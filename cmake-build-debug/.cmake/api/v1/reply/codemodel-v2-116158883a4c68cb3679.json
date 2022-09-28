@@ -1,0 +1,381 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						11
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-c1bd31d127ceb9f571b6.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "libs",
+					"childIndexes" : 
+					[
+						2,
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs-Debug-ec580da4e47c3b0e73da.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "libs"
+				},
+				{
+					"build" : "libs/exception",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs.exception-Debug-689ca6774ffc3a6d3746.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "libs/exception",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "libs/otis",
+					"childIndexes" : 
+					[
+						4,
+						10
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs.otis-Debug-54aebe49ace99a79766a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "libs/otis",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "libs/otis/libs",
+					"childIndexes" : 
+					[
+						5,
+						9
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs.otis.libs-Debug-ac23e68a9511c549184a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "libs/otis/libs"
+				},
+				{
+					"build" : "libs/otis/libs/universe",
+					"childIndexes" : 
+					[
+						6,
+						8
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-libs.otis.libs.universe-Debug-4812da4d44afb1640888.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 3,
+					"source" : "libs/otis/libs/universe",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "libs/otis/libs/universe/libs",
+					"childIndexes" : 
+					[
+						7
+					],
+					"jsonFile" : "directory-libs.otis.libs.universe.libs-Debug-ac0efa43f1e084b0b18c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "libs/otis/libs/universe/libs"
+				},
+				{
+					"build" : "libs/otis/libs/universe/libs/magic-enum",
+					"jsonFile" : "directory-libs.otis.libs.universe.libs.magic-enum-Debug-bd4d00989c0ccaf3bbd3.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 6,
+					"projectIndex" : 4,
+					"source" : "libs/otis/libs/universe/libs/magic-enum"
+				},
+				{
+					"build" : "libs/otis/libs/universe/doc",
+					"jsonFile" : "directory-libs.otis.libs.universe.doc-Debug-2f9427a3fb464baf7016.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 3,
+					"source" : "libs/otis/libs/universe/doc",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "libs/otis/libs/xcsp3-cpp-parser",
+					"jsonFile" : "directory-libs.otis.libs.xcsp3-cpp-parser-Debug-f0d64eda47231f2d110d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6"
+					},
+					"parentIndex" : 4,
+					"projectIndex" : 5,
+					"source" : "libs/otis/libs/xcsp3-cpp-parser",
+					"targetIndexes" : 
+					[
+						6,
+						8
+					]
+				},
+				{
+					"build" : "libs/otis/doc",
+					"jsonFile" : "directory-libs.otis.doc-Debug-096fd409215438314661.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "libs/otis/doc",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "doc",
+					"jsonFile" : "directory-doc-Debug-00ee67dbe228fd23eb89.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.22"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "doc",
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						11
+					],
+					"name" : "panoramyx",
+					"targetIndexes" : 
+					[
+						2,
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "except",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						3,
+						5
+					],
+					"directoryIndexes" : 
+					[
+						3,
+						4,
+						10
+					],
+					"name" : "otis",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						4
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						4
+					],
+					"directoryIndexes" : 
+					[
+						5,
+						6,
+						8
+					],
+					"name" : "universe",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						0,
+						7
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						7
+					],
+					"name" : "magic_enum",
+					"parentIndex" : 3
+				},
+				{
+					"directoryIndexes" : 
+					[
+						9
+					],
+					"name" : "xcsp3parser",
+					"parentIndex" : 2,
+					"targetIndexes" : 
+					[
+						6,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 8,
+					"id" : "doc::@e35b9d4e71c397ff30bc",
+					"jsonFile" : "target-doc-Debug-2309acded6cc21e6dc74.json",
+					"name" : "doc",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "doc_otis::@82e695b9f014272e8f91",
+					"jsonFile" : "target-doc_otis-Debug-1c047a7beb19cbc55905.json",
+					"name" : "doc_otis",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "doc_panoramyx::@c2466c91de71b9c692d9",
+					"jsonFile" : "target-doc_panoramyx-Debug-9acfe677555eb85569b9.json",
+					"name" : "doc_panoramyx",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "exception::@0d72e13e35ddc2303843",
+					"jsonFile" : "target-exception-Debug-05f73759d9054dddf477.json",
+					"name" : "exception",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "otis::@6e4a8b6f990171d5f916",
+					"jsonFile" : "target-otis-Debug-4772599ac86295b3972c.json",
+					"name" : "otis",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "panoramyx::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-panoramyx-Debug-636c538f24460b158c4c.json",
+					"name" : "panoramyx",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "samplesXcsp3::@741abc92070719a5a814",
+					"jsonFile" : "target-samplesXcsp3-Debug-ea47813234f1ba84ee2e.json",
+					"name" : "samplesXcsp3",
+					"projectIndex" : 5
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "universe::@a8d67e9f96a8a99f6d38",
+					"jsonFile" : "target-universe-Debug-fb3704b556d795945765.json",
+					"name" : "universe",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "xcsp3parser::@741abc92070719a5a814",
+					"jsonFile" : "target-xcsp3parser-Debug-a2ef3468ca7d597a2f62.json",
+					"name" : "xcsp3parser",
+					"projectIndex" : 5
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/cmake-build-debug",
+		"source" : "/home/falque/Travail/Doctorat/CP/Workspace/panoramyx"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

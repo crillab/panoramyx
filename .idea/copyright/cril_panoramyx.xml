@@ -1,0 +1,6 @@
+<component name="CopyrightManager">
+  <copyright>
+    <option name="notice" value="&#10;PANORAMYx - Programming pArallel coNstraint sOlveRs mAde aMazingly easY                               &#10;Copyright (c) 2022 - Univ Artois &amp;amp; CNRS &amp;amp; Exakis Nelite.                   &#10;All rights reserved.                                                       &#10;&#10;This library is free software; you can redistribute it andor               &#10;modify it under the terms of the GNU Lesser General Public                 &#10;License as published by the Free Software Foundation; either               &#10;version 3 of the License, or (at your option) any later version.           &#10;&#10;This library is distributed in the hope that it will be useful,            &#10;but WITHOUT ANY WARRANTY; without even the implied warranty of             &#10;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                       &#10;See the GNU Lesser General Public License for more details.                &#10;&#10;You should have received a copy of the GNU Lesser General Public           &#10;License along with this library.                                           &#10;If not, see {@link http:www.gnu.orglicenses}. " />
+    <option name="myName" value="cril-panoramyx" />
+  </copyright>
+</component>

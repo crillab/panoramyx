@@ -1,0 +1,9 @@
+[submodule "libs/otis"]
+	path = libs/otis
+	url = https://gitlab.univ-artois.fr/cril-exakis-nelite-adp/softwares-tfa/cp/tootatis/otis
+[submodule "libs/exception"]
+	path = libs/exception
+	url = https://gitlab.univ-artois.fr/cril-exakis-nelite-adp/softwares-tfa/cp/tootatis/except
+[submodule "libs/universe"]
+	path = libs/universe
+	url = https://gitlab.univ-artois.fr/cril-exakis-nelite-adp/softwares-tfa/cp/tootatis/universe
