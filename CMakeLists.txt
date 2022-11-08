@@ -105,25 +105,26 @@ message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
 # Update and configure submodule dependencies
 
 find_package(Git QUIET)
-if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+if (GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
     # Update submodules as needed
     option(GIT_SUBMODULE "Check submodules during build" ON)
-    if(GIT_SUBMODULE)
+    if (GIT_SUBMODULE)
         message(STATUS "Submodule update")
         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --remote
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 RESULT_VARIABLE GIT_SUBMOD_RESULT)
-        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+        if (NOT GIT_SUBMOD_RESULT EQUAL "0")
             message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-        endif()
-    endif()
-endif()
+        endif ()
+    endif ()
+endif ()
 
 add_subdirectory(libs)
 
 # find MPI
 find_package(MPI REQUIRED)
-
+message(STATUS ${MPI_CXX_HEADER_DIR})
+include_directories(${MPI_CXX_HEADER_DIR})
 
 # add a target to generate API documentation with Doxygen
 add_subdirectory(doc)
@@ -138,9 +139,14 @@ file(GLOB_RECURSE HEADERS
         )
 
 # Adding the library to the build targets.
+
 add_library(${LIBRARY_NAME} ${SOURCES} ${HEADERS})
 set_target_properties(${LIBRARY_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${LIBRARY_NAME} otis exception universe ${MPI_CXX_LIBRARIES})
+
+
+add_executable(main panoramyx/src/main.cpp panoramyx/include/network/INetworkCommunication.hpp panoramyx/include/network/MpiNetworkCommunication.hpp panoramyx/src/network/MpiNetworkCommunication.cpp panoramyx/src/network/MessageBuilder.cpp )
+target_link_libraries(main ${MPI_CXX_LIBRARIES})
 
 
 if (WIN32)
