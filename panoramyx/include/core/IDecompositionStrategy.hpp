@@ -12,8 +12,8 @@
 #define PANORAMYX_IDECOMPOSITIONSTRATEGY_HPP
 
 #include <vector>
-#include "../../../libs/universe/universe/include/core/problem/IUniverseProblem.hpp"
 #include "../utils/VectorStream.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/core/problem/IUniverseProblem.hpp"
 
 namespace Panoramyx {
 

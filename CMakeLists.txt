@@ -126,6 +126,10 @@ find_package(MPI REQUIRED)
 message(STATUS ${MPI_CXX_HEADER_DIR})
 include_directories(${MPI_CXX_HEADER_DIR})
 
+# Configuring the use of JNI.
+find_package(JNI REQUIRED)
+include_directories(${JNI_INCLUDE_DIRS})
+
 # add a target to generate API documentation with Doxygen
 add_subdirectory(doc)
 set(LIBRARY_NAME panoramyx)
@@ -140,13 +144,14 @@ file(GLOB_RECURSE HEADERS
 
 # Adding the library to the build targets.
 
-add_library(${LIBRARY_NAME} ${SOURCES} ${HEADERS})
+include_directories(libs/loguru)
+add_library(${LIBRARY_NAME} ${SOURCES} ${HEADERS} libs/loguru/loguru.cpp libs/loguru/loguru.hpp)
 set_target_properties(${LIBRARY_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(${LIBRARY_NAME} otis exception universe ${MPI_CXX_LIBRARIES})
+target_link_libraries(${LIBRARY_NAME} autis exception universe ${MPI_CXX_LIBRARIES})
 
 
-add_executable(main panoramyx/src/main.cpp panoramyx/include/network/INetworkCommunication.hpp panoramyx/include/network/MpiNetworkCommunication.hpp panoramyx/src/network/MpiNetworkCommunication.cpp panoramyx/src/network/MessageBuilder.cpp )
-target_link_libraries(main ${MPI_CXX_LIBRARIES})
+add_executable(mainpano panoramyx/src/main.cpp)
+target_link_libraries(mainpano ${LIBRARY_NAME})
 
 
 if (WIN32)

@@ -35,13 +35,14 @@ namespace Panoramyx {
         return worldSize;
     }
 
-    Message *MPINetworkCommunication::receive(int tag, int src, int size) {
+    Message *MPINetworkCommunication::receive(int tag, int src, unsigned long size) {
         auto* m = (Message*)(malloc(size));
         MPI_Recv(m,size,MPI_BYTE,src,tag,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
         return m;
     }
 
     void MPINetworkCommunication::send(Message *m, int dest) {
+        m->src=getId();
         MPI_Send(m,sizeof(Message)+m->size,MPI_BYTE,dest,m->tag,MPI_COMM_WORLD);
     }
 

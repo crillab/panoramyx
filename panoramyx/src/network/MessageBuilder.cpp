@@ -38,4 +38,20 @@ namespace Panoramyx {
         message->tag = tag;
         return *this;
     }
+
+    MessageBuilder &MessageBuilder::from(int src) {
+        message->src=src;
+        return *this;
+    }
+
+    template<>
+    MessageBuilder& MessageBuilder::withParameter(std::string p) {
+        message->nbParameters++;
+        size+=p.size()+1;
+
+        message = static_cast<Message *>(realloc(message, size));
+        memcpy(message->parameters+message->size,p.c_str(),p.size()+1);
+        message->size+=p.size()+1;
+        return *this;
+    }
 } // Panoramyx

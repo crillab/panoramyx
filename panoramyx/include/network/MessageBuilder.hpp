@@ -32,30 +32,28 @@ namespace Panoramyx {
     class MessageBuilder {
     private:
         Message* message;
-        int size;
+        unsigned long size;
     public:
         MessageBuilder();
         MessageBuilder& forMethod(const std::string& methodName);
+        MessageBuilder& from(int src);
         MessageBuilder& withTag(int tag);
         template<typename T>
         MessageBuilder& withParameter(T p) {
-            std::cout<<"nb parameter "<<message->nbParameters<<std::endl;
             message->nbParameters++;
-            std::cout<<"nb parameter "<<message->nbParameters<<std::endl;
-            std::cout<<"size "<<size<<std::endl;
             size+=sizeof(T);
-            std::cout<<"size "<<size<<std::endl;
 
             message = static_cast<Message *>(realloc(message, size));
-            std::cout<<"nb parameter "<<message->nbParameters<<std::endl;
             memcpy(message->parameters+message->size,&p,sizeof(p));
             message->size+=sizeof(T);
-            std::cout<<"nb parameter "<<message->nbParameters<<std::endl;
             return *this;
         }
 
+
         Message* build();
     };
+
+
 
 } // Panoramyx
 

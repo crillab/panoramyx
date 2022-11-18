@@ -1,9 +1,9 @@
-[submodule "libs/otis"]
-	path = libs/otis
+[submodule "libs/autis"]
+	path = libs/autis
 	url = https://gitlab.univ-artois.fr/cril-exakis-nelite-adp/softwares-tfa/cp/tootatis/otis
 [submodule "libs/exception"]
 	path = libs/exception
 	url = https://gitlab.univ-artois.fr/cril-exakis-nelite-adp/softwares-tfa/cp/tootatis/except
-[submodule "libs/universe"]
-	path = libs/universe
-	url = https://gitlab.univ-artois.fr/cril-exakis-nelite-adp/softwares-tfa/cp/tootatis/universe
+[submodule "libs/loguru"]
+	path = libs/loguru
+	url = https://github.com/emilk/loguru.git

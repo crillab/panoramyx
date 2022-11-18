@@ -12,12 +12,20 @@
 #define PANORAMYX_NETWORKTYPES_HPP
 namespace Panoramyx{
     struct Message{
-        char methodName[32];
+        char methodName[4];
+        int src;
         int nbParameters;
-        int size;
+        unsigned long size;
         int tag;
         char parameters[];
+
+        template<typename T>
+        inline T read(int i=0) {
+            return *((T*)(parameters+i));
+        }
     };
+
+
 
 }
 #endif //PANORAMYX_NETWORKTYPES_HPP

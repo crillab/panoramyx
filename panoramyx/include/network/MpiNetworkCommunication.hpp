@@ -35,7 +35,7 @@ namespace Panoramyx {
 
         int nbProcesses() override;
 
-        Message *receive(int tag, int src, int size) override;
+        Message *receive(int tag, int src, unsigned long size) override;
 
         void send(Message *m, int dest) override;
 

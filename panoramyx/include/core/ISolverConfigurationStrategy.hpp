@@ -11,9 +11,9 @@
 #ifndef PANORAMYX_ISOLVERCONFIGURATIONSTRATEGY_HPP
 #define PANORAMYX_ISOLVERCONFIGURATIONSTRATEGY_HPP
 
-#include "../../../libs/universe/universe/include/core/problem/IUniverseProblem.hpp"
-#include "../../../libs/universe/universe/include/core/IUniverseSolver.hpp"
 #include "Configuration.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/core/problem/IUniverseProblem.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 
 namespace Panoramyx {
 

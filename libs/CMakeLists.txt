@@ -14,7 +14,7 @@ SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
 FOREACH(submodule ${SUBDIRS})
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${submodule}/CMakeLists.txt")
-        message(FATAL_ERROR "The file CMakeLists for submodule ${submodule} not exists.")
+        message(WARNING "The file CMakeLists for submodule ${submodule} not exists.")
     else()
         if(NOT TARGET ${submodule})
             add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/${submodule})
