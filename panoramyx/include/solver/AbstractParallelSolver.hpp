@@ -48,15 +48,15 @@ namespace Panoramyx {
 
         Universe::UniverseSolverResult solve() override;
 
-        Universe::UniverseSolverResult solve(std::string filename) override;
+        Universe::UniverseSolverResult solve(const std::string &filename) override;
 
-        Universe::UniverseSolverResult solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts) override;
+        Universe::UniverseSolverResult solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override;
 
         virtual void solve(unsigned i) = 0;
 
-        virtual void solve(unsigned i, std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts) = 0;
+        virtual void solve(unsigned i, const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) = 0;
 
-        virtual void solve(unsigned i, std::string filename) = 0;
+        virtual void solve(unsigned i, const std::string &filename) = 0;
 
         void interrupt() override;
 

@@ -35,9 +35,9 @@ namespace Panoramyx {
 
         void solve(unsigned int i) override;
 
-        void solve(unsigned int i, std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts) override;
+        void solve(unsigned int i, const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override;
 
-        void solve(unsigned int i, std::string filename) override;
+        void solve(unsigned int i, const std::string &filename) override;
 
         std::vector<Universe::BigInteger> solution() override;
 

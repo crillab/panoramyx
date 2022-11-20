@@ -31,11 +31,11 @@ namespace Panoramyx {
     }
 
     void
-    PortfolioSolver::solve(unsigned int i, std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts) {
+    PortfolioSolver::solve(unsigned int i, const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
             solvers[i]->solve(assumpts);
     }
 
-    void PortfolioSolver::solve(unsigned int i, std::string filename) {
+    void PortfolioSolver::solve(unsigned int i, const std::string &filename) {
         solvers[i]->solve(filename);
     }
 

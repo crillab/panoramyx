@@ -47,7 +47,7 @@ namespace Panoramyx {
             return Universe::UniverseSolverResult::UNKNOWN;
         }
 
-        Universe::UniverseSolverResult solve(std::string filename) override {
+        Universe::UniverseSolverResult solve(const std::string &filename) override {
             MessageBuilder mb;
             Message *m = mb.forMethod(PANO_MESSAGE_SOLVE_FILENAME).withParameter(filename).withTag(PANO_TAG_SOLVE).build();
             comm->send(m, rank);
@@ -56,7 +56,7 @@ namespace Panoramyx {
         }
 
         Universe::UniverseSolverResult
-        solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts) override {
+        solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override {
             MessageBuilder mb;
             mb.forMethod(PANO_MESSAGE_SOLVE_ASSUMPTIONS);
             for (auto &assumpt: assumpts) {

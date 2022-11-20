@@ -34,7 +34,7 @@ namespace Panoramyx {
         return result;
     }
 
-    Universe::UniverseSolverResult AbstractParallelSolver::solve(std::string filename) {
+    Universe::UniverseSolverResult AbstractParallelSolver::solve(const std::string &filename) {
         readMessages();
         for (unsigned i = 0; i < solvers.size(); i++) {
             solvers[i]->setIndex(i);
@@ -48,7 +48,7 @@ namespace Panoramyx {
     }
 
     Universe::UniverseSolverResult
-    AbstractParallelSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts) {
+    AbstractParallelSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
         readMessages();
         for (unsigned i = 0; i < solvers.size(); i++) {
             solvers[i]->setIndex(i);

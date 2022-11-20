@@ -7,7 +7,7 @@
 * @license This project is released under the GNU LGPL3 License.
 */
 
-
+#include <cstdlib>
 #include "../../include/network/MpiNetworkCommunication.hpp"
 #include <mpi.h>
 
@@ -50,6 +50,7 @@ namespace Panoramyx {
         if (!instance) {
             instance=new MPINetworkCommunication();
             MPI_Comm_set_errhandler(MPI_COMM_WORLD,MPI::ERRORS_THROW_EXCEPTIONS);
+
         }
         return instance;
     }

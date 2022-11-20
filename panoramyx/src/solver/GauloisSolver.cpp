@@ -14,7 +14,7 @@
 #include "../../include/solver/GauloisSolver.hpp"
 #include "../../include/network/INetworkCommunication.hpp"
 #include "../../include/network/MessageBuilder.hpp"
-#include "../../../libs/autis/autis/xcsp/AutisXcspParserAdapter.hpp"
+#include "../../../libs/autis/autis/include/xcsp/AutisXcspParserAdapter.hpp"
 #include "../../../libs/autis/libs/universe/universe/include/csp/IUniverseCspSolver.hpp"
 #include "../../../libs/autis/libs/universe/libs/easy-jni/easyjni/JavaVirtualMachineRegistry.h"
 
@@ -35,7 +35,7 @@ namespace Panoramyx {
         return solver->solve();
     }
 
-    Universe::UniverseSolverResult GauloisSolver::solve(std::string filename) {
+    Universe::UniverseSolverResult GauloisSolver::solve(const std::string &filename) {
         ifstream input(filename);
         Autis::Scanner scanner(input);
         auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver *>(solver));
@@ -45,7 +45,7 @@ namespace Panoramyx {
     }
 
     Universe::UniverseSolverResult
-    GauloisSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> asumpts) {
+    GauloisSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &asumpts) {
         return solver->solve(asumpts);
     }
 

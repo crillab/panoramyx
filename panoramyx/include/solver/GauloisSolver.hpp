@@ -11,6 +11,7 @@
 #ifndef PANORAMYX_GAULOISSOLVER_HPP
 #define PANORAMYX_GAULOISSOLVER_HPP
 
+#include <semaphore>
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 #include "../network/INetworkCommunication.hpp"
 
@@ -56,10 +57,10 @@ namespace Panoramyx {
 
         Universe::UniverseSolverResult solve() override;
 
-        Universe::UniverseSolverResult solve(std::string filename) override;
+        Universe::UniverseSolverResult solve(const std::string &filename) override;
 
         Universe::UniverseSolverResult
-        solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> asumpts) override;
+        solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &asumpts) override;
 
         void interrupt() override;
 

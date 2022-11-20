@@ -5,7 +5,7 @@
 #include "../include/solver/AbstractParallelSolver.hpp"
 #include "../include/solver/PortfolioSolver.hpp"
 #include "../include/solver/GauloisSolver.hpp"
-#include "../../libs/autis/libs/universe/universe/include/utils/JavaSolverFactory.hpp"
+#include "../../libs/autis/libs/universe/universe/include/utils/UniverseJavaSolverFactory.hpp"
 #include "../../libs/autis/libs/universe/libs/easy-jni/easyjni/JavaVirtualMachineBuilder.h"
 #include "../../libs/autis/libs/universe/libs/easy-jni/easyjni/JavaVirtualMachineRegistry.h"
 #include "loguru.hpp"
@@ -44,7 +44,7 @@ int main(int argc, char** argv){
         builder.setVersion(JNI_VERSION_10);
         auto jvm = builder.buildJavaVirtualMachine();
         JavaVirtualMachineRegistry::set(jvm);
-        Universe::JavaSolverFactory factory("fr/univartois/cril/aceurancetourix/AceSolverFactory");
+        Universe::UniverseJavaSolverFactory factory("fr/univartois/cril/aceurancetourix/AceSolverFactory");
         auto ace = factory.createCspSolver();
         ace->setVerbosity(-1);
         GauloisSolver* gaulois = new GauloisSolver(ace,comm);
