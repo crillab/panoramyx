@@ -33,7 +33,9 @@ namespace Panoramyx {
         Universe::IUniverseSolver *solver;
         INetworkCommunication *comm;
         bool interrupted = false;
-        std::binary_semaphore mutex=std::binary_semaphore(0);
+        std::binary_semaphore finished=std::binary_semaphore(0);
+        std::mutex loadMutex;
+        int nbSolved=0;
 
         void readMessage(Message *m);
 
@@ -85,6 +87,8 @@ namespace Panoramyx {
         ~GauloisSolver() override = default;
 
         void sendResult(int src, Universe::UniverseSolverResult result);
+
+        void load(std::string filename);
     };
 
     using GallicSolver = GauloisSolver;

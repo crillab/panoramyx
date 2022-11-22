@@ -14,7 +14,7 @@
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 #include "../network/INetworkCommunication.hpp"
 #include "../network/MessageBuilder.hpp"
-
+#include "../../../libs/loguru/loguru.hpp"
 namespace Panoramyx {
 
 /**
@@ -63,6 +63,8 @@ namespace Panoramyx {
                 mb.withParameter(assumpt.getVariableId());
                 mb.withParameter(assumpt.isEqual());
                 mb.withParameter(Universe::toString(assumpt.getValue()));
+
+                DLOG_F(INFO,"add assumption: %d %s '%s'",assumpt.getVariableId(),assumpt.isEqual()?"=":"!=",Universe::toString(assumpt.getValue()).c_str());
             }
             Message *m = mb.withTag(PANO_TAG_SOLVE).build();
             comm->send(m, rank);
@@ -188,6 +190,13 @@ namespace Panoramyx {
             MessageBuilder mb;
             mb.forMethod(PANO_MESSAGE_END_SEARCH);
             Message *m = mb.withTag(PANO_TAG_SOLVE).build();
+            comm->send(m, rank);
+            free(m);
+        }
+
+        void loadFilename(const std::string &filename) {
+            MessageBuilder mb;
+            Message *m = mb.forMethod(PANO_MESSAGE_LOAD).withParameter(filename).withTag(PANO_TAG_SOLVE).build();
             comm->send(m, rank);
             free(m);
         }

@@ -27,9 +27,6 @@ namespace Panoramyx {
  */
 
     class PortfolioSolver:public AbstractParallelSolver {
-    private:
-        unsigned winner;
-        int endSolvers;
     public:
         explicit PortfolioSolver(INetworkCommunication *comm);
 
@@ -45,14 +42,12 @@ namespace Panoramyx {
 
         int nConstraints() override;
 
-        ~PortfolioSolver() override = default;
-
         void addSolver(RemoteSolver *s) override;
+
+        ~PortfolioSolver() override = default;
 
     protected:
         void readMessage(const Message *message) override;
-
-        void endSearch() override;
     };
 
 } // Panoramyx

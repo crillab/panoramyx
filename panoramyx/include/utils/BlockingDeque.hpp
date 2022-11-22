@@ -14,6 +14,7 @@
 #include <deque>
 #include <mutex>
 #include <semaphore>
+#include "../../../libs/exception/except/except.hpp"
 
 namespace Panoramyx {
 
@@ -34,20 +35,27 @@ namespace Panoramyx {
         std::mutex mutex;
         std::binary_semaphore semaphore;
     public:
-        explicit BlockingDeque() = default;
+        explicit BlockingDeque(): semaphore(0){};
         void add(E e){
-            mutex.lock();
             deque.push_back(e);
             semaphore.release();
-            mutex.unlock();
         }
         E get(){
-            mutex.lock();
+            // warning get with multiple threads = ub
             semaphore.acquire();
+            mutex.lock();
+            if(deque.empty()){
+                mutex.unlock();
+                throw Except::NoSuchElementException("deque is empty");
+            }
             E e = deque.front();
             deque.pop_front();
             mutex.unlock();
             return e;
+        }
+        void clear(){
+            deque.clear();
+            semaphore.release();
         }
         ~BlockingDeque()=default;
     };

@@ -20,14 +20,13 @@ namespace Panoramyx {
 @file AbstractParallelSolver.cpp
 */
 
-    AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm) : comm(comm) {}
+    AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm) : comm(comm),endSolvers(0) {}
     Universe::UniverseSolverResult AbstractParallelSolver::solve() {
         readMessages();
         for (unsigned i = 0; i < solvers.size(); i++) {
-            solvers[i]->setIndex(i);
-            solvers[i]->setComm(comm);
             solve(i);
         }
+        startSearch();
         solved.acquire();
         endSearch();
         end.acquire();
@@ -37,10 +36,9 @@ namespace Panoramyx {
     Universe::UniverseSolverResult AbstractParallelSolver::solve(const std::string &filename) {
         readMessages();
         for (unsigned i = 0; i < solvers.size(); i++) {
-            solvers[i]->setIndex(i);
-            solvers[i]->setComm(comm);
             solve(i, filename);
         }
+        startSearch();
         solved.acquire();
         endSearch();
         end.acquire();
@@ -51,10 +49,9 @@ namespace Panoramyx {
     AbstractParallelSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
         readMessages();
         for (unsigned i = 0; i < solvers.size(); i++) {
-            solvers[i]->setIndex(i);
-            solvers[i]->setComm(comm);
             solve(i, assumpts);
         }
+        startSearch();
         solved.acquire();
         endSearch();
         end.acquire();
@@ -109,7 +106,26 @@ namespace Panoramyx {
     }
 
     void AbstractParallelSolver::addSolver(RemoteSolver *s) {
+        int index = solvers.size();
         solvers.push_back(s);
+        s->setComm(comm);
+        s->setIndex(index);
+        endSolvers++;
+    }
+    void AbstractParallelSolver::endSearch() {
+        for (auto &solver : solvers){
+            solver->endSearch();
+        }
+    }
+
+    void AbstractParallelSolver::startSearch() {
+
+    }
+
+    void AbstractParallelSolver::loadFilename(const std::string &filename) {
+        for(auto s:solvers){
+            s->loadFilename(filename);
+        }
     }
 
 

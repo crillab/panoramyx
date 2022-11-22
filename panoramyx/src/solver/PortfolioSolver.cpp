@@ -19,11 +19,11 @@ namespace Panoramyx {
 @file PortfolioSolver.cpp
 */
 
-    PortfolioSolver::PortfolioSolver(INetworkCommunication *comm) : AbstractParallelSolver(comm),endSolvers(0) {}
+    PortfolioSolver::PortfolioSolver(INetworkCommunication *comm) : AbstractParallelSolver(comm) {}
 
     void PortfolioSolver::addSolver(RemoteSolver *s) {
         AbstractParallelSolver::addSolver(s);
-        endSolvers++;
+
     }
 
     void PortfolioSolver::solve(unsigned int i) {
@@ -68,17 +68,4 @@ namespace Panoramyx {
     int PortfolioSolver::nConstraints() {
         return solvers[0]->nConstraints();
     }
-
-
-    void PortfolioSolver::endSearch() {
-        for (auto &solver : solvers){
-            solver->endSearch();
-        }
-//        MessageBuilder mb;
-//        mb.forMethod(PANO_MESSAGE_END_SEARCH);
-//        Message *m = mb.withTag(PANO_TAG_SOLVE).build();
-//        comm->send(m, 0);
-//        free(m);
-    }
-
 } // Panoramyx

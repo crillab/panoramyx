@@ -20,8 +20,8 @@ namespace Panoramyx{
         char parameters[];
 
         template<typename T>
-        inline T read(int i=0) {
-            return *((T*)(parameters+i));
+        inline T read(int i=0) const {
+            return *((const T*)(parameters+i));
         }
     };
 
