@@ -89,6 +89,10 @@ namespace Panoramyx {
         void sendResult(int src, Universe::UniverseSolverResult result);
 
         void load(std::string filename);
+
+        const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() const override;
+
+        std::map<std::string, Universe::BigInteger> mapSolution() override;
     };
 
     using GallicSolver = GauloisSolver;

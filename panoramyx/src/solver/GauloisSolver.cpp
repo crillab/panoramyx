@@ -116,6 +116,8 @@ namespace Panoramyx {
         if(strncmp(m->methodName, PANO_MESSAGE_SOLVE_FILENAME, sizeof(m->methodName)) == 0){
             std::string filename(m->parameters);
             this->solve(filename,m);
+        }else if(strncmp(m->methodName, PANO_MESSAGE_SOLVE, sizeof(m->methodName)) == 0) {
+            this->solve(m);
         }else if(strncmp(m->methodName, PANO_MESSAGE_SOLVE_ASSUMPTIONS, sizeof(m->methodName)) == 0){
             std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts;
             for(int i=0,n=0;n<m->nbParameters;n+=3){
@@ -256,4 +258,13 @@ namespace Panoramyx {
         parser->parse();
         loadMutex.unlock();
     }
+
+    const map<std::string, Universe::IUniverseVariable *> &GauloisSolver::getVariablesMapping() const {
+        return {};
+    }
+
+    map<std::string, Universe::BigInteger> GauloisSolver::mapSolution() {
+        return std::map<std::string, Universe::BigInteger>();
+    }
+
 } // Panoramyx

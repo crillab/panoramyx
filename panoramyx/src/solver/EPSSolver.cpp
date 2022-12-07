@@ -94,4 +94,11 @@ namespace Panoramyx {
         return std::vector<Universe::BigInteger>();
     }
 
+    const std::map<std::string, Universe::IUniverseVariable *> &EPSSolver::getVariablesMapping() const {
+        return {};
+    }
+
+    std::map<std::string, Universe::BigInteger> EPSSolver::mapSolution() {
+        return std::map<std::string, Universe::BigInteger>();
+    }
 } // Panoramyx

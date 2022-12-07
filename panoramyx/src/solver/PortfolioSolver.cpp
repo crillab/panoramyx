@@ -68,4 +68,13 @@ namespace Panoramyx {
     int PortfolioSolver::nConstraints() {
         return solvers[0]->nConstraints();
     }
+
+    const std::map<std::string, Universe::IUniverseVariable *> &PortfolioSolver::getVariablesMapping() const {
+        return {};
+    }
+
+    std::map<std::string, Universe::BigInteger> PortfolioSolver::mapSolution() {
+        return std::map<std::string, Universe::BigInteger>();
+    }
+
 } // Panoramyx

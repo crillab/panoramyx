@@ -52,6 +52,10 @@ namespace Panoramyx {
 
         std::vector<Universe::BigInteger> solution() override;
 
+        const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() const override;
+
+        std::map<std::string, Universe::BigInteger> mapSolution() override;
+
     protected:
         void readMessage(const Message *message) override;
 

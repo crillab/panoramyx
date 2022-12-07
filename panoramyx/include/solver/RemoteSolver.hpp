@@ -200,6 +200,14 @@ namespace Panoramyx {
             comm->send(m, rank);
             free(m);
         }
+
+        [[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() const override {
+            return {};
+        }
+
+        std::map<std::string, Universe::BigInteger> mapSolution() override {
+            return {};
+        }
     };
 
 } // Panoramyx
