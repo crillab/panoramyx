@@ -1,34 +1,26 @@
 #include <iostream>
 #include <mpi.h>
+#include <fstream>
 #include "../include/network/INetworkCommunication.hpp"
 #include "../include/network/MpiNetworkCommunication.hpp"
 #include "../include/solver/AbstractParallelSolver.hpp"
 #include "../include/solver/PortfolioSolver.hpp"
 #include "../include/solver/GauloisSolver.hpp"
-#include "../../libs/autis/libs/universe/universe/include/utils/UniverseJavaSolverFactory.hpp"
-#include "../../libs/autis/libs/universe/libs/easy-jni/easyjni/JavaVirtualMachineBuilder.h"
 #include "loguru.hpp"
 #include "../include/solver/EPSSolver.hpp"
 #include "../include/utils/VectorStream.hpp"
+#include "../include/decomposition/LexicographicCubeGenerator.hpp"
+#include "../include/core/FinalConsistencyChecker.hpp"
+#include "../../libs/autis/autis/include/core/Scanner.hpp"
+#include "../../libs/autis/autis/include/xcsp/AutisXcspParserAdapter.hpp"
+
+#include "../../libs/autis/libs/universe/universe/include/utils/UniverseJavaSolverFactory.hpp"
+#include "../../libs/autis/libs/universe/libs/easy-jni/easyjni/JavaVirtualMachineBuilder.h"
+#include "../include/core/PartialConsistencyChecker.hpp"
 
 using namespace Panoramyx;
 using namespace easyjni;
 
-class StupidCube:public ICubeGenerator{
-public:
-    void setSolver(Universe::IUniverseSolver *solver) override {
-
-    }
-
-    Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> *generateCubes() override {
-        DLOG_F(INFO,"generate cubes");
-        std::vector<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> vectors;
-        vectors.push_back({{0,true,0},{1,true,0}});
-        vectors.push_back({{0,true,0},{1,true,1}});
-        DLOG_F(INFO,"generate cubes %ld",vectors.size());
-        return new VectorStream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>>(vectors);
-    }
-};
 
 /**
 * @date 28/09/22
@@ -42,32 +34,43 @@ int main(int argc, char** argv){
     MPI_Init(&argc,&argv);
     loguru::init(argc, argv);
     INetworkCommunication* comm = MPINetworkCommunication::getInstance();
+    JavaVirtualMachineBuilder builder = JavaVirtualMachineBuilder();
+    builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/juniverse.jar");
+    builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/ACE.jar");
+    builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/aceurancetourix.jar");
+    builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/xcsp3-tools.jar");
+    builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/javax.json-1.1.2.jar");
+    builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/javax.json-api-1.1.2.jar");
+    builder.setVersion(JNI_VERSION_10);
+    auto jvm = builder.buildJavaVirtualMachine();
+    JavaVirtualMachineRegistry::set(jvm);
     if(comm->getId()==0){
-        Abraracourcix* chief = new EPSSolver(comm,new StupidCube());
+        std::string instance = "/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/panoramyx/AllInterval-006.xml";
+        Universe::UniverseJavaSolverFactory factory("fr/univartois/cril/aceurancetourix/PreprocAceSolverFactory");
+        auto ace = factory.createCspSolver();
+        ace->setVerbosity(-1);
+        std::ifstream input(instance);
+        Autis::Scanner scanner(input);
+        auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver *>(ace));
+        parser->parse();
+        auto cubeGenerator = new LexicographicCubeGenerator(100);
+        cubeGenerator->setSolver(ace);
+        cubeGenerator->setConsistencyChecker(new PartialConsistencyChecker(ace));
+        Abraracourcix* chief = new EPSSolver(comm,cubeGenerator);
         for(int i=1;i<comm->nbProcesses();i++){
             chief->addSolver(new RemoteSolver(i));
         }
-        chief->loadFilename("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/panoramyx/AllInterval-006.xml");
+        chief->loadFilename(instance);
         auto r=chief->solve();
         std::cout<<(int)r<<std::endl;
     }else{
-        JavaVirtualMachineBuilder builder = JavaVirtualMachineBuilder();
-        builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/juniverse.jar");
-        builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/ACE.jar");
-        builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/assurancetourix.jar");
-        builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/xcsp3-tools.jar");
-        builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/javax.json-1.1.2.jar");
-        builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/javax.json-api-1.1.2.jar");
-        builder.setVersion(JNI_VERSION_10);
-        auto jvm = builder.buildJavaVirtualMachine();
-        JavaVirtualMachineRegistry::set(jvm);
         Universe::UniverseJavaSolverFactory factory("fr/univartois/cril/aceurancetourix/AceSolverFactory");
         auto ace = factory.createCspSolver();
         ace->setVerbosity(-1);
         GauloisSolver* gaulois = new GauloisSolver(ace,comm);
         gaulois->start();
     }
-    MPI_Finalize();
     getchar();
+    MPI_Finalize();
     return 0;
 }
