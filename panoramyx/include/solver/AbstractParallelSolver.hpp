@@ -42,6 +42,10 @@ namespace Panoramyx {
         unsigned winner;
         int endSolvers;
 
+        Universe::BigInteger lowerBound;
+        Universe::BigInteger upperBound;
+        bool isMinimization;
+
         virtual void readMessages();
         virtual void readMessage(const Message* message)=0;
         virtual void endSearch();

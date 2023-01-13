@@ -61,6 +61,11 @@ namespace Panoramyx {
         std::thread t([this](){
             int nbCubes = 0;
             for(auto c:*this->generator->generateCubes()){
+                if(c.empty()){
+                    result=Universe::UniverseSolverResult::UNSATISFIABLE;
+                    solved.release();
+                    return;
+                }
                 try {
                     nbCubes++;
                     DLOG_F(INFO,"generate cubes %ld",nbCubes);
@@ -94,7 +99,7 @@ namespace Panoramyx {
         return std::vector<Universe::BigInteger>();
     }
 
-    const std::map<std::string, Universe::IUniverseVariable *> &EPSSolver::getVariablesMapping() const {
+    const std::map<std::string, Universe::IUniverseVariable *> &EPSSolver::getVariablesMapping()  {
         return {};
     }
 

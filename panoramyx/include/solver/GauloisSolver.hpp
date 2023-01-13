@@ -13,6 +13,7 @@
 
 #include <semaphore>
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/optim/IOptimizationSolver.hpp"
 #include "../network/INetworkCommunication.hpp"
 
 namespace Panoramyx {
@@ -28,7 +29,7 @@ namespace Panoramyx {
  * @version 0.1.0
  */
 
-    class GauloisSolver : public Universe::IUniverseSolver {
+    class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
     private:
         Universe::IUniverseSolver *solver;
         INetworkCommunication *comm;
@@ -90,9 +91,19 @@ namespace Panoramyx {
 
         void load(std::string filename);
 
-        const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() const override;
+        const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 
         std::map<std::string, Universe::BigInteger> mapSolution() override;
+
+        void setLowerBound(const Universe::BigInteger &lb) override;
+
+        void setUpperBound(const Universe::BigInteger &ub) override;
+
+        void setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) override;
+
+        Universe::BigInteger getCurrentBound() override;
+
+        bool isMinimization() override;
     };
 
     using GallicSolver = GauloisSolver;

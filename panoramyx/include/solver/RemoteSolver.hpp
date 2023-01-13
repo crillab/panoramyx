@@ -15,6 +15,8 @@
 #include "../network/INetworkCommunication.hpp"
 #include "../network/MessageBuilder.hpp"
 #include "../../../libs/loguru/loguru.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/optim/IOptimizationSolver.hpp"
+
 namespace Panoramyx {
 
 /**
@@ -28,7 +30,7 @@ namespace Panoramyx {
  * @version 0.1.0
  */
 
-    class RemoteSolver : public Universe::IUniverseSolver {
+    class RemoteSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
     private:
         int rank;
         unsigned index;
@@ -49,7 +51,8 @@ namespace Panoramyx {
 
         Universe::UniverseSolverResult solve(const std::string &filename) override {
             MessageBuilder mb;
-            Message *m = mb.forMethod(PANO_MESSAGE_SOLVE_FILENAME).withParameter(filename).withTag(PANO_TAG_SOLVE).build();
+            Message *m = mb.forMethod(PANO_MESSAGE_SOLVE_FILENAME).withParameter(filename).withTag(
+                    PANO_TAG_SOLVE).build();
             comm->send(m, rank);
             free(m);
             return Universe::UniverseSolverResult::UNKNOWN;
@@ -64,7 +67,8 @@ namespace Panoramyx {
                 mb.withParameter(assumpt.isEqual());
                 mb.withParameter(Universe::toString(assumpt.getValue()));
 
-                DLOG_F(INFO,"add assumption: %d %s '%s'",assumpt.getVariableId(),assumpt.isEqual()?"=":"!=",Universe::toString(assumpt.getValue()).c_str());
+                DLOG_F(INFO, "add assumption: %d %s '%s'", assumpt.getVariableId(), assumpt.isEqual() ? "=" : "!=",
+                       Universe::toString(assumpt.getValue()).c_str());
             }
             Message *m = mb.withTag(PANO_TAG_SOLVE).build();
             comm->send(m, rank);
@@ -126,13 +130,13 @@ namespace Panoramyx {
             m = comm->receive(PANO_TAG_RESPONSE, rank, size);
             mutex.unlock();
             std::vector<Universe::BigInteger> bigbig;
-            char* ptr=m->parameters;
-            for(int i=0,n=0;n<m->nbParameters;i++){
-                if(ptr[i]=='\0'){
-                    std::string param(ptr,i);
+            char *ptr = m->parameters;
+            for (int i = 0, n = 0; n < m->nbParameters; i++) {
+                if (ptr[i] == '\0') {
+                    std::string param(ptr, i);
                     bigbig.push_back(Universe::bigIntegerValueOf(param));
-                    ptr+=i+1;
-                    i=-1;
+                    ptr += i + 1;
+                    i = -1;
                     n++;
                 }
 
@@ -201,12 +205,65 @@ namespace Panoramyx {
             free(m);
         }
 
-        [[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() const override {
+        [[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override {
             return {};
         }
 
         std::map<std::string, Universe::BigInteger> mapSolution() override {
             return {};
+        }
+
+        void setLowerBound(const Universe::BigInteger &lb) override {
+            MessageBuilder mb;
+            Message *m = mb.forMethod(PANO_MESSAGE_LOWER_BOUND).withParameter(lb).withTag(PANO_TAG_SOLVE).build();
+            comm->send(m, rank);
+            free(m);
+        }
+
+        void setUpperBound(const Universe::BigInteger &ub) override {
+            MessageBuilder mb;
+            Message *m = mb.forMethod(PANO_MESSAGE_UPPER_BOUND).withParameter(ub).withTag(PANO_TAG_SOLVE).build();
+            comm->send(m, rank);
+            free(m);
+        }
+
+        void setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) override {
+            MessageBuilder mb;
+            Message *m = mb.forMethod(PANO_MESSAGE_LOWER_UPPER_BOUND).withParameter(lb).withParameter(ub).withTag(
+                    PANO_TAG_SOLVE).build();
+            comm->send(m, rank);
+            free(m);
+        }
+
+        Universe::BigInteger getCurrentBound() override {
+            mutex.lock();
+            MessageBuilder mb;
+            Message *m = mb.forMethod(PANO_MESSAGE_GET_CURRENT_BOUND).withTag(
+                    PANO_TAG_RESPONSE).build();
+            comm->send(m, rank);
+            free(m);
+
+            m = comm->receive(PANO_TAG_RESPONSE, rank, 1024);
+            std::string param(m->parameters, strlen(m->parameters)+1);
+            Universe::BigInteger  newBound=Universe::bigIntegerValueOf(param);
+            mutex.unlock();
+            free(m);
+            return newBound;
+        }
+
+        bool isMinimization() override {
+            mutex.lock();
+            MessageBuilder mb;
+            Message *m = mb.forMethod(PANO_MESSAGE_IS_MINIMIZATION).withTag(
+                    PANO_TAG_RESPONSE).build();
+            comm->send(m, rank);
+            free(m);
+
+            m = comm->receive(PANO_TAG_RESPONSE, rank, 1024);
+            bool r = m->read<bool>();
+            mutex.unlock();
+            free(m);
+            return r;
         }
     };
 

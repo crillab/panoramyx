@@ -158,6 +158,8 @@ namespace Panoramyx {
             comm->send(r,m->src);
             free(r);
             interrupt();
+        }else if(strncmp(m->methodName,PANO_MESSAGE_LOWER_BOUND, sizeof(m->methodName))==0){
+
         }
 
     }
@@ -259,12 +261,32 @@ namespace Panoramyx {
         loadMutex.unlock();
     }
 
-    const map<std::string, Universe::IUniverseVariable *> &GauloisSolver::getVariablesMapping() const {
+    const map<std::string, Universe::IUniverseVariable *> &GauloisSolver::getVariablesMapping() {
         return {};
     }
 
     map<std::string, Universe::BigInteger> GauloisSolver::mapSolution() {
         return std::map<std::string, Universe::BigInteger>();
+    }
+
+    void GauloisSolver::setLowerBound(const Universe::BigInteger &lb) {
+
+    }
+
+    void GauloisSolver::setUpperBound(const Universe::BigInteger &ub) {
+
+    }
+
+    void GauloisSolver::setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) {
+
+    }
+
+    Universe::BigInteger GauloisSolver::getCurrentBound() {
+        return 0;
+    }
+
+    bool GauloisSolver::isMinimization() {
+        return false;
     }
 
 } // Panoramyx

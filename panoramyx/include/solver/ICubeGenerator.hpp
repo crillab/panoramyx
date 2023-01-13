@@ -13,6 +13,7 @@
 
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 #include "../utils/Stream.hpp"
+#include "../core/IConsistencyChecker.hpp"
 
 namespace Panoramyx {
 
@@ -29,6 +30,7 @@ namespace Panoramyx {
 
     class ICubeGenerator {
     public:
+        virtual void setConsistencyChecker(IConsistencyChecker* solver)=0;
         virtual void setSolver(Universe::IUniverseSolver* solver)=0;
         virtual Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>>* generateCubes()=0;
         virtual ~ICubeGenerator()=default;

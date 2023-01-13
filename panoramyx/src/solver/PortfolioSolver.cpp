@@ -54,6 +54,21 @@ namespace Panoramyx {
                 interrupted= true;
                 end.release();
             }
+        }else if(strncmp(message->methodName,PANO_MESSAGE_NEW_BOUND_FOUND,sizeof(message->methodName))==0){
+            std::string param(message->parameters, strlen(message->parameters)+1);
+            Universe::BigInteger  newBound=Universe::bigIntegerValueOf(param);
+            if(isMinimization && newBound < upperBound){
+                upperBound=newBound;
+                for(auto solver:solvers){
+                    solver->setUpperBound(upperBound);
+                }
+            }else if(!isMinimization && lowerBound<newBound){
+                lowerBound=newBound;
+                for(auto solver:solvers){
+                    solver->setLowerBound(lowerBound);
+                }
+            }
+
         }
     }
 
@@ -69,7 +84,7 @@ namespace Panoramyx {
         return solvers[0]->nConstraints();
     }
 
-    const std::map<std::string, Universe::IUniverseVariable *> &PortfolioSolver::getVariablesMapping() const {
+    const std::map<std::string, Universe::IUniverseVariable *> &PortfolioSolver::getVariablesMapping()  {
         return {};
     }
 
