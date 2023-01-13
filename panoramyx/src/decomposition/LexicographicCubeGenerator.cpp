@@ -9,6 +9,8 @@
 
 
 #include "../../include/decomposition/LexicographicCubeGenerator.hpp"
+#include "../../include/decomposition/StreamLexicographicCube.hpp"
+
 using namespace Panoramyx;
 using namespace Universe;
 using namespace std;
@@ -19,6 +21,10 @@ using namespace std;
 @file LexicographicCubeGenerator.cpp
 */
 
+LexicographicCubeGenerator::LexicographicCubeGenerator(int nbCubesMax) : nbCubesMax(nbCubesMax) {
+
+}
     Stream<vector<UniverseAssumption<BigInteger>>>* LexicographicCubeGenerator::generateCubes() {
-        return nullptr;
+        return new StreamLexicographicCube(solver->getVariablesMapping(), nbCubesMax, consistencyChecker);
     }
+

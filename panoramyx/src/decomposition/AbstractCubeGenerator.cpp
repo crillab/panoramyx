@@ -9,6 +9,7 @@
 
 
 #include "../../include/decomposition/AbstractCubeGenerator.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/csp/IUniverseCspSolver.hpp"
 
 namespace Panoramyx {
 
@@ -18,12 +19,15 @@ namespace Panoramyx {
 @file AbstractCubeGenerator.cpp
 */
 
-    void AbstractCubeGenerator::setSolver(Universe::IUniverseSolver *solver) {
-        this->solver=solver;
+    void AbstractCubeGenerator::setConsistencyChecker(IConsistencyChecker *cc) {
+        this->consistencyChecker=cc;
     }
 
     bool AbstractCubeGenerator::checkConsistency(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>>& cube) {
-        auto result = this->solver->solve(cube);
-        return result!=Universe::UniverseSolverResult::UNSATISFIABLE;
+        return this->consistencyChecker->checkFinal(cube);
+    }
+
+    void AbstractCubeGenerator::setSolver(Universe::IUniverseSolver *s) {
+        this->solver=s;
     }
 } // Panoramyx

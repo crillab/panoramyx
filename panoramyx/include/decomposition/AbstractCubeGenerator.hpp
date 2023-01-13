@@ -12,6 +12,7 @@
 #define PANORAMYX_ABSTRACTCUBEGENERATOR_HPP
 
 #include "../solver/ICubeGenerator.hpp"
+#include "../core/IConsistencyChecker.hpp"
 
 namespace Panoramyx {
 
@@ -28,10 +29,12 @@ namespace Panoramyx {
 
     class AbstractCubeGenerator: public ICubeGenerator {
     protected:
+        IConsistencyChecker* consistencyChecker;
         Universe::IUniverseSolver* solver;
         bool checkConsistency(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>>& cube);
     public:
-        void setSolver(Universe::IUniverseSolver *solver) override;
+        void setSolver(Universe::IUniverseSolver* solver) override;
+        void setConsistencyChecker(IConsistencyChecker* checker) override;
         ~AbstractCubeGenerator() override = default;
     };
 

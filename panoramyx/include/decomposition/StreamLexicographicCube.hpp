@@ -17,6 +17,8 @@
 #include "../../../libs/autis/libs/universe/universe/include/core/UniverseType.hpp"
 #include "../../../libs/autis/libs/universe/universe/include/core/UniverseAssumption.hpp"
 #include "../../../libs/autis/libs/universe/universe/include/core/problem/IUniverseVariable.hpp"
+#include "../core/IConsistencyChecker.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/csp/IUniverseCspSolver.hpp"
 
 namespace Panoramyx {
 
@@ -31,27 +33,32 @@ namespace Panoramyx {
  * @version 0.1.0
  */
 
-class StreamLexicographicCube: public Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> {
-private:
-    const std::map<std::string,Universe::IUniverseVariable*>& mapping;
-    std::vector<Universe::UniverseAssumption<Universe::BigInteger>> current;
-    std::vector<bool> variablesFinish;
-    std::vector<int> indexesCurrentValues;
-    std::vector<Universe::IUniverseVariable*> variables;
-    size_t nbCubeMax;
+    class StreamLexicographicCube : public Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> {
+    private:
+        const std::map<std::string, Universe::IUniverseVariable *> &mapping;
+        std::vector<Universe::UniverseAssumption<Universe::BigInteger>> current;
+        std::vector<bool> variablesFinish;
+        std::vector<int> indexesCurrentValues;
+        std::vector<Universe::IUniverseVariable *> variables;
+        size_t nbCubeMax;
+        IConsistencyChecker *checker;
 
-    void generateFirst();
-    void generateNext();
-public:
 
-    explicit StreamLexicographicCube(const std::map<std::string,Universe::IUniverseVariable*>& mapping,size_t nbCubeMax);
+        void generateFirst();
 
-    std::vector<Universe::UniverseAssumption<Universe::BigInteger>> next() override;
+        void generateNext();
 
-    bool hasNext() override;
+    public:
 
-    ~StreamLexicographicCube() override = default;
-};
+        explicit StreamLexicographicCube(const std::map<std::string, Universe::IUniverseVariable *> &mapping,
+                                         size_t nbCubeMax, IConsistencyChecker *checker);
+
+        std::vector<Universe::UniverseAssumption<Universe::BigInteger>> next() override;
+
+        bool hasNext() override;
+
+        ~StreamLexicographicCube() override = default;
+    };
 
 } // Panoramyx
 

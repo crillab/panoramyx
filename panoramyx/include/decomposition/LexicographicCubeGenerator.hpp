@@ -27,7 +27,11 @@ namespace Panoramyx {
  */
 
     class LexicographicCubeGenerator: public AbstractCubeGenerator {
+    private:
+        int nbCubesMax;
+
     public:
+        explicit LexicographicCubeGenerator(int nbCubesMax);
         Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> *generateCubes() override;
     };
 
