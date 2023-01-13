@@ -22,7 +22,9 @@ namespace Panoramyx {
 
     bool PartialConsistencyChecker::checkPartial(
             const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
-        return solver->solve(assumpts)!=Universe::UniverseSolverResult::UNSATISFIABLE;
+        auto result = solver->solve(assumpts)!=Universe::UniverseSolverResult::UNSATISFIABLE;
+        solver->reset();
+        return result;
     }
 
     bool PartialConsistencyChecker::checkFinal(
