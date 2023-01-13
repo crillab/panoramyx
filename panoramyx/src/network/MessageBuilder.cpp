@@ -10,6 +10,7 @@
 
 #include <cstring>
 #include "../../include/network/MessageBuilder.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/core/UniverseType.hpp"
 
 namespace Panoramyx {
 
@@ -54,4 +55,11 @@ namespace Panoramyx {
         message->size+=p.size()+1;
         return *this;
     }
+
+    template<>
+    MessageBuilder& MessageBuilder::withParameter(Universe::BigInteger p) {
+        this->withParameter(Universe::toString(p));
+        return *this;
+    }
+
 } // Panoramyx
