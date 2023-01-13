@@ -147,7 +147,7 @@ file(GLOB_RECURSE HEADERS
 include_directories(libs/loguru)
 add_library(${LIBRARY_NAME} ${SOURCES} ${HEADERS} libs/loguru/loguru.cpp libs/loguru/loguru.hpp)
 set_target_properties(${LIBRARY_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(${LIBRARY_NAME} autis exception universe ${MPI_CXX_LIBRARIES})
+target_link_libraries(${LIBRARY_NAME} autis exception universe easyjni ${MPI_CXX_LIBRARIES})
 
 
 add_executable(mainpano panoramyx/src/main.cpp)
