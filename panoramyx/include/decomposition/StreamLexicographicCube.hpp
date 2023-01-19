@@ -55,7 +55,7 @@ namespace Panoramyx {
 
         std::vector<Universe::UniverseAssumption<Universe::BigInteger>> next() override;
 
-        bool hasNext() override;
+        [[nodiscard]] bool hasNext() const override;
 
         ~StreamLexicographicCube() override = default;
     };

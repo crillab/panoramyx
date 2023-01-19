@@ -37,7 +37,7 @@ std::vector<UniverseAssumption<BigInteger>> StreamLexicographicCube::next() {
     return current;
 }
 
-bool StreamLexicographicCube::hasNext() {
+bool StreamLexicographicCube::hasNext() const {
     return indexesCurrentValues.empty() || !variablesFinish[variablesFinish.size() - 1];
 }
 
