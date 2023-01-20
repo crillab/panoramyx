@@ -2,7 +2,7 @@
 #include <mpi.h>
 #include <fstream>
 #include "../include/network/INetworkCommunication.hpp"
-#include "../include/network/MpiNetworkCommunication.hpp"
+#include "../include/network/MPINetworkCommunication.hpp"
 #include "../include/solver/AbstractParallelSolver.hpp"
 #include "../include/solver/PortfolioSolver.hpp"
 #include "../include/solver/GauloisSolver.hpp"

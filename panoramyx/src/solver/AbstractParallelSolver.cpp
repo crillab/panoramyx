@@ -11,6 +11,7 @@
 #include <thread>
 #include <mpi.h>
 #include "../../include/solver/AbstractParallelSolver.hpp"
+#include "../../include/network/Message.hpp"
 
 namespace Panoramyx {
 

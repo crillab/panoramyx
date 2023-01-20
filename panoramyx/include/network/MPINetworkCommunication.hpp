@@ -19,8 +19,8 @@
  */
 
 /**
- * @file INetworkCommunication.hpp
- * @brief Defines a strategy for network communication.
+ * @file MPINetworkCommunication.hpp
+ * @brief An MPI implementation of INetworkCommunication.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -29,43 +29,64 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#ifndef PANORAMYX_INETWORKCOMMUNICATION_HPP
-#define PANORAMYX_INETWORKCOMMUNICATION_HPP
+#ifndef PANORAMYX_MPINETWORKCOMMUNICATION_HPP
+#define PANORAMYX_MPINETWORKCOMMUNICATION_HPP
 
-#include <cstring>
-
-#include "Message.hpp"
+#include "INetworkCommunication.hpp"
 
 namespace Panoramyx {
 
     /**
-     * The INetworkCommunication defines en interface for a strategy allowing to
-     * exchange information through the network.
-     * This interface is designed to allow communication using various approaches,
-     * such as, e.g., MPI, UNIX pipes, etc.
+     * The MPINetworkCommunication is an implementation of INetworkCommunication
+     * that relies on MPI (Message Passing Interface) to communicate between
+     * different processes.
      */
-    class INetworkCommunication {
+    class MPINetworkCommunication : public INetworkCommunication {
+
+    private:
+
+        /**
+         * The unique instance of this class.
+         */
+        static INetworkCommunication *instance;
+
+        /**
+         * The rank of the current communicator, as assigned by MPI.
+         */
+        int rank = -1;
+
+        /**
+         * The size of MPI's world, i.e., the number of processes.
+         */
+        int worldSize = -1;
 
     public:
 
         /**
-         * Destroys this INetworkCommunication.
+         * Destroys this MPINetworkCommunication.
          */
-        virtual ~INetworkCommunication() = default;
+        ~MPINetworkCommunication() override = default;
+
+        /**
+         * Gives the unique instance of MPINetworkCommunication.
+         *
+         * @return The unique instance of MPINetworkCommunication.
+         */
+        static INetworkCommunication *getInstance();
 
         /**
          * Gives the identifier of the current communicator.
          *
          * @return The identifier of the current communicator.
          */
-        virtual int getId() = 0;
+        int getId() override;
 
         /**
          * Gives the number of processes that are currently communicating.
          *
          * @return The number of processes.
          */
-        virtual int nbProcesses() = 0;
+        int nbProcesses() override;
 
         /**
          * Receives a message.
@@ -76,7 +97,7 @@ namespace Panoramyx {
          *
          * @return The received message.
          */
-        virtual Message *receive(int tag, int src, unsigned long size) = 0;
+        Message *receive(int tag, int src, unsigned long size) override;
 
         /**
          * Sends a message.
@@ -84,7 +105,7 @@ namespace Panoramyx {
          * @param message The message to send.
          * @param dest The identifier of the destination of the message (i.e., the communicator that will receive it).
          */
-        virtual void send(Message *message, int dest) = 0;
+        void send(Message *message, int dest) override;
 
     };
 

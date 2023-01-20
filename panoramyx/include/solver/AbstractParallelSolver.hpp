@@ -13,7 +13,7 @@
 
 #include <vector>
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
-#include "../network/NetworkTypes.hpp"
+#include "../network/Message.hpp"
 #include "../utils/BlockingDeque.hpp"
 #include "RemoteSolver.hpp"
 

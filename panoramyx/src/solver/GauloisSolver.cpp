@@ -16,6 +16,7 @@
 #include "../../../libs/autis/autis/include/xcsp/AutisXcspParserAdapter.hpp"
 #include "../../../libs/autis/libs/universe/libs/easy-jni/easyjni/JavaVirtualMachineRegistry.h"
 #include "loguru.hpp"
+#include "../../include/network/Message.hpp"
 
 namespace Panoramyx {
 
@@ -26,14 +27,15 @@ namespace Panoramyx {
 */
 
 
-    GauloisSolver::GauloisSolver(Universe::IUniverseSolver *solver,INetworkCommunication* comm) : solver(solver),comm(comm) {
+    GauloisSolver::GauloisSolver(Universe::IUniverseSolver *solver, INetworkCommunication *comm) : solver(solver),
+                                                                                                   comm(comm) {
 
     }
 
     Universe::UniverseSolverResult GauloisSolver::solve() {
         loadMutex.lock();
         nbSolved++;
-        auto r=solver->solve();
+        auto r = solver->solve();
         loadMutex.unlock();
         return r;
     }
@@ -43,9 +45,10 @@ namespace Panoramyx {
         nbSolved++;
         ifstream input(filename);
         Autis::Scanner scanner(input);
-        auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver *>(solver));
+        auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner,
+                                                                 dynamic_cast<Universe::IUniverseCspSolver *>(solver));
         parser->parse();
-        auto result= solver->solve();
+        auto result = solver->solve();
         loadMutex.unlock();
         return result;
     }
@@ -54,14 +57,15 @@ namespace Panoramyx {
     GauloisSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &asumpts) {
         loadMutex.lock();
         nbSolved++;
-        auto r= solver->solve(asumpts);
-        DLOG_F(INFO,"result after solve(assumpts): %s",r==Universe::UniverseSolverResult::SATISFIABLE?"satisfiable":"unsatisfiable");
+        auto r = solver->solve(asumpts);
+        DLOG_F(INFO, "result after solve(assumpts): %s",
+               r == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
         loadMutex.unlock();
         return r;
     }
 
     void GauloisSolver::interrupt() {
-        interrupted= true;
+        interrupted = true;
         solver->interrupt();
     }
 
@@ -79,7 +83,7 @@ namespace Panoramyx {
 
     void GauloisSolver::reset() {
         loadMutex.lock();
-        DLOG_F(INFO,"call reset");
+        DLOG_F(INFO, "call reset");
         solver->reset();
         loadMutex.unlock();
     }
@@ -106,59 +110,59 @@ namespace Panoramyx {
             readMessage(message);
             free(message);
         }
-        for(int i=0;i<nbSolved;i++) {
+        for (int i = 0; i < nbSolved; i++) {
             finished.acquire();
         }
     }
 
     void GauloisSolver::readMessage(Message *m) {
-        DLOG_F(INFO,"Gaulois Solver: readMessage - %s",m->methodName);
-        if(strncmp(m->methodName, PANO_MESSAGE_SOLVE_FILENAME, sizeof(m->methodName)) == 0){
+        DLOG_F(INFO, "Gaulois Solver: readMessage - %s", m->name);
+        if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE_FILENAME))) {
             std::string filename(m->parameters);
-            this->solve(filename,m);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_SOLVE, sizeof(m->methodName)) == 0) {
+            this->solve(filename, m);
+        } else if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE))) {
             this->solve(m);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_SOLVE_ASSUMPTIONS, sizeof(m->methodName)) == 0){
+        } else if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE_ASSUMPTIONS))) {
             std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts;
-            for(int i=0,n=0;n<m->nbParameters;n+=3){
+            for (int i = 0, n = 0; n < m->nbParameters; n += 3) {
                 int varId = m->read<int>(i);
-                i+=sizeof(int);
+                i += sizeof(int);
                 bool equal = m->read<bool>(i);
-                i+= sizeof(bool);
-                char* ptr=m->parameters+i;
-                std::string param(ptr, strlen(ptr)+1);
-                DLOG_F(INFO,"%d %s '%s'",varId,equal?"=":"!=",param.c_str());
-                Universe::BigInteger  tmp=Universe::bigIntegerValueOf(param);
-                assumpts.emplace_back(varId,equal,tmp);
-                i+=param.size();
+                i += sizeof(bool);
+                char *ptr = m->parameters + i;
+                std::string param(ptr, strlen(ptr) + 1);
+                DLOG_F(INFO, "%d %s '%s'", varId, equal ? "=" : "!=", param.c_str());
+                Universe::BigInteger tmp = Universe::bigIntegerValueOf(param);
+                assumpts.emplace_back(varId, equal, tmp);
+                i += param.size();
             }
-            this->solve(assumpts,m);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_RESET, sizeof(m->methodName)) == 0){
+            this->solve(assumpts, m);
+        } else if (strncmp(m->name, PANO_MESSAGE_RESET, sizeof(m->name)) == 0) {
             this->reset();
-        }else if(strncmp(m->methodName,PANO_MESSAGE_LOAD, sizeof(m->methodName))==0) {
+        } else if (strncmp(m->name, PANO_MESSAGE_LOAD, sizeof(m->name)) == 0) {
             std::string filename(m->parameters);
             this->load(filename);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_INTERRUPT, sizeof(m->methodName)) == 0){
+        } else if (strncmp(m->name, PANO_MESSAGE_INTERRUPT, sizeof(m->name)) == 0) {
             this->interrupt();
-        }else if(strncmp(m->methodName, PANO_MESSAGE_SET_TIMEOUT, sizeof(m->methodName)) == 0){
+        } else if (strncmp(m->name, PANO_MESSAGE_SET_TIMEOUT, sizeof(m->name)) == 0) {
             auto timeout = m->read<long>();
             this->setTimeout(timeout);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_SET_TIMEOUT_MS, sizeof(m->methodName)) == 0){
+        } else if (strncmp(m->name, PANO_MESSAGE_SET_TIMEOUT_MS, sizeof(m->name)) == 0) {
             auto timeout = m->read<long>();
             this->setTimeoutMs(timeout);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_SET_VERBOSITY, sizeof(m->methodName)) == 0){
+        } else if (strncmp(m->name, PANO_MESSAGE_SET_VERBOSITY, sizeof(m->name)) == 0) {
             int level = m->read<int>();
             this->setVerbosity(level);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_SET_LOG_FILE, sizeof(m->methodName)) == 0){
+        } else if (strncmp(m->name, PANO_MESSAGE_SET_LOG_FILE, sizeof(m->name)) == 0) {
             std::string filename(m->parameters);
             this->setLogFile(filename);
-        }else if(strncmp(m->methodName, PANO_MESSAGE_END_SEARCH, sizeof(m->methodName)) == 0){
+        } else if (strncmp(m->name, PANO_MESSAGE_END_SEARCH, sizeof(m->name)) == 0) {
             MessageBuilder mb;
-            Message* r =mb.forMethod(PANO_MESSAGE_END_SEARCH).withTag(PANO_TAG_SOLVE).build();
-            comm->send(r,m->src);
+            Message *r = mb.named(PANO_MESSAGE_END_SEARCH).withTag(PANO_TAG_SOLVE).build();
+            comm->send(r, m->src);
             free(r);
             interrupt();
-        }else if(strncmp(m->methodName,PANO_MESSAGE_LOWER_BOUND, sizeof(m->methodName))==0){
+        } else if (strncmp(m->name, PANO_MESSAGE_LOWER_BOUND, sizeof(m->name)) == 0) {
 
         }
 
@@ -166,7 +170,7 @@ namespace Panoramyx {
 
     std::vector<Universe::BigInteger> GauloisSolver::solution(Message *m) {
         MessageBuilder mb;
-        mb.forMethod("solution");
+        mb.named("solution");
         const std::vector<Universe::BigInteger> &solution1 = solver->solution();
         for (auto &big: solution1) {
             mb.withParameter(Universe::toString(big));
@@ -178,26 +182,26 @@ namespace Panoramyx {
     }
 
     int GauloisSolver::nVariables(Message *m) {
-        int n=solver->nVariables();
+        int n = solver->nVariables();
         MessageBuilder mb;
-        Message* r=mb.forMethod(PANO_MESSAGE_N_VARIABLES).withTag(PANO_TAG_RESPONSE).withParameter(n).build();
-        comm->send(r,m->src);
+        Message *r = mb.named(PANO_MESSAGE_N_VARIABLES).withTag(PANO_TAG_RESPONSE).withParameter(n).build();
+        comm->send(r, m->src);
         free(r);
         return n;
     }
 
     int GauloisSolver::nConstraints(Message *m) {
-        int n=solver->nConstraints();
+        int n = solver->nConstraints();
         MessageBuilder mb;
-        Message* r=mb.forMethod(PANO_MESSAGE_N_CONSTRAINTS).withTag(PANO_TAG_RESPONSE).withParameter(n).build();
-        comm->send(r,m->src);
+        Message *r = mb.named(PANO_MESSAGE_N_CONSTRAINTS).withTag(PANO_TAG_RESPONSE).withParameter(n).build();
+        comm->send(r, m->src);
         free(r);
         return n;
     }
 
     Universe::UniverseSolverResult GauloisSolver::solve(Message *m) {
-        int src=m->src;
-        std::thread t([this,src]() {
+        int src = m->src;
+        std::thread t([this, src]() {
             auto result = this->solve();
             sendResult(src, result);
             finished.release();
@@ -209,29 +213,29 @@ namespace Panoramyx {
         MessageBuilder mb;
         switch (result) {
             case Universe::UniverseSolverResult::SATISFIABLE:
-                mb.forMethod(PANO_MESSAGE_SATISFIABLE);
+                mb.named(PANO_MESSAGE_SATISFIABLE);
                 break;
             case Universe::UniverseSolverResult::UNSATISFIABLE:
-                mb.forMethod(PANO_MESSAGE_UNSATISFIABLE);
+                mb.named(PANO_MESSAGE_UNSATISFIABLE);
                 break;
             case Universe::UniverseSolverResult::UNKNOWN:
-                mb.forMethod(PANO_MESSAGE_UNKNOWN);
+                mb.named(PANO_MESSAGE_UNKNOWN);
                 break;
             case Universe::UniverseSolverResult::UNSUPPORTED:
-                mb.forMethod(PANO_MESSAGE_UNSUPPORTED);
+                mb.named(PANO_MESSAGE_UNSUPPORTED);
                 break;
             case Universe::UniverseSolverResult::OPTIMUM_FOUND:
-                mb.forMethod(PANO_MESSAGE_OPTIMUM_FOUND);
+                mb.named(PANO_MESSAGE_OPTIMUM_FOUND);
                 break;
         }
-        Message* r = mb.withTag(PANO_TAG_SOLVE).build();
+        Message *r = mb.withTag(PANO_TAG_SOLVE).build();
         comm->send(r, src);
         free(r);
     }
 
     Universe::UniverseSolverResult GauloisSolver::solve(std::string filename, Message *m) {
-        int src=m->src;
-        std::thread t([this,src,filename]() {
+        int src = m->src;
+        std::thread t([this, src, filename]() {
             auto result = this->solve(filename);
             sendResult(src, result);
             finished.release();
@@ -241,9 +245,9 @@ namespace Panoramyx {
 
     Universe::UniverseSolverResult
     GauloisSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> asumpts, Message *m) {
-        int src=m->src;
-        std::thread t([this,src,asumpts]() {
-            DLOG_F(INFO,"Run solve(assumpts,m) in a new thread.");
+        int src = m->src;
+        std::thread t([this, src, asumpts]() {
+            DLOG_F(INFO, "Run solve(assumpts,m) in a new thread.");
             auto result = this->solve(asumpts);
             sendResult(src, result);
             easyjni::JavaVirtualMachineRegistry::detachCurrentThread();
@@ -256,7 +260,8 @@ namespace Panoramyx {
         loadMutex.lock();
         ifstream input(filename);
         Autis::Scanner scanner(input);
-        auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver *>(solver));
+        auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner,
+                                                                 dynamic_cast<Universe::IUniverseCspSolver *>(solver));
         parser->parse();
         loadMutex.unlock();
     }

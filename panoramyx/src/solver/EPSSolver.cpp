@@ -11,6 +11,8 @@
 #include <thread>
 #include "../../include/solver/EPSSolver.hpp"
 #include "../../../libs/loguru/loguru.hpp"
+#include "../../include/network/Message.hpp"
+
 namespace Panoramyx {
 
 /**
@@ -37,18 +39,18 @@ namespace Panoramyx {
     }
 
     void EPSSolver::readMessage(const Message *message) {
-        if(strncmp(message->methodName,PANO_MESSAGE_SATISFIABLE,sizeof(message->methodName))==0){
+        if(strncmp(message->name, PANO_MESSAGE_SATISFIABLE, sizeof(message->name)) == 0){
             winner = message->read<unsigned>();;
             result=Universe::UniverseSolverResult::SATISFIABLE;
             availableSolvers.clear();
             solved.release();
             cubes.release();
-        }else if(strncmp(message->methodName,PANO_MESSAGE_UNSATISFIABLE,sizeof(message->methodName))==0){
+        }else if(strncmp(message->name, PANO_MESSAGE_UNSATISFIABLE, sizeof(message->name)) == 0){
             auto src = message->read<unsigned>();
             solvers[src]->reset();
             availableSolvers.add(solvers[src]);
             cubes.release();
-        }else if(strncmp(message->methodName,PANO_MESSAGE_END_SEARCH,sizeof(message->methodName))==0){
+        }else if(strncmp(message->name, PANO_MESSAGE_END_SEARCH, sizeof(message->name)) == 0){
             endSolvers--;
             if(endSolvers<=0){
                 interrupted= true;

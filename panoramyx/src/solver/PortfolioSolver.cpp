@@ -10,6 +10,7 @@
 
 #include <cstring>
 #include "../../include/solver/PortfolioSolver.hpp"
+#include "../../include/network/Message.hpp"
 
 namespace Panoramyx {
 
@@ -40,21 +41,21 @@ namespace Panoramyx {
     }
 
     void PortfolioSolver::readMessage(const Message *message) {
-        if(strncmp(message->methodName,PANO_MESSAGE_SATISFIABLE,sizeof(message->methodName))==0){
+        if(strncmp(message->name, PANO_MESSAGE_SATISFIABLE, sizeof(message->name)) == 0){
             winner = *((const unsigned *)message->parameters);
             result=Universe::UniverseSolverResult::SATISFIABLE;
             solved.release();
-        }else if(strncmp(message->methodName,PANO_MESSAGE_UNSATISFIABLE,sizeof(message->methodName))==0){
+        }else if(strncmp(message->name, PANO_MESSAGE_UNSATISFIABLE, sizeof(message->name)) == 0){
             winner = *((const unsigned *)message->parameters);
             result=Universe::UniverseSolverResult::UNSATISFIABLE;
             solved.release();
-        }else if(strncmp(message->methodName,PANO_MESSAGE_END_SEARCH,sizeof(message->methodName))==0){
+        }else if(strncmp(message->name, PANO_MESSAGE_END_SEARCH, sizeof(message->name)) == 0){
             endSolvers--;
             if(endSolvers<=0){
                 interrupted= true;
                 end.release();
             }
-        }else if(strncmp(message->methodName,PANO_MESSAGE_NEW_BOUND_FOUND,sizeof(message->methodName))==0){
+        }else if(strncmp(message->name, PANO_MESSAGE_NEW_BOUND_FOUND, sizeof(message->name)) == 0){
             std::string param(message->parameters, strlen(message->parameters)+1);
             Universe::BigInteger  newBound=Universe::bigIntegerValueOf(param);
             if(isMinimization && newBound < upperBound){
