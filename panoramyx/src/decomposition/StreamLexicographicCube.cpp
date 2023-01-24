@@ -67,22 +67,31 @@ vector<UniverseAssumption<BigInteger>> StreamLexicographicCube::next() {
 }
 
 void StreamLexicographicCube::generateFirst() {
-    size_t nb = 1;
-    for (auto &items: mapping) {
-        current.emplace_back(items.second->getId(), true, items.second->getDomain()->getValues().at(0));
-        variables.push_back(items.second);
+    size_t estimatedCubeCount = 1;
+
+    for (auto &variable : mapping) {
+        // Assuming the first value of the domain for this variable.
+        current.emplace_back(variable.second->getId(), true, variable.second->getDomain()->getValues().at(0));
+        variables.push_back(variable.second);
         indexesCurrentValues.emplace_back(0);
-        bool currentVariableIsFinish = items.second->getDomain()->size() == 1;
+
+        // Checking whether the domain of this variable is fully explored.
+        // As we assumed the first value, it is the case iff the domain is a singleton.
+        bool currentVariableIsFinish = (variable.second->getDomain()->size() == 1);
         if (!variablesFinished.empty()) {
             currentVariableIsFinish &= variablesFinished[variablesFinished.size() - 1];
         }
         variablesFinished.emplace_back(currentVariableIsFinish);
-        nb *= items.second->getDomain()->size();
-        if (nb >= nbCubeMax) {
+
+        // Updating the estimated count of cubes based on the size of the domain of the current variable.
+        estimatedCubeCount *= variable.second->getDomain()->size();
+        if (estimatedCubeCount >= nbCubeMax) {
             break;
         }
     }
+
     if (!consistencyChecker->checkPartial(current) || !consistencyChecker->checkFinal(current)) {
+        // The first cube is inconsistent, we must generate another one.
         generateNext();
     }
 }
