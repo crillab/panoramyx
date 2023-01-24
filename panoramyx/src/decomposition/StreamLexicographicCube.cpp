@@ -70,18 +70,13 @@ void StreamLexicographicCube::generateFirst() {
     size_t estimatedCubeCount = 1;
 
     for (auto &variable : mapping) {
-        // Assuming the first value of the domain for this variable.
-        current.emplace_back(variable.second->getId(), true, variable.second->getDomain()->getValues().at(0));
+        // Initializing internal data-structures.
         variables.push_back(variable.second);
         indexesCurrentValues.emplace_back(0);
+        variablesFinished.emplace_back(false);
 
-        // Checking whether the domain of this variable is fully explored.
-        // As we assumed the first value, it is the case iff the domain is a singleton.
-        bool currentVariableIsFinish = (variable.second->getDomain()->size() == 1);
-        if (!variablesFinished.empty()) {
-            currentVariableIsFinish &= variablesFinished[variablesFinished.size() - 1];
-        }
-        variablesFinished.emplace_back(currentVariableIsFinish);
+        // Assuming the first value of the domain for this variable.
+        assume(variables.size() - 1, 0);
 
         // Updating the estimated count of cubes based on the size of the domain of the current variable.
         estimatedCubeCount *= variable.second->getDomain()->size();
@@ -97,45 +92,67 @@ void StreamLexicographicCube::generateFirst() {
 }
 
 void StreamLexicographicCube::generateNext() {
-    bool partialOk;
+    bool partiallyConsistent;
+
     do {
-        partialOk = true;
-        int i;
-        for (i = current.size() - 1; i >= 0 && indexesCurrentValues[i] == variables[i]->getDomain()->size() - 1; i--) {
-            current.pop_back();
-        }
-        if (i < 0) {
+        // Backtracking to a variable whose domain is not fully explored.
+        int varIndex = backtrack();
+        if (varIndex < 0) {
+            // We have tried all remaining assignments, and no one is consistent.
             current.clear();
             return;
         }
-        current.pop_back();
-        current.emplace_back(variables[i]->getId(), true,
-                             variables[i]->getDomain()->getValues().at(++indexesCurrentValues[i]));
-        if (!consistencyChecker->checkPartial(current)) {
-            partialOk = false;
-            continue;
-        }
-        variablesFinished[i] = indexesCurrentValues[i] == variables[i]->getDomain()->size() - 1;
-        if (i != 0) {
-            variablesFinished[i] = variablesFinished[i] && variablesFinished[i - 1];
-        }
 
-        for (i++; i < variables.size(); i++) {
-            partialOk = false;
-            for (int v = 0; v < variables[i]->getDomain()->size(); v++) {
-                current.emplace_back(variables[i]->getId(), true, variables[i]->getDomain()->getValues().at(v));
-                indexesCurrentValues[i] = v;
-                variablesFinished[i] = variables[i]->getDomain()->size() == v + 1 && variablesFinished[i - 1];
+        // Assuming the next value for the current variable.
+        assume(varIndex, indexesCurrentValues[varIndex] + 1);
+        partiallyConsistent = consistencyChecker->checkPartial(current);
+
+        // Completing the cube with the remaining variables.
+        for (varIndex++; partiallyConsistent && (varIndex < variables.size()); varIndex++) {
+            partiallyConsistent = false;
+
+            // Looking for a consistent value.
+            for (int valIndex = 0; valIndex < variables[varIndex]->getDomain()->size(); valIndex++) {
+                assume(varIndex, valIndex);
                 if (consistencyChecker->checkPartial(current)) {
-                    partialOk = true;
+                    partiallyConsistent = true;
                     break;
                 }
-               current.pop_back();
-            }
-            if (!partialOk) {
-                break;
+                current.pop_back();
             }
         }
-    } while (!partialOk || !consistencyChecker->checkFinal(current));
+
+    } while (!partiallyConsistent || !consistencyChecker->checkFinal(current));
 }
 
+int StreamLexicographicCube::backtrack() {
+    int varIndex;
+
+    for (varIndex = current.size() - 1; varIndex >= 0; varIndex--) {
+        // Undoing the assignment.
+        current.pop_back();
+
+        if (indexesCurrentValues[varIndex] != (variables[varIndex]->getDomain()->size() - 1)) {
+            // Some values are still to be explored in the domain of this variable.
+            break;
+        }
+    }
+
+    return varIndex;
+}
+
+void StreamLexicographicCube::assume(int varIndex, int valIndex) {
+    // Adding the assumption to the cube.
+    current.emplace_back(variables[varIndex]->getId(),
+                         true,
+                         variables[varIndex]->getDomain()->getValues().at(valIndex));
+
+    // Updating the index of the current value.
+    indexesCurrentValues[varIndex] = valIndex;
+
+    // Checking whether the domain of the variable has been fully explored.
+    variablesFinished[varIndex] = (indexesCurrentValues[varIndex] == (variables[varIndex]->getDomain()->size() - 1));
+    if (varIndex != 0) {
+        variablesFinished[varIndex] = variablesFinished[varIndex] && variablesFinished[varIndex - 1];
+    }
+}

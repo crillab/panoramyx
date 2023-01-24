@@ -132,6 +132,21 @@ namespace Panoramyx {
          */
         void generateNext();
 
+        /**
+         * Backtracks to a variable whose domain is not fully explored.
+         *
+         * @return The index of the next variable to assign, or -1 if there is no such variable.
+         */
+        int backtrack();
+
+        /**
+         * Adds an assumption to the current cube.
+         *
+         * @param varIndex The index of the variable to assume.
+         * @param valIndex The index of the assumed value for the variable.
+         */
+        void assume(int varIndex, int valIndex);
+
     };
 
 }
