@@ -62,12 +62,12 @@ namespace Panoramyx {
         /**
          * Sets the consistencyChecker used to check the consistency of the generated cubes.
          *
-         * @param checker The consistencyChecker to set.
+         * @param checker The consistency checker to set.
          */
         virtual void setConsistencyChecker(Panoramyx::IConsistencyChecker *checker) = 0;
 
         /**
-         * Generates the cube representing the assumptions to distribute among the
+         * Generates the cubes representing the assumptions to distribute among the
          * solvers that are run in parallel.
          *
          * @return The stream of the generated cubes.

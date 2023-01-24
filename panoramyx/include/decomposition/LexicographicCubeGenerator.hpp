@@ -59,7 +59,7 @@ namespace Panoramyx {
         explicit LexicographicCubeGenerator(int nbCubesMax);
 
         /**
-         * Generates the cube representing the assumptions to distribute among the
+         * Generates the cubes representing the assumptions to distribute among the
          * solvers that are run in parallel.
          *
          * @return The stream of the generated cubes.
