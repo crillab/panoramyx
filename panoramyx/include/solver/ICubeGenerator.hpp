@@ -60,9 +60,9 @@ namespace Panoramyx {
         virtual void setSolver(Universe::IUniverseSolver *solver) = 0;
 
         /**
-         * Sets the checker used to check the consistency of the generated cubes.
+         * Sets the consistencyChecker used to check the consistency of the generated cubes.
          *
-         * @param checker The checker to set.
+         * @param checker The consistencyChecker to set.
          */
         virtual void setConsistencyChecker(Panoramyx::IConsistencyChecker *checker) = 0;
 

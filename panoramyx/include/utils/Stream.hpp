@@ -63,9 +63,9 @@ namespace Panoramyx {
         virtual ~Stream() = default;
 
         /**
-         * Checks whether there is another element in this Stream.
+         * Checks whether there is another element in this stream.
          *
-         * @return Whether there is another element in this Stream.
+         * @return Whether there is another element in this stream.
          */
         [[nodiscard]] virtual bool hasNext() const = 0;
 

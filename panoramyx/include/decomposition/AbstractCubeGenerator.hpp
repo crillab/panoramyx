@@ -1,43 +1,82 @@
 /**
-* @date 05/12/22
-* @file AbstractCubeGenerator.hpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
+/**
+ * @file AbstractCubeGenerator.hpp
+ * @brief Provides a base implementation for cube generators.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #ifndef PANORAMYX_ABSTRACTCUBEGENERATOR_HPP
 #define PANORAMYX_ABSTRACTCUBEGENERATOR_HPP
 
-#include "../solver/ICubeGenerator.hpp"
 #include "../core/IConsistencyChecker.hpp"
+#include "../solver/ICubeGenerator.hpp"
 
 namespace Panoramyx {
 
-/**
- * @class AbstractCubeGenerator
- *
- * @brief 
- * @file AbstractCubeGenerator.hpp
- * @author Thibault Falque
- * @author Romain Wallon
- *
- * @version 0.1.0
- */
+    /**
+     * The AbstractCubeGenerator provides a base implementation for cube generators.
+     */
+    class AbstractCubeGenerator : public Panoramyx::ICubeGenerator {
 
-    class AbstractCubeGenerator: public ICubeGenerator {
     protected:
-        IConsistencyChecker* consistencyChecker;
-        Universe::IUniverseSolver* solver;
-        bool checkConsistency(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>>& cube);
+
+        /**
+         * The solver providing the metadata about the problem to solve.
+         */
+        Universe::IUniverseSolver *solver;
+
+        /**
+         * The consistency checker used to check whether the generated cube are consistent.
+         */
+        Panoramyx::IConsistencyChecker *consistencyChecker;
+
     public:
-        void setSolver(Universe::IUniverseSolver* solver) override;
-        void setConsistencyChecker(IConsistencyChecker* checker) override;
+
+        /**
+         * Destroys this AbstractCubeGenerator.
+         */
         ~AbstractCubeGenerator() override = default;
+
+        /**
+         * Sets the solver providing the metadata about the problem to solve.
+         *
+         * @param solver The solver to set.
+         */
+        void setSolver(Universe::IUniverseSolver *solver) override;
+
+        /**
+         * Sets the consistency checker used to check whether the generated cube are consistent.
+         *
+         * @param checker The consistency checker to set.
+         */
+        void setConsistencyChecker(Panoramyx::IConsistencyChecker *checker) override;
+
     };
 
-} // Panoramyx
+}
 
-#endif //PANORAMYX_ABSTRACTCUBEGENERATOR_HPP
+#endif

@@ -1,12 +1,33 @@
 /**
-* @date 05/12/22
-* @file LexicographicCubeGenerator.hpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
+/**
+ * @file LexicographicCubeGenerator.hpp
+ * @brief Generates cubes following a lexicographic order.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #ifndef PANORAMYX_LEXICOGRAPHICCUBEGENERATOR_HPP
 #define PANORAMYX_LEXICOGRAPHICCUBEGENERATOR_HPP
@@ -15,26 +36,38 @@
 
 namespace Panoramyx {
 
-/**
- * @class LexicographicCubeGenerator
- *
- * @brief 
- * @file LexicographicCubeGenerator.hpp
- * @author Thibault Falque
- * @author Romain Wallon
- *
- * @version 0.1.0
- */
+    /**
+     * The LexicographicCubeGenerator generates cubes following a lexicographic order
+     * on the variables and the values of their domains
+     */
+    class LexicographicCubeGenerator : public Panoramyx::AbstractCubeGenerator {
 
-    class LexicographicCubeGenerator: public AbstractCubeGenerator {
     private:
+
+        /**
+         * The maximum number of cubes to generate.
+         */
         int nbCubesMax;
 
     public:
+
+        /**
+         * Creates a new LexicographicCubeGenerator.
+         *
+         * @param nbCubesMax The maximum number of cubes to generate.
+         */
         explicit LexicographicCubeGenerator(int nbCubesMax);
-        Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> *generateCubes() override;
+
+        /**
+         * Generates the cube representing the assumptions to distribute among the
+         * solvers that are run in parallel.
+         *
+         * @return The stream of the generated cubes.
+         */
+        Panoramyx::Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> *generateCubes() override;
+
     };
 
-} // Panoramyx
+}
 
-#endif //PANORAMYX_LEXICOGRAPHICCUBEGENERATOR_HPP
+#endif

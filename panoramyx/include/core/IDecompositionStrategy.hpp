@@ -30,6 +30,13 @@ namespace Panoramyx {
 
     class IDecompositionStrategy {
     public:
+        /**
+         * Decomposes the given problem into several sub-problems.
+         *
+         * @param problem The problem to decompose.
+         *
+         * @return The stream of the sub-problems that have been generated.
+         */
         virtual Stream<Universe::IUniverseProblem*>* decompose(Universe::IUniverseProblem* problem)=0;
 
         virtual ~IDecompositionStrategy()=default;
