@@ -1,30 +1,45 @@
 /**
-* @date 07/12/22
-* @file NullConsistencyChecker.cpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
+/**
+ * @file NullConsistencyChecker.cpp
+ * @brief Provides a consistency checker that never checks cube consistency.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #include "../../include/core/NullConsistencyChecker.hpp"
 
-namespace Panoramyx {
+using namespace std;
 
-/**
-@class NullConsistencyChecker
-@brief Definition of the class NullConsistencyChecker. 
-@file NullConsistencyChecker.cpp
-*/
+using namespace Panoramyx;
+using namespace Universe;
 
-    bool NullConsistencyChecker::checkPartial(
-            const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
-        return true;
-    }
+bool NullConsistencyChecker::checkPartial(const vector<UniverseAssumption<BigInteger>> &) {
+    return true;
+}
 
-    bool NullConsistencyChecker::checkFinal(
-            const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
-        return true;
-    }
-} // Panoramyx
+bool NullConsistencyChecker::checkFinal(const vector<UniverseAssumption<BigInteger>> &) {
+    return true;
+}

@@ -1,35 +1,53 @@
 /**
-* @date 07/12/22
-* @file FinalConsistencyChecker.cpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
+/**
+ * @file FinalConsistencyChecker.cpp
+ * @brief Provides a consistency checker that checks cube consistency when all assumptions have been added.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #include "../../include/core/FinalConsistencyChecker.hpp"
 
-namespace Panoramyx {
+using namespace std;
 
-/**
-@class FinalConsistencyChecker
-@brief Definition of the class FinalConsistencyChecker. 
-@file FinalConsistencyChecker.cpp
-*/
+using namespace Panoramyx;
+using namespace Universe;
 
-    FinalConsistencyChecker::FinalConsistencyChecker(Universe::IUniverseSolver *solver) : solver(solver) {}
-    bool FinalConsistencyChecker::checkPartial(
-            const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
-        return true;
-    }
+FinalConsistencyChecker::FinalConsistencyChecker(IUniverseSolver *solver) :
+        solver(solver) {
+    // Nothing to do: everything is already initialized.
+}
 
-    bool FinalConsistencyChecker::checkFinal(
-            const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
-        auto result = solver->solve(assumpts)!=Universe::UniverseSolverResult::UNSATISFIABLE;
-        solver->reset();
-        return result;
-    }
+bool FinalConsistencyChecker::checkPartial(const vector<UniverseAssumption<BigInteger>> &) {
+    // Partial cubes are not checked.
+    return true;
+}
 
-
-} // Panoramyx
+bool FinalConsistencyChecker::checkFinal(const vector<UniverseAssumption<BigInteger>> &cube) {
+    auto result = solver->solve(cube);
+    solver->reset();
+    return result != Universe::UniverseSolverResult::UNSATISFIABLE;
+}

@@ -1,12 +1,33 @@
 /**
-* @date 11/10/22
-* @file Configuration.hpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
+/**
+ * @file Configuration.hpp
+ * @brief Provides an object for configuring Panoramyx.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #ifndef PANORAMYX_CONFIGURATION_HPP
 #define PANORAMYX_CONFIGURATION_HPP
@@ -16,25 +37,31 @@
 
 namespace Panoramyx {
 
-/**
- * @class Configuration
- *
- * @brief 
- * @file Configuration.hpp
- * @author Thibault Falque
- * @author Romain Wallon
- *
- * @version 0.1.0
- */
-
+    /**
+     * The Configuration provides an object for configuring Panoramyx.
+     */
     class Configuration {
-    public:
-        std::string& operator[](const std::string& key);
 
     private:
-        std::unordered_map<std::string,std::string> map;
+
+        /**
+         * The map storing the configuration.
+         */
+        std::unordered_map<std::string, std::string> map;
+
+    public:
+
+        /**
+         * Gives the configured value for the given key.
+         *
+         * @param key The key to get the value of.
+         *
+         * @return The configured value for the given key.
+         */
+        std::string &operator[](const std::string &key);
+
     };
 
-} // Panoramyx
+}
 
-#endif //PANORAMYX_CONFIGURATION_HPP
+#endif

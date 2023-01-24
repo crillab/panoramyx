@@ -1,25 +1,40 @@
 /**
-* @date 11/10/22
-* @file Configuration.cpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
+/**
+ * @file Configuration.cpp
+ * @brief Provides an object for configuring Panoramyx.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #include "../../include/core/Configuration.hpp"
 
-namespace Panoramyx {
+using namespace std;
 
-/**
-@class Configuration
-@brief Definition of the class Configuration. 
-@file Configuration.cpp
-*/
+using namespace Panoramyx;
 
-    std::string &Configuration::operator[](const std::string &key) {
-        return map[key];
-    }
-
-} // Panoramyx
+string &Configuration::operator[](const string &key) {
+    return map[key];
+}
