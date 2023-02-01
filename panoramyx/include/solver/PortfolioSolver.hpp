@@ -50,6 +50,8 @@ namespace Panoramyx {
 
         std::map<std::string, Universe::BigInteger> mapSolution() override;
 
+        void beforeSearch() override;
+
     protected:
         void readMessage(const Message *message) override;
     };

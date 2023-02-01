@@ -66,7 +66,7 @@ namespace Panoramyx {
         virtual void solve(unsigned i, const std::string &filename) = 0;
 
         virtual void startSearch();
-
+        virtual void beforeSearch();
         void interrupt() override;
 
         void setVerbosity(int level) override;

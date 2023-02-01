@@ -91,6 +91,9 @@ namespace Panoramyx {
         Universe::BigInteger getCurrentBound() override;
 
         bool isMinimization() override;
+
+        Universe::BigInteger getLowerBound() override;
+        Universe::BigInteger getUpperBound() override;
     };
 
 }

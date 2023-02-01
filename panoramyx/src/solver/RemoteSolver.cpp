@@ -238,3 +238,35 @@ bool RemoteSolver::isMinimization() {
     free(m);
     return r;
 }
+
+Universe::BigInteger RemoteSolver::getLowerBound() {
+    mutex.lock();
+    MessageBuilder mb;
+    Message *m = mb.named(PANO_MESSAGE_GET_LOWER_BOUND).withTag(
+            PANO_TAG_RESPONSE).build();
+    comm->send(m, rank);
+    free(m);
+
+    m = comm->receive(PANO_TAG_RESPONSE, rank, 1024);
+    std::string param(m->parameters, strlen(m->parameters) + 1);
+    Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
+    mutex.unlock();
+    free(m);
+    return newBound;
+}
+
+Universe::BigInteger RemoteSolver::getUpperBound() {
+    mutex.lock();
+    MessageBuilder mb;
+    Message *m = mb.named(PANO_MESSAGE_GET_UPPER_BOUND).withTag(
+            PANO_TAG_RESPONSE).build();
+    comm->send(m, rank);
+    free(m);
+
+    m = comm->receive(PANO_TAG_RESPONSE, rank, 1024);
+    std::string param(m->parameters, strlen(m->parameters) + 1);
+    Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
+    mutex.unlock();
+    free(m);
+    return newBound;
+}

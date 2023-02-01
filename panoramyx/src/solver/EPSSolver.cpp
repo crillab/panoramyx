@@ -70,7 +70,7 @@ namespace Panoramyx {
                 }
                 try {
                     nbCubes++;
-                    DLOG_F(INFO,"generate cubes %ld",nbCubes);
+                    DLOG_F(INFO,"generate cubes %d",nbCubes);
                     auto s = availableSolvers.get();
                     s->solve(c);
                 }catch (Except::NoSuchElementException& e){

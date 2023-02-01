@@ -120,8 +120,9 @@ namespace Panoramyx {
          */
         void clear() {
             // FIXME Why do we release the semaphore here?
+            mutex.lock();
             deque.clear();
-            semaphore.release();
+            mutex.unlock();
         }
 
     };

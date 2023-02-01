@@ -45,7 +45,7 @@ int main(int argc, char** argv){
     auto jvm = builder.buildJavaVirtualMachine();
     JavaVirtualMachineRegistry::set(jvm);
     if(comm->getId()==0){
-        std::string instance = "/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/panoramyx/AllInterval-006.xml";
+        std::string instance = "/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/AllInterval.xml";
         Universe::UniverseJavaSolverFactory factory("fr/univartois/cril/aceurancetourix/PreprocAceSolverFactory");
         auto ace = factory.createCspSolver();
         ace->setVerbosity(-1);

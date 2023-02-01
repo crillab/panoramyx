@@ -21,9 +21,17 @@ namespace Panoramyx {
 @file AbstractParallelSolver.cpp
 */
 
-    AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm) : comm(comm),endSolvers(0) {}
+    AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm) : comm(comm), endSolvers(0) {}
+
+
+    void AbstractParallelSolver::beforeSearch() {
+
+    }
+
+
     Universe::UniverseSolverResult AbstractParallelSolver::solve() {
         readMessages();
+        beforeSearch();
         for (unsigned i = 0; i < solvers.size(); i++) {
             solve(i);
         }
@@ -37,7 +45,11 @@ namespace Panoramyx {
     Universe::UniverseSolverResult AbstractParallelSolver::solve(const std::string &filename) {
         readMessages();
         for (unsigned i = 0; i < solvers.size(); i++) {
-            solve(i, filename);
+            solvers[i]->loadFilename(filename);
+        }
+        beforeSearch();
+        for (unsigned i = 0; i < solvers.size(); i++) {
+            solve(i);
         }
         startSearch();
         solved.acquire();
@@ -49,6 +61,7 @@ namespace Panoramyx {
     Universe::UniverseSolverResult
     AbstractParallelSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
         readMessages();
+        beforeSearch();
         for (unsigned i = 0; i < solvers.size(); i++) {
             solve(i, assumpts);
         }
@@ -97,7 +110,7 @@ namespace Panoramyx {
     void AbstractParallelSolver::readMessages() {
         std::thread rm([this]() {
             while (!interrupted) {
-                auto message = comm->receive(PANO_TAG_SOLVE,MPI_ANY_SOURCE,PANO_DEFAULT_MESSAGE_SIZE);
+                auto message = comm->receive(PANO_TAG_SOLVE, MPI_ANY_SOURCE, PANO_DEFAULT_MESSAGE_SIZE);
                 readMessage(message);
                 free(message);
             }
@@ -113,8 +126,9 @@ namespace Panoramyx {
         s->setIndex(index);
         endSolvers++;
     }
+
     void AbstractParallelSolver::endSearch() {
-        for (auto &solver : solvers){
+        for (auto &solver: solvers) {
             solver->endSearch();
         }
     }
@@ -124,7 +138,7 @@ namespace Panoramyx {
     }
 
     void AbstractParallelSolver::loadFilename(const std::string &filename) {
-        for(auto s:solvers){
+        for (auto s: solvers) {
             s->loadFilename(filename);
         }
     }

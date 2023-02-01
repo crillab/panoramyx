@@ -43,9 +43,11 @@ namespace Panoramyx {
         std::vector<Universe::BigInteger> solution(Message *m);
 
         int nVariables(Message *m);
-
         int nConstraints(Message *m);
-
+        Universe::BigInteger getLowerBound(Message *m);
+        Universe::BigInteger getUpperBound(Message *m);
+        Universe::BigInteger getCurrentBound(Message *m);
+        bool isMinimization(Message *m);
 
         Universe::UniverseSolverResult solve(Message *m);
 
@@ -53,6 +55,8 @@ namespace Panoramyx {
 
         Universe::UniverseSolverResult
         solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> asumpts, Message *m);
+
+        Universe::IOptimizationSolver* getOptimSolver();
 
     public:
 
@@ -104,6 +108,11 @@ namespace Panoramyx {
         Universe::BigInteger getCurrentBound() override;
 
         bool isMinimization() override;
+
+        Universe::BigInteger getLowerBound() override;
+        Universe::BigInteger getUpperBound() override;
+
+
     };
 
     using GallicSolver = GauloisSolver;

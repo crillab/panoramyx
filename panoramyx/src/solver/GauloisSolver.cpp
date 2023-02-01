@@ -41,15 +41,9 @@ namespace Panoramyx {
     }
 
     Universe::UniverseSolverResult GauloisSolver::solve(const std::string &filename) {
-        loadMutex.lock();
         nbSolved++;
-        ifstream input(filename);
-        Autis::Scanner scanner(input);
-        auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner,
-                                                                 dynamic_cast<Universe::IUniverseCspSolver *>(solver));
-        parser->parse();
+        load(filename);
         auto result = solver->solve();
-        loadMutex.unlock();
         return result;
     }
 
@@ -163,7 +157,29 @@ namespace Panoramyx {
             free(r);
             interrupt();
         } else if (strncmp(m->name, PANO_MESSAGE_LOWER_BOUND, sizeof(m->name)) == 0) {
+            std::string param(m->parameters, strlen(m->parameters) + 1);
+            Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
+            this->setLowerBound(newBound);
+        }else if(strncmp(m->name, PANO_MESSAGE_UPPER_BOUND, sizeof(m->name)) == 0){
+            std::string param(m->parameters, strlen(m->parameters) + 1);
+            Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
+            this->setUpperBound(newBound);
+        }else if(strncmp(m->name, PANO_MESSAGE_LOWER_UPPER_BOUND, sizeof(m->name)) == 0){
+            std::string param(m->parameters, strlen(m->parameters) + 1);
+            Universe::BigInteger lowerBound = Universe::bigIntegerValueOf(param);
 
+            std::string param2(m->parameters+param.size(), strlen(m->parameters+param.size()) + 1);
+            Universe::BigInteger upperBound = Universe::bigIntegerValueOf(param2);
+            this->setBounds(lowerBound,upperBound);
+        }else if(strncmp(m->name, PANO_MESSAGE_GET_CURRENT_BOUND, sizeof(m->name)) == 0){
+            this->getCurrentBound(m);
+        }else if(strncmp(m->name, PANO_MESSAGE_GET_LOWER_BOUND, sizeof(m->name)) == 0){
+            this->getLowerBound(m);
+        }else if(strncmp(m->name, PANO_MESSAGE_GET_UPPER_BOUND, sizeof(m->name)) == 0){
+            this->getUpperBound(m);
+        }
+        else if(strncmp(m->name, PANO_MESSAGE_IS_MINIMIZATION, sizeof(m->name)) == 0){
+            this->isMinimization(m);
         }
 
     }
@@ -275,23 +291,70 @@ namespace Panoramyx {
     }
 
     void GauloisSolver::setLowerBound(const Universe::BigInteger &lb) {
-
+        this->getOptimSolver()->setLowerBound(lb);
     }
 
     void GauloisSolver::setUpperBound(const Universe::BigInteger &ub) {
-
+        this->getOptimSolver()->setUpperBound(ub);
     }
 
     void GauloisSolver::setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) {
-
+        this->getOptimSolver()->setBounds(lb,ub);
     }
 
     Universe::BigInteger GauloisSolver::getCurrentBound() {
-        return 0;
+        return this->getOptimSolver()->getCurrentBound();
     }
 
     bool GauloisSolver::isMinimization() {
-        return false;
+        return this->getOptimSolver()->isMinimization();
     }
 
+    Universe::IOptimizationSolver *GauloisSolver::getOptimSolver() {
+        return dynamic_cast<Universe::IOptimizationSolver*>(solver);
+    }
+
+    Universe::BigInteger GauloisSolver::getLowerBound() {
+        return getOptimSolver()->getLowerBound();
+    }
+
+    Universe::BigInteger GauloisSolver::getUpperBound() {
+        return getOptimSolver()->getUpperBound();
+    }
+
+    Universe::BigInteger GauloisSolver::getLowerBound(Message *m) {
+        auto result = this->getLowerBound();
+        MessageBuilder mb;
+        Message *r = mb.named(PANO_MESSAGE_GET_LOWER_BOUND).withTag(PANO_TAG_RESPONSE).withParameter(result).build();
+        comm->send(r, m->src);
+        free(r);
+        return result;
+    }
+
+    Universe::BigInteger GauloisSolver::getUpperBound(Message *m) {
+        auto result = this->getUpperBound();
+        MessageBuilder mb;
+        Message *r = mb.named(PANO_MESSAGE_GET_UPPER_BOUND).withTag(PANO_TAG_RESPONSE).withParameter(result).build();
+        comm->send(r, m->src);
+        free(r);
+        return result;
+    }
+
+    Universe::BigInteger GauloisSolver::getCurrentBound(Message *m) {
+        auto result = this->getCurrentBound();
+        MessageBuilder mb;
+        Message *r = mb.named(PANO_MESSAGE_GET_CURRENT_BOUND).withTag(PANO_TAG_RESPONSE).withParameter(result).build();
+        comm->send(r, m->src);
+        free(r);
+        return result;
+    }
+
+    bool GauloisSolver::isMinimization(Message *m) {
+        auto result = this->isMinimization();
+        MessageBuilder mb;
+        Message *r = mb.named(PANO_MESSAGE_IS_MINIMIZATION).withTag(PANO_TAG_RESPONSE).withParameter(result).build();
+        comm->send(r, m->src);
+        free(r);
+        return result;
+    }
 } // Panoramyx

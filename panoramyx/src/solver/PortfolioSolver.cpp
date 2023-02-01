@@ -27,6 +27,12 @@ namespace Panoramyx {
 
     }
 
+    void PortfolioSolver::beforeSearch() {
+        if(solvers[0]->isMinimization()){
+
+        }
+    }
+
     void PortfolioSolver::solve(unsigned int i) {
         solvers[i]->solve();
     }
