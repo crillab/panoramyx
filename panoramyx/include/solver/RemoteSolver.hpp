@@ -50,6 +50,8 @@ namespace Panoramyx {
         Universe::UniverseSolverResult
         solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override;
 
+        bool isOptimization();
+
         void interrupt() override;
 
         void setVerbosity(int level) override;
@@ -76,7 +78,7 @@ namespace Panoramyx {
 
         void endSearch();
 
-        void loadFilename(const std::string &filename);
+        void loadInstance(const std::string &filename);
 
         [[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 

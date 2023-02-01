@@ -1,102 +1,103 @@
 /**
-* @date 14/11/22
-* @file PortfolioSolver.cpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
-
-
-#include <cstring>
-#include "../../include/solver/PortfolioSolver.hpp"
-#include "../../include/network/Message.hpp"
-
-namespace Panoramyx {
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
 /**
-@class PortfolioSolver
-@brief Definition of the class PortfolioSolver. 
-@file PortfolioSolver.cpp
-*/
+ * @file PortfolioSolver.cpp
+ * @brief Defines a parallel solver that runs different solvers on the same instance.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
-    PortfolioSolver::PortfolioSolver(INetworkCommunication *comm) : AbstractParallelSolver(comm) {}
+#include "../../include/solver/PortfolioSolver.hpp"
 
-    void PortfolioSolver::addSolver(RemoteSolver *s) {
-        AbstractParallelSolver::addSolver(s);
+using namespace std;
 
+using namespace Except;
+using namespace Panoramyx;
+using namespace Universe;
+
+PortfolioSolver::PortfolioSolver(INetworkCommunication *comm, IAllocationStrategy *allocationStrategy) :
+        AbstractParallelSolver(comm, allocationStrategy) {
+    // Nothing to do: everything is already initialized.
+}
+
+void PortfolioSolver::beforeSearch() {
+    if (solvers[0]->isOptimization()) {
+        // FIXME: Maybe use a state design pattern here?
+        auto lb = solvers[0]->getLowerBound();
+        auto ub = solvers[0]->getUpperBound();
+        currentBounds = allocationStrategy->computeBoundAllocation(currentBounds, lb, ub);
     }
+}
 
-    void PortfolioSolver::beforeSearch() {
-        if(solvers[0]->isMinimization()){
+void PortfolioSolver::startSearch() {
+    for (unsigned i = 0; i < solvers.size(); i++) {
+        solve(i);
+    }
+}
 
+void PortfolioSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &assumpts) {
+    for (unsigned i = 0; i < solvers.size(); i++) {
+        solve(i, assumpts);
+    }
+}
+
+void PortfolioSolver::solve(unsigned i) {
+    if (solvers[i]->isOptimization()) {
+        // FIXME: Maybe use a state design pattern here?
+        solvers[i]->setBounds(currentBounds[i], currentBounds[i + 1]);
+    }
+    solvers[i]->solve();
+}
+
+void PortfolioSolver::solve(unsigned i, const vector<UniverseAssumption<BigInteger>> &assumpts) {
+    if (solvers[i]->isOptimization()) {
+        // FIXME: Maybe use a state design pattern here?
+        solvers[i]->setBounds(currentBounds[i], currentBounds[i + 1]);
+    }
+    solvers[i]->solve(assumpts);
+}
+
+void PortfolioSolver::onNewBoundFound(const BigInteger &bound) {
+    // FIXME: Maybe use a state design pattern here?
+    // TODO: Interrupts solvers that are out of bounds.
+    if (isMinimization && bound < upperBound) {
+        upperBound = bound;
+        for (auto solver: solvers) {
+            solver->setUpperBound(upperBound);
+        }
+    } else if (!isMinimization && lowerBound < bound) {
+        lowerBound = bound;
+        for (auto solver: solvers) {
+            solver->setLowerBound(lowerBound);
         }
     }
+}
 
-    void PortfolioSolver::solve(unsigned int i) {
-        solvers[i]->solve();
-    }
-
-    void
-    PortfolioSolver::solve(unsigned int i, const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
-            solvers[i]->solve(assumpts);
-    }
-
-    void PortfolioSolver::solve(unsigned int i, const std::string &filename) {
-        solvers[i]->solve(filename);
-    }
-
-    void PortfolioSolver::readMessage(const Message *message) {
-        if(strncmp(message->name, PANO_MESSAGE_SATISFIABLE, sizeof(message->name)) == 0){
-            winner = *((const unsigned *)message->parameters);
-            result=Universe::UniverseSolverResult::SATISFIABLE;
-            solved.release();
-        }else if(strncmp(message->name, PANO_MESSAGE_UNSATISFIABLE, sizeof(message->name)) == 0){
-            winner = *((const unsigned *)message->parameters);
-            result=Universe::UniverseSolverResult::UNSATISFIABLE;
-            solved.release();
-        }else if(strncmp(message->name, PANO_MESSAGE_END_SEARCH, sizeof(message->name)) == 0){
-            endSolvers--;
-            if(endSolvers<=0){
-                interrupted= true;
-                end.release();
-            }
-        }else if(strncmp(message->name, PANO_MESSAGE_NEW_BOUND_FOUND, sizeof(message->name)) == 0){
-            std::string param(message->parameters, strlen(message->parameters)+1);
-            Universe::BigInteger  newBound=Universe::bigIntegerValueOf(param);
-            if(isMinimization && newBound < upperBound){
-                upperBound=newBound;
-                for(auto solver:solvers){
-                    solver->setUpperBound(upperBound);
-                }
-            }else if(!isMinimization && lowerBound<newBound){
-                lowerBound=newBound;
-                for(auto solver:solvers){
-                    solver->setLowerBound(lowerBound);
-                }
-            }
-
-        }
-    }
-
-    std::vector<Universe::BigInteger> PortfolioSolver::solution() {
-        return solvers[winner]->solution();
-    }
-
-    int PortfolioSolver::nVariables() {
-        return solvers[0]->nVariables();
-    }
-
-    int PortfolioSolver::nConstraints() {
-        return solvers[0]->nConstraints();
-    }
-
-    const std::map<std::string, Universe::IUniverseVariable *> &PortfolioSolver::getVariablesMapping()  {
-        return {};
-    }
-
-    std::map<std::string, Universe::BigInteger> PortfolioSolver::mapSolution() {
-        return std::map<std::string, Universe::BigInteger>();
-    }
-
-} // Panoramyx
+void PortfolioSolver::onUnsatisfiableFound(unsigned solverIndex) {
+    // FIXME: If OPTIM, update bounds
+    winner = solverIndex;
+    result = Universe::UniverseSolverResult::UNSATISFIABLE;
+    solved.release();
+}

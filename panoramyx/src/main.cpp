@@ -60,7 +60,7 @@ int main(int argc, char** argv){
         for(int i=1;i<comm->nbProcesses();i++){
             chief->addSolver(new RemoteSolver(i));
         }
-        chief->loadFilename(instance);
+        chief->loadInstance(instance);
         auto r=chief->solve();
         std::cout<<(int)r<<std::endl;
     }else{

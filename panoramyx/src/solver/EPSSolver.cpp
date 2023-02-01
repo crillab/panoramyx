@@ -1,111 +1,118 @@
 /**
-* @date 21/11/22
-* @file EpsSolver.cpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
-
-
-#include <thread>
-#include "../../include/solver/EPSSolver.hpp"
-#include "../../../libs/loguru/loguru.hpp"
-#include "../../include/network/Message.hpp"
-
-namespace Panoramyx {
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
 /**
-@class EPSSolver
-@brief Definition of the class EPSSolver. 
-@file EpsSolver.cpp
-*/
+ * @file EPSSolver.cpp
+ * @brief Defines a parallel solver that applies a cube-and-conquer approach to solve an instance.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
-    EPSSolver::EPSSolver(INetworkCommunication *comm, ICubeGenerator *generator) : AbstractParallelSolver(comm),
-                                                                                   generator(generator), cubes(0) {}
+#include <thread>
 
+#include "../../../libs/loguru/loguru.hpp"
 
-    void EPSSolver::solve(unsigned int i) {
-        availableSolvers.add(solvers[i]);
-    }
+#include "../../include/network/Message.hpp"
+#include "../../include/solver/EPSSolver.hpp"
 
-    void
-    EPSSolver::solve(unsigned int i, const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
-        availableSolvers.add(solvers[i]);
-    }
+using namespace std;
 
-    void EPSSolver::solve(unsigned int i, const std::string &filename) {
-        availableSolvers.add(solvers[i]);
-    }
+using namespace Except;
+using namespace Panoramyx;
+using namespace Universe;
 
-    void EPSSolver::readMessage(const Message *message) {
-        if(strncmp(message->name, PANO_MESSAGE_SATISFIABLE, sizeof(message->name)) == 0){
-            winner = message->read<unsigned>();;
-            result=Universe::UniverseSolverResult::SATISFIABLE;
-            availableSolvers.clear();
-            solved.release();
-            cubes.release();
-        }else if(strncmp(message->name, PANO_MESSAGE_UNSATISFIABLE, sizeof(message->name)) == 0){
-            auto src = message->read<unsigned>();
-            solvers[src]->reset();
-            availableSolvers.add(solvers[src]);
-            cubes.release();
-        }else if(strncmp(message->name, PANO_MESSAGE_END_SEARCH, sizeof(message->name)) == 0){
-            endSolvers--;
-            if(endSolvers<=0){
-                interrupted= true;
-                end.release();
+EPSSolver::EPSSolver(INetworkCommunication *comm, ICubeGenerator *generator) :
+        AbstractParallelSolver(comm),
+        generator(generator),
+        cubes(0) {
+    // Nothing to do: everything is already initialized.
+}
+
+void EPSSolver::ready(unsigned solverIndex) {
+    availableSolvers.add(solvers[solverIndex]);
+}
+
+void EPSSolver::startSearch() {
+    std::thread t([this]() {
+        int nbCubes = 0;
+
+        // Generating the cubes, and assigning them to the different solvers.
+        for (auto cube : *this->generator->generateCubes()) {
+            if (cube.empty()) {
+                // There is no more consistent cubes.
+                // FIXME: Really UNSAT? Maybe we should let running solvers check this, no?
+                result = Universe::UniverseSolverResult::UNSATISFIABLE;
+                solved.release();
+                return;
             }
+
+            // Solving the cube using one of the available solvers.
+            // FIXME: We must indeed release the semaphore when clearing, because we must stop waiting for a new one...
+            try {
+                nbCubes++;
+                DLOG_F(INFO, "generate cubes %d", nbCubes);
+                auto s = availableSolvers.get();
+                s->solve(cube);
+
+            } catch (Except::NoSuchElementException &e) {
+                return;
+            }
+        }
+
+        // All cubes have been generated.
+        // We must wait for the solvers to solve them.
+        waitForAllCubes(nbCubes);
+    });
+
+    t.detach();
+}
+
+void EPSSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &assumpts) {
+    throw UnsupportedOperationException("cannot use assumptions in EPS mode");
+}
+
+void EPSSolver::onSatisfiableFound(unsigned solverIndex) {
+    availableSolvers.clear();
+    cubes.release();
+}
+
+void EPSSolver::onUnsatisfiableFound(unsigned solverIndex) {
+    solvers[solverIndex]->reset();
+    availableSolvers.add(solvers[solverIndex]);
+    cubes.release();
+}
+
+void EPSSolver::waitForAllCubes(int nbCubes) {
+    for (int i = 0; i < nbCubes; i++) {
+        cubes.acquire();
+        if (result == Universe::UniverseSolverResult::SATISFIABLE) {
+            // One of the cube has a solution, so the search is finished.
+            return;
         }
     }
 
-    void EPSSolver::startSearch() {
-        std::thread t([this](){
-            int nbCubes = 0;
-            for(auto c:*this->generator->generateCubes()){
-                if(c.empty()){
-                    result=Universe::UniverseSolverResult::UNSATISFIABLE;
-                    solved.release();
-                    return;
-                }
-                try {
-                    nbCubes++;
-                    DLOG_F(INFO,"generate cubes %d",nbCubes);
-                    auto s = availableSolvers.get();
-                    s->solve(c);
-                }catch (Except::NoSuchElementException& e){
-                    return;
-                }
-            }
-            for(int i=0;i<nbCubes;i++){
-                cubes.acquire();
-                if(result==Universe::UniverseSolverResult::SATISFIABLE){
-                    return;
-                }
-            }
-            result=Universe::UniverseSolverResult::UNSATISFIABLE;
-            solved.release();
-        });
-        t.detach();
-    }
-
-    int EPSSolver::nVariables() {
-        return 0;
-    }
-
-    int EPSSolver::nConstraints() {
-        return 0;
-    }
-
-    std::vector<Universe::BigInteger> EPSSolver::solution() {
-        return std::vector<Universe::BigInteger>();
-    }
-
-    const std::map<std::string, Universe::IUniverseVariable *> &EPSSolver::getVariablesMapping()  {
-        return {};
-    }
-
-    std::map<std::string, Universe::BigInteger> EPSSolver::mapSolution() {
-        return std::map<std::string, Universe::BigInteger>();
-    }
-} // Panoramyx
+    // None of the cubes has a solution: the problem is unsatisfiable.
+    result = Universe::UniverseSolverResult::UNSATISFIABLE;
+    solved.release();
+}

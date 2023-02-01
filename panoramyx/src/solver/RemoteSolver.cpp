@@ -15,6 +15,21 @@ using namespace Panoramyx;
 
 RemoteSolver::RemoteSolver(int rank) : rank(rank) {}
 
+bool RemoteSolver::isOptimization() {
+    mutex.lock();
+    MessageBuilder mb;
+    mb.named(PANO_MESSAGE_IS_OPTIMIZATION);
+    Message *m = mb.withTag(PANO_TAG_RESPONSE).build();
+    comm->send(m, rank);
+    free(m);
+
+    m = comm->receive(PANO_TAG_RESPONSE, rank, PANO_DEFAULT_MESSAGE_SIZE);
+    mutex.unlock();
+    auto isOptim = m->read<bool>();
+    free(m);
+    return isOptim;
+}
+
 Universe::UniverseSolverResult RemoteSolver::solve() {
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_SOLVE).withTag(PANO_TAG_SOLVE).build();
@@ -171,7 +186,7 @@ void RemoteSolver::endSearch() {
     free(m);
 }
 
-void RemoteSolver::loadFilename(const std::string &filename) {
+void RemoteSolver::loadInstance(const std::string &filename) {
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_LOAD).withParameter(filename).withTag(PANO_TAG_SOLVE).build();
     comm->send(m, rank);

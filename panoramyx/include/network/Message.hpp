@@ -34,6 +34,8 @@
 
 #include <cstring>
 
+#define PANO_ANY_SOURCE (-1)
+
 #define PANO_TAG_RESPONSE 1
 #define PANO_TAG_SOLVE 2
 #define PANO_TAG_CONFIG 4
