@@ -4,6 +4,3 @@
 [submodule "libs/loguru"]
 	path = libs/loguru
 	url = https://github.com/emilk/loguru.git
-[submodule "libs/cosoco"]
-	path = libs/cosoco
-	url = https://github.com/thibaultfalque/cosoco.git
