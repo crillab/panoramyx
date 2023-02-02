@@ -1,6 +1,7 @@
 [submodule "libs/autis"]
 	path = libs/autis
 	url = https://gitlab.univ-artois.fr/cril-exakis-nelite-adp/softwares-tfa/cp/tootatis/otis
+	branch = main
 [submodule "libs/loguru"]
 	path = libs/loguru
 	url = https://github.com/emilk/loguru.git
