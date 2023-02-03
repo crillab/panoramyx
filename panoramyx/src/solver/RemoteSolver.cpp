@@ -1,14 +1,14 @@
 /**
-* @date 11/10/22
-* @file RemoteSolver.hpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
-
+ * @date 11/10/22
+ * @file RemoteSolver.hpp
+ * @brief
+ * @author Thibault Falque
+ * @author Romain Wallon
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #include "../../include/solver/RemoteSolver.hpp"
+
 #include "../../include/network/Message.hpp"
 
 using namespace Panoramyx;
@@ -16,18 +16,22 @@ using namespace Panoramyx;
 RemoteSolver::RemoteSolver(int rank) : rank(rank) {}
 
 bool RemoteSolver::isOptimization() {
-    mutex.lock();
-    MessageBuilder mb;
-    mb.named(PANO_MESSAGE_IS_OPTIMIZATION);
-    Message *m = mb.withTag(PANO_TAG_RESPONSE).build();
-    comm->send(m, rank);
-    free(m);
-
-    m = comm->receive(PANO_TAG_RESPONSE, rank, PANO_DEFAULT_MESSAGE_SIZE);
-    mutex.unlock();
-    auto isOptim = m->read<bool>();
-    free(m);
-    return isOptim;
+    if (!isOptim) {
+        mutex.lock();
+        MessageBuilder mb;
+        mb.named(PANO_MESSAGE_IS_OPTIMIZATION);
+        Message *m = mb.withTag(PANO_TAG_RESPONSE).build();
+        comm->send(m, rank);
+        free(m);
+        DLOG_F(INFO, "Wait answer");
+        m = comm->receive(PANO_TAG_RESPONSE, PANO_ANY_SOURCE, PANO_DEFAULT_MESSAGE_SIZE);
+        DLOG_F(INFO, "after answer");
+        mutex.unlock();
+        isOptim = m->read<bool>();
+        DLOG_F(INFO, "Remote Solver: readMessage - %d", isOptim);
+        free(m);
+    }
+    return *isOptim;
 }
 
 Universe::UniverseSolverResult RemoteSolver::solve() {
@@ -38,25 +42,30 @@ Universe::UniverseSolverResult RemoteSolver::solve() {
     return Universe::UniverseSolverResult::UNKNOWN;
 }
 
-Universe::UniverseSolverResult RemoteSolver::solve(const std::string &filename) {
+Universe::UniverseSolverResult RemoteSolver::solve(
+    const std::string &filename) {
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_SOLVE_FILENAME).withParameter(filename).withTag(
-            PANO_TAG_SOLVE).build();
+    Message *m = mb.named(PANO_MESSAGE_SOLVE_FILENAME)
+                     .withParameter(filename)
+                     .withTag(PANO_TAG_SOLVE)
+                     .build();
     comm->send(m, rank);
     free(m);
     return Universe::UniverseSolverResult::UNKNOWN;
 }
 
-Universe::UniverseSolverResult
-RemoteSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
+Universe::UniverseSolverResult RemoteSolver::solve(
+    const std::vector<Universe::UniverseAssumption<Universe::BigInteger>>
+        &assumpts) {
     MessageBuilder mb;
     mb.named(PANO_MESSAGE_SOLVE_ASSUMPTIONS);
-    for (auto &assumpt: assumpts) {
+    for (auto &assumpt : assumpts) {
         mb.withParameter(assumpt.getVariableId());
         mb.withParameter(assumpt.isEqual());
         mb.withParameter(Universe::toString(assumpt.getValue()));
 
-        DLOG_F(INFO, "add assumption: %d %s '%s'", assumpt.getVariableId(), assumpt.isEqual() ? "=" : "!=",
+        DLOG_F(INFO, "add assumption: %d %s '%s'", assumpt.getVariableId(),
+               assumpt.isEqual() ? "=" : "!=",
                Universe::toString(assumpt.getValue()).c_str());
     }
     Message *m = mb.withTag(PANO_TAG_SOLVE).build();
@@ -109,7 +118,8 @@ void RemoteSolver::reset() {
 }
 
 std::vector<Universe::BigInteger> RemoteSolver::solution() {
-    unsigned long size = nVariables() * sizeof(long long) + sizeof(Message) + PANO_DEFAULT_RAB;
+    unsigned long size =
+        nVariables() * sizeof(long long) + sizeof(Message) + PANO_DEFAULT_RAB;
     mutex.lock();
     MessageBuilder mb;
     mb.named(PANO_MESSAGE_SOLUTION);
@@ -118,6 +128,7 @@ std::vector<Universe::BigInteger> RemoteSolver::solution() {
     free(m);
     m = comm->receive(PANO_TAG_RESPONSE, rank, size);
     mutex.unlock();
+
     std::vector<Universe::BigInteger> bigbig;
     char *ptr = m->parameters;
     for (int i = 0, n = 0; n < m->nbParameters; i++) {
@@ -128,8 +139,8 @@ std::vector<Universe::BigInteger> RemoteSolver::solution() {
             i = -1;
             n++;
         }
-
     }
+    free(m);
     return bigbig;
 }
 
@@ -144,7 +155,8 @@ int RemoteSolver::nVariables() {
 
         m = comm->receive(PANO_TAG_RESPONSE, rank, PANO_DEFAULT_MESSAGE_SIZE);
         mutex.unlock();
-        nbVariables = *((const int *) m->parameters);
+        nbVariables = *((const int *)m->parameters);
+        free(m);
     }
     return nbVariables;
 }
@@ -160,23 +172,17 @@ int RemoteSolver::nConstraints() {
 
         m = comm->receive(PANO_TAG_RESPONSE, rank, 1024);
         mutex.unlock();
-        nbConstraints = *((const int *) m->parameters);
+        nbConstraints = *((const int *)m->parameters);
+        free(m);
     }
     return nbConstraints;
 }
 
-void RemoteSolver::setLogFile(const std::string &filename) {
+void RemoteSolver::setLogFile(const std::string &filename) {}
 
-}
+void RemoteSolver::setIndex(unsigned i) { this->index = i; }
 
-void RemoteSolver::setIndex(unsigned i) {
-    this->index = i;
-}
-
-void RemoteSolver::setComm(INetworkCommunication *c) {
-    comm = c;
-}
-
+void RemoteSolver::setComm(INetworkCommunication *c) { comm = c; }
 
 void RemoteSolver::endSearch() {
     MessageBuilder mb;
@@ -188,12 +194,16 @@ void RemoteSolver::endSearch() {
 
 void RemoteSolver::loadInstance(const std::string &filename) {
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_LOAD).withParameter(filename).withTag(PANO_TAG_SOLVE).build();
+    Message *m = mb.named(PANO_MESSAGE_LOAD)
+                     .withParameter(filename)
+                     .withTag(PANO_TAG_SOLVE)
+                     .build();
     comm->send(m, rank);
     free(m);
 }
 
-[[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &RemoteSolver::getVariablesMapping() {
+[[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *>
+    &RemoteSolver::getVariablesMapping() {
     return {};
 }
 
@@ -203,22 +213,32 @@ std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution() {
 
 void RemoteSolver::setLowerBound(const Universe::BigInteger &lb) {
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_LOWER_BOUND).withParameter(lb).withTag(PANO_TAG_SOLVE).build();
+    Message *m = mb.named(PANO_MESSAGE_LOWER_BOUND)
+                     .withParameter(lb)
+                     .withTag(PANO_TAG_SOLVE)
+                     .build();
     comm->send(m, rank);
     free(m);
 }
 
 void RemoteSolver::setUpperBound(const Universe::BigInteger &ub) {
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_UPPER_BOUND).withParameter(ub).withTag(PANO_TAG_SOLVE).build();
+    Message *m = mb.named(PANO_MESSAGE_UPPER_BOUND)
+                     .withParameter(ub)
+                     .withTag(PANO_TAG_SOLVE)
+                     .build();
     comm->send(m, rank);
     free(m);
 }
 
-void RemoteSolver::setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) {
+void RemoteSolver::setBounds(const Universe::BigInteger &lb,
+                             const Universe::BigInteger &ub) {
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_LOWER_UPPER_BOUND).withParameter(lb).withParameter(ub).withTag(
-            PANO_TAG_SOLVE).build();
+    Message *m = mb.named(PANO_MESSAGE_LOWER_UPPER_BOUND)
+                     .withParameter(lb)
+                     .withParameter(ub)
+                     .withTag(PANO_TAG_SOLVE)
+                     .build();
     comm->send(m, rank);
     free(m);
 }
@@ -226,8 +246,9 @@ void RemoteSolver::setBounds(const Universe::BigInteger &lb, const Universe::Big
 Universe::BigInteger RemoteSolver::getCurrentBound() {
     mutex.lock();
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_GET_CURRENT_BOUND).withTag(
-            PANO_TAG_RESPONSE).build();
+    Message *m = mb.named(PANO_MESSAGE_GET_CURRENT_BOUND)
+                     .withTag(PANO_TAG_RESPONSE)
+                     .build();
     comm->send(m, rank);
     free(m);
 
@@ -242,8 +263,8 @@ Universe::BigInteger RemoteSolver::getCurrentBound() {
 bool RemoteSolver::isMinimization() {
     mutex.lock();
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_IS_MINIMIZATION).withTag(
-            PANO_TAG_RESPONSE).build();
+    Message *m =
+        mb.named(PANO_MESSAGE_IS_MINIMIZATION).withTag(PANO_TAG_RESPONSE).build();
     comm->send(m, rank);
     free(m);
 
@@ -257,8 +278,8 @@ bool RemoteSolver::isMinimization() {
 Universe::BigInteger RemoteSolver::getLowerBound() {
     mutex.lock();
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_GET_LOWER_BOUND).withTag(
-            PANO_TAG_RESPONSE).build();
+    Message *m =
+        mb.named(PANO_MESSAGE_GET_LOWER_BOUND).withTag(PANO_TAG_RESPONSE).build();
     comm->send(m, rank);
     free(m);
 
@@ -273,8 +294,8 @@ Universe::BigInteger RemoteSolver::getLowerBound() {
 Universe::BigInteger RemoteSolver::getUpperBound() {
     mutex.lock();
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_GET_UPPER_BOUND).withTag(
-            PANO_TAG_RESPONSE).build();
+    Message *m =
+        mb.named(PANO_MESSAGE_GET_UPPER_BOUND).withTag(PANO_TAG_RESPONSE).build();
     comm->send(m, rank);
     free(m);
 

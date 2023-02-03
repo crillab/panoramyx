@@ -61,10 +61,7 @@ void EPSSolver::startSearch() {
         for (auto cube : *this->generator->generateCubes()) {
             if (cube.empty()) {
                 // There is no more consistent cubes.
-                // FIXME: Really UNSAT? Maybe we should let running solvers check this, no?
-                result = Universe::UniverseSolverResult::UNSATISFIABLE;
-                solved.release();
-                return;
+                break;
             }
 
             // Solving the cube using one of the available solvers.

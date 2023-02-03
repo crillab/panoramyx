@@ -105,19 +105,19 @@ message(STATUS "CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
 # Update and configure submodule dependencies
 
 find_package(Git QUIET)
-if (GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-    # Update submodules as needed
-    option(GIT_SUBMODULE "Check submodules during build" ON)
-    if (GIT_SUBMODULE)
-        message(STATUS "Submodule update")
-        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --remote
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                RESULT_VARIABLE GIT_SUBMOD_RESULT)
-        if (NOT GIT_SUBMOD_RESULT EQUAL "0")
-            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-        endif ()
-    endif ()
-endif ()
+# if (GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+#     # Update submodules as needed
+#     option(GIT_SUBMODULE "Check submodules during build" ON)
+#     if (GIT_SUBMODULE)
+#         message(STATUS "Submodule update")
+#         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive --remote
+#                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#                 RESULT_VARIABLE GIT_SUBMOD_RESULT)
+#         if (NOT GIT_SUBMOD_RESULT EQUAL "0")
+#             message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+#         endif ()
+#     endif ()
+# endif ()
 
 add_subdirectory(libs)
 
@@ -147,7 +147,7 @@ file(GLOB_RECURSE HEADERS
 include_directories(libs/loguru)
 add_library(${LIBRARY_NAME} ${SOURCES} ${HEADERS} libs/loguru/loguru.cpp libs/loguru/loguru.hpp)
 set_target_properties(${LIBRARY_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(${LIBRARY_NAME} autis exception universe easyjni ${MPI_CXX_LIBRARIES})
+target_link_libraries(${LIBRARY_NAME} autis exception universe easyjni ${MPI_CXX_LIBRARIES} argparse)
 
 
 add_executable(mainpano panoramyx/src/main.cpp)

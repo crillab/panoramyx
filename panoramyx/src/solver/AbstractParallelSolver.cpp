@@ -29,12 +29,13 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include <thread>
+#include "../../include/solver/AbstractParallelSolver.hpp"
 
 #include <mpi.h>
 
+#include <thread>
+
 #include "../../include/network/Message.hpp"
-#include "../../include/solver/AbstractParallelSolver.hpp"
 
 using namespace std;
 
@@ -42,40 +43,40 @@ using namespace Except;
 using namespace Panoramyx;
 using namespace Universe;
 
-AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm, IAllocationStrategy *allocationStrategy) :
-        communicator(comm),
-        solvers(),
-        runningSolvers(0),
-        allocationStrategy(allocationStrategy),
-        currentBounds(),
-        isMinimization(true),
-        lowerBound(0),
-        upperBound(0),
-        interrupted(false),
-        solved(0),
-        result(Universe::UniverseSolverResult::UNKNOWN),
-        winner(-1),
-        end(0) {
-    // Nothing to do, everything is already initialized.
+AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm, IAllocationStrategy *allocationStrategy) : communicator(comm),
+                                                                                                                       solvers(),
+                                                                                                                       runningSolvers(0),
+                                                                                                                       allocationStrategy(allocationStrategy),
+                                                                                                                       currentBounds(),
+                                                                                                                       isMinimization(true),
+                                                                                                                       lowerBound(0),
+                                                                                                                       upperBound(0),
+                                                                                                                       interrupted(false),
+                                                                                                                       solved(0),
+                                                                                                                       result(Universe::UniverseSolverResult::UNKNOWN),
+                                                                                                                       winner(-1),
+                                                                                                                       end(0) {
+    currentBounds.push_back(0);
 }
 
 void AbstractParallelSolver::addSolver(RemoteSolver *solver) {
     unsigned index = solvers.size();
     solvers.push_back(solver);
+    currentBounds.push_back(0);
     solver->setComm(communicator);
     solver->setIndex(index);
     runningSolvers++;
 }
 
 void AbstractParallelSolver::loadInstance(const string &filename) {
-    for (auto &solver: solvers) {
+    for (auto &solver : solvers) {
         solver->loadInstance(filename);
     }
 }
 
 void AbstractParallelSolver::reset() {
     // FIXME: make sure that the semaphores, etc. are also reset.
-    for (auto &solver: solvers) {
+    for (auto &solver : solvers) {
         solver->reset();
     }
 }
@@ -93,19 +94,19 @@ int AbstractParallelSolver::nConstraints() {
 }
 
 void AbstractParallelSolver::setTimeout(long seconds) {
-    for (auto &solver: solvers) {
+    for (auto &solver : solvers) {
         solver->setTimeout(seconds);
     }
 }
 
 void AbstractParallelSolver::setTimeoutMs(long mseconds) {
-    for (auto &solver: solvers) {
+    for (auto &solver : solvers) {
         solver->setTimeoutMs(mseconds);
     }
 }
 
 void AbstractParallelSolver::setVerbosity(int level) {
-    for (auto &solver: solvers) {
+    for (auto &solver : solvers) {
         solver->setVerbosity(level);
     }
 }
@@ -147,7 +148,7 @@ UniverseSolverResult AbstractParallelSolver::internalSolve(const vector<Universe
 }
 
 void AbstractParallelSolver::interrupt() {
-    for (auto &solver: solvers) {
+    for (auto &solver : solvers) {
         solver->interrupt();
     }
     interrupted = true;
@@ -179,8 +180,10 @@ void AbstractParallelSolver::readMessages() {
 }
 
 void AbstractParallelSolver::readMessage(const Message *message) {
+    DLOG_F(INFO, "abstract readMessage %s", message->name);
     if (NAME_OF(message, IS(PANO_MESSAGE_SATISFIABLE))) {
-        winner = message->read<unsigned>();;
+        winner = message->read<unsigned>();
+        ;
         result = UniverseSolverResult::SATISFIABLE;
         onSatisfiableFound(winner);
         solved.release();
@@ -224,7 +227,7 @@ void AbstractParallelSolver::onUnsatisfiableFound(unsigned solverIndex) {
 }
 
 void AbstractParallelSolver::endSearch() {
-    for (auto &solver: solvers) {
+    for (auto &solver : solvers) {
         solver->endSearch();
     }
 }

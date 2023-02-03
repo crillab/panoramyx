@@ -1,17 +1,17 @@
 /**
-* @date 15/11/22
-* @file GauloisSolver.hpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
-
+ * @date 15/11/22
+ * @file GauloisSolver.hpp
+ * @brief
+ * @author Thibault Falque
+ * @author Romain Wallon
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
 #ifndef PANORAMYX_GAULOISSOLVER_HPP
 #define PANORAMYX_GAULOISSOLVER_HPP
 
 #include <semaphore>
+
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 #include "../../../libs/autis/libs/universe/universe/include/optim/IOptimizationSolver.hpp"
 #include "../network/INetworkCommunication.hpp"
@@ -21,7 +21,7 @@ namespace Panoramyx {
 /**
  * @class GauloisSolver
  *
- * @brief 
+ * @brief
  * @file GauloisSolver.hpp
  * @author Thibault Falque
  * @author Romain Wallon
@@ -29,94 +29,93 @@ namespace Panoramyx {
  * @version 0.1.0
  */
 
-    class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
-    private:
-        Universe::IUniverseSolver *solver;
-        INetworkCommunication *comm;
-        bool interrupted = false;
-        std::binary_semaphore finished=std::binary_semaphore(0);
-        std::mutex loadMutex;
-        int nbSolved=0;
+class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
+   private:
+    Universe::IUniverseSolver *solver;
+    INetworkCommunication *comm;
+    bool interrupted = false;
+    std::binary_semaphore finished = std::binary_semaphore(0);
+    std::mutex loadMutex;
+    int nbSolved = 0;
+    bool optimization;
+    void readMessage(Message *m);
 
-        void readMessage(Message *m);
+    std::vector<Universe::BigInteger> solution(Message *m);
 
-        std::vector<Universe::BigInteger> solution(Message *m);
+    int nVariables(Message *m);
+    int nConstraints(Message *m);
+    Universe::BigInteger getLowerBound(Message *m);
+    Universe::BigInteger getUpperBound(Message *m);
+    Universe::BigInteger getCurrentBound(Message *m);
+    bool isMinimization(Message *m);
 
-        int nVariables(Message *m);
-        int nConstraints(Message *m);
-        Universe::BigInteger getLowerBound(Message *m);
-        Universe::BigInteger getUpperBound(Message *m);
-        Universe::BigInteger getCurrentBound(Message *m);
-        bool isMinimization(Message *m);
+    Universe::UniverseSolverResult solve(Message *m);
 
-        Universe::UniverseSolverResult solve(Message *m);
+    Universe::UniverseSolverResult solve(std::string filename, Message *m);
 
-        Universe::UniverseSolverResult solve(std::string filename, Message *m);
+    Universe::UniverseSolverResult
+    solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> asumpts, Message *m);
 
-        Universe::UniverseSolverResult
-        solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> asumpts, Message *m);
+    Universe::IOptimizationSolver *getOptimSolver();
 
-        Universe::IOptimizationSolver* getOptimSolver();
+   public:
+    explicit GauloisSolver(Universe::IUniverseSolver *solver, INetworkCommunication *comm);
 
-    public:
+    Universe::UniverseSolverResult solve() override;
 
-        explicit GauloisSolver(Universe::IUniverseSolver *solver, INetworkCommunication *comm);
+    Universe::UniverseSolverResult solve(const std::string &filename) override;
 
-        Universe::UniverseSolverResult solve() override;
+    Universe::UniverseSolverResult
+    solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &asumpts) override;
 
-        Universe::UniverseSolverResult solve(const std::string &filename) override;
+    void interrupt() override;
 
-        Universe::UniverseSolverResult
-        solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &asumpts) override;
+    void setVerbosity(int level) override;
 
-        void interrupt() override;
+    void setTimeout(long seconds) override;
 
-        void setVerbosity(int level) override;
+    void setTimeoutMs(long mseconds) override;
 
-        void setTimeout(long seconds) override;
+    void reset() override;
 
-        void setTimeoutMs(long mseconds) override;
+    std::vector<Universe::BigInteger> solution() override;
 
-        void reset() override;
+    int nVariables() override;
 
-        std::vector<Universe::BigInteger> solution() override;
+    int nConstraints() override;
 
-        int nVariables() override;
+    void setLogFile(const std::string &filename) override;
 
-        int nConstraints() override;
+    void start();
 
-        void setLogFile(const std::string &filename) override;
+    ~GauloisSolver() override = default;
 
-        void start();
+    void sendResult(int src, Universe::UniverseSolverResult result);
 
-        ~GauloisSolver() override = default;
+    void load(std::string filename);
 
-        void sendResult(int src, Universe::UniverseSolverResult result);
+    const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 
-        void load(std::string filename);
+    std::map<std::string, Universe::BigInteger> mapSolution() override;
 
-        const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
+    void setLowerBound(const Universe::BigInteger &lb) override;
 
-        std::map<std::string, Universe::BigInteger> mapSolution() override;
+    void setUpperBound(const Universe::BigInteger &ub) override;
 
-        void setLowerBound(const Universe::BigInteger &lb) override;
+    void setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) override;
 
-        void setUpperBound(const Universe::BigInteger &ub) override;
+    Universe::BigInteger getCurrentBound() override;
 
-        void setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) override;
+    bool isMinimization() override;
 
-        Universe::BigInteger getCurrentBound() override;
+    bool isOptimization(Message *m);
 
-        bool isMinimization() override;
+    Universe::BigInteger getLowerBound() override;
+    Universe::BigInteger getUpperBound() override;
+};
 
-        Universe::BigInteger getLowerBound() override;
-        Universe::BigInteger getUpperBound() override;
+using GallicSolver = GauloisSolver;
 
+}  // namespace Panoramyx
 
-    };
-
-    using GallicSolver = GauloisSolver;
-
-} // Panoramyx
-
-#endif //PANORAMYX_GAULOISSOLVER_HPP
+#endif  // PANORAMYX_GAULOISSOLVER_HPP

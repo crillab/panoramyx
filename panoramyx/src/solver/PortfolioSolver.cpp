@@ -30,6 +30,7 @@
  */
 
 #include "../../include/solver/PortfolioSolver.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -65,6 +66,7 @@ void PortfolioSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &
 
 void PortfolioSolver::solve(unsigned i) {
     if (solvers[i]->isOptimization()) {
+        std::cout<<currentBounds[i]<< currentBounds[i + 1]<<std::endl;
         // FIXME: Maybe use a state design pattern here?
         solvers[i]->setBounds(currentBounds[i], currentBounds[i + 1]);
     }
@@ -97,7 +99,23 @@ void PortfolioSolver::onNewBoundFound(const BigInteger &bound) {
 
 void PortfolioSolver::onUnsatisfiableFound(unsigned solverIndex) {
     // FIXME: If OPTIM, update bounds
-    winner = solverIndex;
-    result = Universe::UniverseSolverResult::UNSATISFIABLE;
-    solved.release();
+    if(solvers[0]->isOptimization()){
+        auto bound = currentBounds[solverIndex];
+        if (!isMinimization && bound < upperBound) {
+            upperBound = bound-1;
+            for (auto solver: solvers) {
+                solver->setUpperBound(upperBound);
+            }
+        } else if (isMinimization && lowerBound < bound) {
+            lowerBound = bound+1;
+            for (auto solver: solvers) {
+                solver->setLowerBound(lowerBound);
+            }
+        }
+    }else{
+        winner = solverIndex;
+        result = Universe::UniverseSolverResult::UNSATISFIABLE;
+        solved.release();
+    }
+
 }

@@ -12,6 +12,7 @@
 #define PANORAMYX_REMOTESOLVER_HPP
 
 #include <mutex>
+#include <optional>
 
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 #include "../network/INetworkCommunication.hpp"
@@ -40,6 +41,7 @@ namespace Panoramyx {
         std::mutex mutex;
         int nbVariables = -1;
         int nbConstraints = -1;
+        std::optional<bool> isOptim;
     public:
         explicit RemoteSolver(int rank);
 
