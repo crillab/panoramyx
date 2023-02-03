@@ -5,3 +5,6 @@
 [submodule "libs/loguru"]
 	path = libs/loguru
 	url = https://github.com/emilk/loguru.git
+[submodule "libs/argparse"]
+	path = libs/argparse
+	url = https://github.com/p-ranav/argparse.git
