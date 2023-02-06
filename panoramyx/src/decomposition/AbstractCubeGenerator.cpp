@@ -29,7 +29,11 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
+#include <fstream>
 #include "../../include/decomposition/AbstractCubeGenerator.hpp"
+#include "../../../libs/autis/libs/universe/universe/include/csp/IUniverseCspSolver.hpp"
+#include "../../../libs/autis/autis/include/core/Scanner.hpp"
+#include "../../../libs/autis/autis/include/xcsp/AutisXcspParserAdapter.hpp"
 
 using namespace Panoramyx;
 using namespace Universe;
@@ -40,4 +44,11 @@ void AbstractCubeGenerator::setSolver(IUniverseSolver *s) {
 
 void AbstractCubeGenerator::setConsistencyChecker(IConsistencyChecker *checker) {
     this->consistencyChecker = checker;
+}
+
+void AbstractCubeGenerator::loadInstance(const std::string &filename) {
+    std::ifstream input(filename);
+    Autis::Scanner scanner(input);
+    auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver*>(solver));
+    parser->parse();
 }

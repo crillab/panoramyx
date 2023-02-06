@@ -86,6 +86,8 @@ namespace Panoramyx {
          */
         virtual void send(Message *message, int dest) = 0;
 
+
+        virtual void finalize()=0;
     };
 
 }

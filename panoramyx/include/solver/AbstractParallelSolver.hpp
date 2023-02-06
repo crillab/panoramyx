@@ -142,7 +142,7 @@ namespace Panoramyx {
         /**
          * Loads a problem instance from a file.
          */
-        void loadInstance(const std::string &filename);
+        virtual void loadInstance(const std::string &filename);
 
         /**
          * Resets this solver in its original state.

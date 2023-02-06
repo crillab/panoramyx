@@ -52,7 +52,7 @@ GauloisSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::Bi
     loadMutex.lock();
     nbSolved++;
     auto r = solver->solve(asumpts);
-    DLOG_F(INFO, "result after solve(assumpts): %s",
+    LOG_F(INFO, "result after solve(assumpts): %s",
            r == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
     loadMutex.unlock();
     return r;
@@ -96,6 +96,7 @@ int GauloisSolver::nConstraints() {
 
 void GauloisSolver::setLogFile(const std::string &filename) {
     solver->setLogFile(filename);
+    loguru::add_file(filename.c_str(), loguru::Append, loguru::Verbosity_INFO);
 }
 
 void GauloisSolver::start() {
@@ -125,7 +126,7 @@ void GauloisSolver::readMessage(Message *m) {
             i += sizeof(bool);
             char *ptr = m->parameters + i;
             std::string param(ptr, strlen(ptr) + 1);
-            DLOG_F(INFO, "%d %s '%s'", varId, equal ? "=" : "!=", param.c_str());
+            LOG_F(INFO, "%d %s '%s'", varId, equal ? "=" : "!=", param.c_str());
             Universe::BigInteger tmp = Universe::bigIntegerValueOf(param);
             assumpts.emplace_back(varId, equal, tmp);
             i += param.size();

@@ -64,7 +64,7 @@ Universe::UniverseSolverResult RemoteSolver::solve(
         mb.withParameter(assumpt.isEqual());
         mb.withParameter(Universe::toString(assumpt.getValue()));
 
-        DLOG_F(INFO, "add assumption: %d %s '%s'", assumpt.getVariableId(),
+        LOG_F(INFO, "add assumption: %d %s '%s'", assumpt.getVariableId(),
                assumpt.isEqual() ? "=" : "!=",
                Universe::toString(assumpt.getValue()).c_str());
     }

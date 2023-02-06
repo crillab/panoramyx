@@ -30,6 +30,7 @@
  */
 
 #include <cstring>
+#include <iostream>
 
 #include "../../../libs/autis/libs/universe/universe/include/core/UniverseType.hpp"
 
@@ -62,8 +63,8 @@ MessageBuilder &MessageBuilder::withTag(int tag) {
     return *this;
 }
 
-template<>
 MessageBuilder &MessageBuilder::withParameter(string p) {
+    std::cerr<<"with parameter string"<<std::endl;
     message->nbParameters++;
     size += p.size() + 1;
     message = static_cast<Message *>(realloc(message, size));
@@ -72,7 +73,6 @@ MessageBuilder &MessageBuilder::withParameter(string p) {
     return *this;
 }
 
-template<>
 MessageBuilder &MessageBuilder::withParameter(BigInteger param) {
     this->withParameter(Universe::toString(param));
     return *this;

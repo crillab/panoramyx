@@ -2,10 +2,12 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/argparse" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/autis" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/autis/libs/exception" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/autis/libs/universe" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/autis/libs/universe/libs/easy-jni" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/libs/autis/libs/universe/libs/magic-enum" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/autis/libs/xcsp3parser" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/cosoco" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/libs/cosoco/libs/xcsp3parser" vcs="Git" />

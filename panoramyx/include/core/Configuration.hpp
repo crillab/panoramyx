@@ -34,6 +34,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <any>
 
 namespace Panoramyx {
 
@@ -47,7 +48,7 @@ namespace Panoramyx {
         /**
          * The map storing the configuration.
          */
-        std::unordered_map<std::string, std::string> map;
+        std::unordered_map<std::string, std::any> map;
 
     public:
 
@@ -58,7 +59,16 @@ namespace Panoramyx {
          *
          * @return The configured value for the given key.
          */
-        std::string &operator[](const std::string &key);
+         template <typename T>
+         T get(const std::string &key){
+            return std::any_cast<T>(map[key]);
+         }
+
+        template <typename T>
+        void set(const std::string &key,T value){
+            map[key]=value;
+        }
+
 
     };
 

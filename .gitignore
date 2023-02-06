@@ -45,6 +45,7 @@ _deps
 cmake-build-debug
 .idea
 build
-
-*.xml
-*.xml.lzma
+cmake-*
+logs
+.vscode
+*.xml*

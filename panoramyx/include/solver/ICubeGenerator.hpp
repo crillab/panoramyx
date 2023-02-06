@@ -74,6 +74,7 @@ namespace Panoramyx {
          */
         virtual Panoramyx::Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> *generateCubes() = 0;
 
+        virtual void loadInstance(const std::string &filename)=0;
     };
 
 }

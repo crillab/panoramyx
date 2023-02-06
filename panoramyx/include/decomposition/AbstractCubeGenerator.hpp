@@ -75,6 +75,7 @@ namespace Panoramyx {
          */
         void setConsistencyChecker(Panoramyx::IConsistencyChecker *checker) override;
 
+        void loadInstance(const std::string &filename) override;
     };
 
 }

@@ -71,3 +71,7 @@ void MPINetworkCommunication::send(Message *m, int dest) {
     m->src = getId();
     MPI_Send(m, (int) (sizeof(Message) + m->size), MPI_BYTE, dest, m->tag, MPI_COMM_WORLD);
 }
+
+void MPINetworkCommunication::finalize() {
+    MPI_Finalize();
+}

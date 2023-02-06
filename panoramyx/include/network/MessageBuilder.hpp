@@ -109,7 +109,8 @@ namespace Panoramyx {
             message->size += sizeof(T);
             return *this;
         }
-
+        MessageBuilder &withParameter(std::string param);
+        MessageBuilder &withParameter(Universe::BigInteger param);
         /**
          * Builds the message.
          *

@@ -70,6 +70,9 @@ namespace Panoramyx {
          */
         EPSSolver(Panoramyx::INetworkCommunication *comm, Panoramyx::ICubeGenerator *generator);
 
+        void loadInstance(const std::string &filename) override;
+
+
         /**
          * Destroys this EPSSolver.
          */

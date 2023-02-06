@@ -107,6 +107,7 @@ namespace Panoramyx {
          */
         void send(Message *message, int dest) override;
 
+        void finalize() override;
     };
 
 }

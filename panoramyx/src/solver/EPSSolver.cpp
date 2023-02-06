@@ -113,3 +113,8 @@ void EPSSolver::waitForAllCubes(int nbCubes) {
     result = Universe::UniverseSolverResult::UNSATISFIABLE;
     solved.release();
 }
+
+void EPSSolver::loadInstance(const string &filename) {
+    AbstractParallelSolver::loadInstance(filename);
+    this->generator->loadInstance(filename);
+}
