@@ -1,5 +1,5 @@
 # Configuring CMake.
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.18)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
@@ -43,7 +43,7 @@ if (NOT MSVC)
         set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g3 ")
     else ()
         message("DEFAULT VALUE" ${CMAKE_CXX_FLAGS_RELEASE} )
-        set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O1")
+        set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG ")
         set(CMAKE_CXX_FLAGS_RELWITHDEBINFO " -mtune=native -march=native -g3 ")
     endif ()
 
@@ -148,7 +148,7 @@ file(GLOB_RECURSE HEADERS
 include_directories(libs/loguru)
 add_library(${LIBRARY_NAME} ${SOURCES} ${HEADERS} libs/loguru/loguru.cpp libs/loguru/loguru.hpp)
 set_target_properties(${LIBRARY_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(${LIBRARY_NAME} autis exception universe easyjni ${MPI_CXX_LIBRARIES} argparse)
+target_link_libraries(${LIBRARY_NAME} autis exception universe easyjni ${MPI_CXX_LIBRARIES} argparse dl pthread)
 
 
 add_executable(mainpano panoramyx/src/main.cpp)
