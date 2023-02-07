@@ -76,7 +76,7 @@ namespace Panoramyx {
          *
          * @return The received message.
          */
-        virtual Message *receive(int tag, int src, unsigned long size) = 0;
+        virtual Message *receive(int tag, int src, unsigned long size=PANO_DEFAULT_MESSAGE_SIZE) = 0;
 
         /**
          * Sends a message.

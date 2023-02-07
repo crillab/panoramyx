@@ -64,7 +64,6 @@ MessageBuilder &MessageBuilder::withTag(int tag) {
 }
 
 MessageBuilder &MessageBuilder::withParameter(string p) {
-    std::cerr<<"with parameter string"<<std::endl;
     message->nbParameters++;
     size += p.size() + 1;
     message = static_cast<Message *>(realloc(message, size));
