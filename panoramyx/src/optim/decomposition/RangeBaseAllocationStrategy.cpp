@@ -28,7 +28,7 @@ namespace Panoramyx {
                                                         const Universe::BigInteger &currentMin,
                                                         const Universe::BigInteger &currentMax) {
         std::vector<Universe::BigInteger> result;
-        for(auto b:*rangeIterator(currentMin,currentMax,currentBounds.size())){
+        for(auto b:*rangeIterator(currentMin,currentMax,currentBounds.size()-1)){
             result.push_back(b);
         }
         return result;
