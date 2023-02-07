@@ -27,6 +27,8 @@
 #include "../include/solver/AbstractSolverBuilder.hpp"
 #include "../include/solver/EpsSolverBuilder.hpp"
 #include "../include/core/NullConsistencyChecker.hpp"
+#include "../include/solver/PortfolioSolverBuilder.hpp"
+
 
 using namespace Panoramyx;
 using namespace easyjni;
@@ -216,6 +218,14 @@ void buildJVM(argparse::ArgumentParser &parser) {
     }
 }
 
+IAllocationStrategy *parseAllocationStrategy(argparse::ArgumentParser &program, INetworkCommunication *pCommunication) {
+    if (program.get<string>("allocation-strategy") == "Linear") {
+        return new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); });
+    }
+    throw runtime_error("invalid network communicator");
+}
+
+
 int main(int argc, char **argv) {
     loguru::init(argc, argv);
     argparse::ArgumentParser program("Panoramyx", PANO_VERSION);
@@ -238,6 +248,14 @@ int main(int argc, char **argv) {
                     splitJavaOptions(program.get<string>("java-options")))->withJars(
                     program.get<std::vector<string>>("jars"));
 
+        }else{
+            asb = (new PortfolioSolverBuilder())->withAllocationStrategy(
+                    parseAllocationStrategy(program.at<argparse::ArgumentParser>("portfolio"),
+                                       networkCommunication))->withNetworkCommunicator(
+                    networkCommunication)->withJavaOption(
+                    splitJavaOptions(program.get<string>("java-options")))->withJars(
+                    program.get<std::vector<string>>("jars"));
+
         }
         chief = asb->build();
 
@@ -248,7 +266,6 @@ int main(int argc, char **argv) {
         auto r = chief->solve();
         std::cout << (int) r << std::endl;
     } else {
-        LOG_F(INFO,"toto");
         auto configs = parseSolverConfiguration(program);
         auto logdir = program.get<string>("log-directory");
         if (!std::filesystem::is_directory(logdir)) {
@@ -268,7 +285,7 @@ int main(int argc, char **argv) {
         solver->setVerbosity(localConfig.get<int>("verbosity"));
         auto *gaulois = new GauloisSolver(solver, networkCommunication);
         gaulois->setLogFile(logdir + std::filesystem::path::preferred_separator + "log_gaulois_" +
-                            std::to_string(networkCommunication->getId())+".log");
+                            std::to_string(networkCommunication->getId())+"_"+std::to_string(getpid())+".log");
         gaulois->start();
 
     }
@@ -324,3 +341,5 @@ int main(int argc, char **argv) {
 // MPI_Finalize();
     return 0;
 }
+
+

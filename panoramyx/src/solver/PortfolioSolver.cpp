@@ -66,17 +66,27 @@ void PortfolioSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &
 
 void PortfolioSolver::solve(unsigned i) {
     if (solvers[i]->isOptimization()) {
-        std::cout<<currentBounds[i]<< currentBounds[i + 1]<<std::endl;
+        LOG_F(INFO,"range of bounds for solver %d: %s ... %s",i,Universe::toString(currentBounds[i]).c_str(),Universe::toString(currentBounds[i+1]).c_str());
         // FIXME: Maybe use a state design pattern here?
-        solvers[i]->setBounds(currentBounds[i], currentBounds[i + 1]);
+        if(isMinimization){
+            solvers[i]->setUpperBound(currentBounds[i+1]);
+        }else{
+            solvers[i]->setLowerBound(currentBounds[i]);
+        }
     }
     solvers[i]->solve();
 }
 
 void PortfolioSolver::solve(unsigned i, const vector<UniverseAssumption<BigInteger>> &assumpts) {
     if (solvers[i]->isOptimization()) {
+        LOG_F(INFO,"range of bounds for solver %d: %s ... %s",i,Universe::toString(currentBounds[i]).c_str(),Universe::toString(currentBounds[i+1]).c_str());
         // FIXME: Maybe use a state design pattern here?
-        solvers[i]->setBounds(currentBounds[i], currentBounds[i + 1]);
+        if(isMinimization){
+            solvers[i]->setUpperBound(currentBounds[i+1]);
+        }else{
+            solvers[i]->setLowerBound(currentBounds[i]);
+        }
+
     }
     solvers[i]->solve(assumpts);
 }

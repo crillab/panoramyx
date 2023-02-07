@@ -11,6 +11,8 @@
 #ifndef PANORAMYX_PORTFOLIOSOLVERBUILDER_HPP
 #define PANORAMYX_PORTFOLIOSOLVERBUILDER_HPP
 
+#include "AbstractSolverBuilder.hpp"
+
 namespace Panoramyx {
 
 /**
@@ -24,8 +26,12 @@ namespace Panoramyx {
  * @version 0.1.0
  */
 
-    class PortfolioSolverBuilder {
-
+    class PortfolioSolverBuilder:public AbstractSolverBuilder {
+    private:
+        IAllocationStrategy* allocationStrategy;
+    public:
+        PortfolioSolverBuilder* withAllocationStrategy(IAllocationStrategy* allocationStrategy);
+        AbstractParallelSolver *build() override;
     };
 
 } // Panoramyx

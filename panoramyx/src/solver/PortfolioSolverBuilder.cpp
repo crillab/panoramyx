@@ -8,7 +8,8 @@
 */
 
 
-#include "PortfolioSolverBuilder.hpp"
+#include "../../include/solver/PortfolioSolverBuilder.hpp"
+#include "../../include/solver/PortfolioSolver.hpp"
 
 namespace Panoramyx {
 
@@ -18,4 +19,12 @@ namespace Panoramyx {
 @file PortfolioSolverBuilder.cpp
 */
 
+    AbstractParallelSolver *PortfolioSolverBuilder::build() {
+        return new PortfolioSolver(networkCommunication,allocationStrategy);
+    }
+
+    PortfolioSolverBuilder *PortfolioSolverBuilder::withAllocationStrategy(IAllocationStrategy *allocationStrategy) {
+        this->allocationStrategy=allocationStrategy;
+        return this;
+    }
 } // Panoramyx
