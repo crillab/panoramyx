@@ -8,8 +8,8 @@
 */
 
 
-#ifndef PANORAMYX_RANGEBASEALLOCATIONSTRATEGY_HPP
-#define PANORAMYX_RANGEBASEALLOCATIONSTRATEGY_HPP
+#ifndef PANORAMYX_AGGRESSIVERANGEBASEALLOCATIONSTRATEGY_HPP
+#define PANORAMYX_AGGRESSIVERANGEBASEALLOCATIONSTRATEGY_HPP
 
 #include "IAllocationStrategy.hpp"
 #include "../../utils/Stream.hpp"
@@ -27,13 +27,13 @@ namespace Panoramyx {
  * @version 0.1.0
  */
 
-    class RangeBaseAllocationStrategy:public IAllocationStrategy {
+    class AggressiveRangeBaseAllocationStrategy:public IAllocationStrategy {
     private:
         std::function<Stream<Universe::BigInteger>*(Universe::BigInteger, Universe::BigInteger, int)> rangeIterator;
         bool minimization;
 
     public:
-        explicit RangeBaseAllocationStrategy(std::function<Stream<Universe::BigInteger>*(Universe::BigInteger, Universe::BigInteger, int)> rangeIterator);
+        explicit AggressiveRangeBaseAllocationStrategy(std::function<Stream<Universe::BigInteger>*(Universe::BigInteger, Universe::BigInteger, int)> rangeIterator);
 
         std::vector<Universe::BigInteger> computeBoundAllocation(const std::vector<Universe::BigInteger> &currentBounds,
                                                                  const Universe::BigInteger &currentMin,
@@ -45,4 +45,4 @@ namespace Panoramyx {
 
 } // Panoramyx
 
-#endif //PANORAMYX_RANGEBASEALLOCATIONSTRATEGY_HPP
+#endif
