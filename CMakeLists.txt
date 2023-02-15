@@ -43,8 +43,8 @@ if (NOT MSVC)
         set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g3 ")
     else ()
         message("DEFAULT VALUE" ${CMAKE_CXX_FLAGS_RELEASE} )
-        set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG ")
-        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO " -mtune=native -march=native -g3 ")
+        set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3")
+        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO " -mtune=native -march=native -g3 -O3")
     endif ()
 
     # disable warnings for the register keyword which is deprecated but used in the python 2.7 bindings
