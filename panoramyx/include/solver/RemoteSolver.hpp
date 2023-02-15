@@ -52,7 +52,7 @@ namespace Panoramyx {
         Universe::UniverseSolverResult
         solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override;
 
-        bool isOptimization();
+        bool isOptimization() override;
 
         void interrupt() override;
 
@@ -98,6 +98,8 @@ namespace Panoramyx {
 
         Universe::BigInteger getLowerBound() override;
         Universe::BigInteger getUpperBound() override;
+
+        unsigned int getIndex() const;
     };
 
 }

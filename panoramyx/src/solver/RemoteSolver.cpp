@@ -7,6 +7,7 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
+#include <iostream>
 #include "../../include/solver/RemoteSolver.hpp"
 
 #include "../../include/network/Message.hpp"
@@ -180,7 +181,14 @@ int RemoteSolver::nConstraints() {
 
 void RemoteSolver::setLogFile(const std::string &filename) {}
 
-void RemoteSolver::setIndex(unsigned i) { this->index = i; }
+void RemoteSolver::setIndex(unsigned i) {
+    this->index = i;
+    MessageBuilder mb;
+    mb.named(PANO_MESSAGE_INDEX);
+    Message *m = mb.withTag(PANO_TAG_SOLVE).withParameter(i).build();
+    comm->send(m, rank);
+    free(m);
+}
 
 void RemoteSolver::setComm(INetworkCommunication *c) { comm = c; }
 
@@ -215,7 +223,8 @@ std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution() {
             .build();
     comm->send(m, rank);
     free(m);
-    unsigned long size = nVariables()*(PANO_VARIABLE_NAME_MAX_CHAR+PANO_NUMBER_MAX_CHAR+2)+sizeof(Message);
+    unsigned long size = 100*nVariables()*(PANO_VARIABLE_NAME_MAX_CHAR+PANO_NUMBER_MAX_CHAR+2)+sizeof(Message);
+
     m = comm->receive(PANO_TAG_RESPONSE, rank,size);
     mutex.unlock();
     std::map<std::string,Universe::BigInteger> bigbig;
@@ -335,4 +344,8 @@ Universe::BigInteger RemoteSolver::getUpperBound() {
     mutex.unlock();
     free(m);
     return newBound;
+}
+
+unsigned int RemoteSolver::getIndex() const {
+    return index;
 }
