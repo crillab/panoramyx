@@ -32,6 +32,8 @@ namespace Panoramyx {
         virtual std::vector<Universe::BigInteger>
         computeBoundAllocation(const std::vector<Universe::BigInteger> &currentBounds,
                                const Universe::BigInteger &currentMin, const Universe::BigInteger &currentMax) = 0;
+
+        virtual void setMinimization(bool min)=0;
     };
 
 } // Panoramyx
