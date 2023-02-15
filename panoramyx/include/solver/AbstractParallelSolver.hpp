@@ -47,10 +47,10 @@ namespace Panoramyx {
      * The AbstractParallelSolver is the parent class of all the solvers that run
      * in parallel.
      */
-    class AbstractParallelSolver : public Universe::IUniverseSolver {
+    class AbstractParallelSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
 
     protected:
-
+        std::map<std::string, Universe::BigInteger> bestSolution;
         /**
          * The interface used to communicate with the different solvers.
          */
@@ -79,7 +79,7 @@ namespace Panoramyx {
         /**
          * Whether the problem to solve is a minimization problem.
          */
-        bool isMinimization;
+        bool minimization;
 
         /**
          * The current lower bound of the optimization problem.
@@ -115,6 +115,8 @@ namespace Panoramyx {
          * The semaphore allowing to wait for the solvers to terminate properly.
          */
         std::binary_semaphore end;
+
+        std::vector<bool> currentRunningSolvers;
 
     public:
 
@@ -245,6 +247,24 @@ namespace Panoramyx {
          */
         std::map<std::string, Universe::BigInteger> mapSolution() override;
 
+        Universe::UniverseSolverResult getResult();
+
+        Universe::BigInteger getCurrentBound() override;
+
+        Universe::BigInteger getLowerBound() override;
+
+        void setLowerBound(const Universe::BigInteger &lb) override;
+
+        Universe::BigInteger getUpperBound() override;
+
+        void setUpperBound(const Universe::BigInteger &ub) override;
+
+        void setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) override;
+
+        bool isMinimization() override;
+
+        bool isOptimization() override;
+
     protected:
 
         /**
@@ -295,7 +315,7 @@ namespace Panoramyx {
          *
          * @param bound The new bound that has been found.
          */
-        virtual void onNewBoundFound(const Universe::BigInteger &bound);
+        virtual void onNewBoundFound(const Universe::BigInteger &bound, unsigned int i);
 
         /**
          * Updates the search when a solver proved the unsatisfiability of its problem.

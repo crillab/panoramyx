@@ -44,33 +44,40 @@ PortfolioSolver::PortfolioSolver(INetworkCommunication *comm, IAllocationStrateg
 }
 
 void PortfolioSolver::beforeSearch() {
-    if (solvers[0]->isOptimization()) {
+    if (isOptimization()) {
         // FIXME: Maybe use a state design pattern here?
-        auto lb = solvers[0]->getLowerBound();
-        auto ub = solvers[0]->getUpperBound();
-        currentBounds = allocationStrategy->computeBoundAllocation(currentBounds, lb, ub);
+        minimization = solvers[0]->isMinimization();
+        allocationStrategy->setMinimization(minimization);
+        lowerBound = solvers[0]->getLowerBound();
+        upperBound = solvers[0]->getUpperBound();
+        currentBounds = allocationStrategy->computeBoundAllocation(currentBounds, lowerBound, upperBound);
     }
 }
 
 void PortfolioSolver::startSearch() {
     for (unsigned i = 0; i < solvers.size(); i++) {
         solve(i);
+        currentRunningSolvers[i] = true;
+        solvers[i]->nVariables();
+        solvers[i]->nConstraints();
     }
 }
 
 void PortfolioSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &assumpts) {
     for (unsigned i = 0; i < solvers.size(); i++) {
         solve(i, assumpts);
+        currentRunningSolvers[i] = true;
     }
 }
 
 void PortfolioSolver::solve(unsigned i) {
     if (solvers[i]->isOptimization()) {
-        LOG_F(INFO,"range of bounds for solver %d: %s ... %s",i,Universe::toString(currentBounds[i]).c_str(),Universe::toString(currentBounds[i+1]).c_str());
+        LOG_F(INFO, "range of bounds for solver %d: %s ... %s", i, Universe::toString(currentBounds[i]).c_str(),
+              Universe::toString(currentBounds[i + 1]).c_str());
         // FIXME: Maybe use a state design pattern here?
-        if(isMinimization){
-            solvers[i]->setUpperBound(currentBounds[i+1]);
-        }else{
+        if (minimization) {
+            solvers[i]->setUpperBound(currentBounds[i + 1]);
+        } else {
             solvers[i]->setLowerBound(currentBounds[i]);
         }
     }
@@ -79,11 +86,12 @@ void PortfolioSolver::solve(unsigned i) {
 
 void PortfolioSolver::solve(unsigned i, const vector<UniverseAssumption<BigInteger>> &assumpts) {
     if (solvers[i]->isOptimization()) {
-        LOG_F(INFO,"range of bounds for solver %d: %s ... %s",i,Universe::toString(currentBounds[i]).c_str(),Universe::toString(currentBounds[i+1]).c_str());
+        LOG_F(INFO, "range of bounds for solver %d: %s ... %s", i, Universe::toString(currentBounds[i]).c_str(),
+              Universe::toString(currentBounds[i + 1]).c_str());
         // FIXME: Maybe use a state design pattern here?
-        if(isMinimization){
-            solvers[i]->setUpperBound(currentBounds[i+1]);
-        }else{
+        if (minimization) {
+            solvers[i]->setUpperBound(currentBounds[i + 1]);
+        } else {
             solvers[i]->setLowerBound(currentBounds[i]);
         }
 
@@ -91,41 +99,83 @@ void PortfolioSolver::solve(unsigned i, const vector<UniverseAssumption<BigInteg
     solvers[i]->solve(assumpts);
 }
 
-void PortfolioSolver::onNewBoundFound(const BigInteger &bound) {
+void PortfolioSolver::onNewBoundFound(const Universe::BigInteger &bound, unsigned int src) {
     // FIXME: Maybe use a state design pattern here?
-    // TODO: Interrupts solvers that are out of bounds.
-    if (isMinimization && bound < upperBound) {
+    // TODO GMP case
+    if (minimization && bound < upperBound) {
         upperBound = bound;
-        for (auto solver: solvers) {
-            solver->setUpperBound(upperBound);
-        }
-    } else if (!isMinimization && lowerBound < bound) {
+        winner = src;
+        bestSolution = solvers[winner]->mapSolution();
+        LOG_F(INFO, "New upper bound %lld by solver %d", bound, winner);
+    } else if (!minimization && lowerBound < bound) {
         lowerBound = bound;
-        for (auto solver: solvers) {
-            solver->setLowerBound(lowerBound);
-        }
+        winner = src;
+        bestSolution = solvers[winner]->mapSolution();
+        LOG_F(INFO, "New lower bound %lld by solver %d", bound, winner);
+    } else {
+        LOG_F(INFO, "else %lld %lld %lld", lowerBound, bound, upperBound);
     }
+    updateBounds();
 }
 
 void PortfolioSolver::onUnsatisfiableFound(unsigned solverIndex) {
-    // FIXME: If OPTIM, update bounds
-    if(solvers[0]->isOptimization()){
+    // FIXME: Maybe use a state design pattern here?
+    // TODO GMP case
+    bool trueUnsat = !isOptimization();
+    if (!trueUnsat) {
         auto bound = currentBounds[solverIndex];
-        if (!isMinimization && bound < upperBound) {
-            upperBound = bound-1;
-            for (auto solver: solvers) {
-                solver->setUpperBound(upperBound);
-            }
-        } else if (isMinimization && lowerBound < bound) {
-            lowerBound = bound+1;
-            for (auto solver: solvers) {
-                solver->setLowerBound(lowerBound);
-            }
+        if (!minimization && bound < upperBound) {
+            upperBound = bound - 1;
+            LOG_F(INFO, "New upper bound %lld by solver %d", upperBound, solverIndex);
+        } else if (minimization && lowerBound < bound) {
+            lowerBound = bound + 1;
+            LOG_F(INFO, "New lower bound %lld by solver %d", lowerBound, solverIndex);
         }
-    }else{
+
+        if (lowerBound >= upperBound) {
+            trueUnsat = true;
+        } else {
+            updateBounds();
+        }
+
+    }
+
+    if (trueUnsat) {
         winner = solverIndex;
-        result = Universe::UniverseSolverResult::UNSATISFIABLE;
+        result = (result == Universe::UniverseSolverResult::SATISFIABLE) ?
+                Universe::UniverseSolverResult::OPTIMUM_FOUND :
+                Universe::UniverseSolverResult::UNSATISFIABLE;
         solved.release();
     }
 
+}
+
+void PortfolioSolver::updateBounds() {
+    auto newBounds = allocationStrategy->computeBoundAllocation(currentBounds, lowerBound, upperBound);
+    for (unsigned long i = 0; i < solvers.size(); i++) {
+        auto solver = solvers[i];
+        if (currentBounds[i] == currentBounds[i+1]) {
+            // No more bounds.
+            solver->interrupt();
+            LOG_F(INFO, "Solver %ld is definitively interrupted", i);
+            continue;
+        }
+
+        LOG_F(INFO, "range of bounds for solver %ld: %s ... %s", i, toString(currentBounds[i]).c_str(),
+              toString(currentBounds[i + 1]).c_str());
+        if (minimization && newBounds[i + 1] != currentBounds[i + 1]) {
+            currentBounds[i + 1] = newBounds[i + 1];
+            solver->setUpperBound(currentBounds[i + 1]);
+
+        } else if (!minimization && currentBounds[i] != newBounds[i]) {
+            currentBounds[i] = newBounds[i];
+            solver->setLowerBound(currentBounds[i]);
+        }
+        LOG_F(INFO, "Is solver %lu running? %d", i, (int) currentRunningSolvers[i]);
+        if (!currentRunningSolvers[i]) {
+            solver->reset();
+            solver->solve();
+            currentRunningSolvers[i] = solver;
+        }
+    }
 }

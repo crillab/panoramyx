@@ -48,7 +48,7 @@ AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm, IAll
                                                                                                                        runningSolvers(0),
                                                                                                                        allocationStrategy(allocationStrategy),
                                                                                                                        currentBounds(),
-                                                                                                                       isMinimization(true),
+                                                                                                                       minimization(true),
                                                                                                                        lowerBound(0),
                                                                                                                        upperBound(0),
                                                                                                                        interrupted(false),
@@ -62,7 +62,8 @@ AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm, IAll
 void AbstractParallelSolver::addSolver(RemoteSolver *solver) {
     unsigned index = solvers.size();
     solvers.push_back(solver);
-    currentBounds.push_back(0);
+    currentBounds.push_back(LLONG_MAX);
+    currentRunningSolvers.push_back(false);
     solver->setComm(communicator);
     solver->setIndex(index);
     runningSolvers++;
@@ -163,7 +164,7 @@ vector<BigInteger> AbstractParallelSolver::solution() {
 
 map<string, BigInteger> AbstractParallelSolver::mapSolution() {
     if (result == UniverseSolverResult::SATISFIABLE || result == UniverseSolverResult::OPTIMUM_FOUND) {
-        return solvers[winner]->mapSolution();
+        return bestSolution;
     }
     throw IllegalStateException("problem has no solution yet");
 }
@@ -183,7 +184,7 @@ void AbstractParallelSolver::readMessage(const Message *message) {
     DLOG_F(INFO, "abstract readMessage %s", message->name);
     if (NAME_OF(message, IS(PANO_MESSAGE_SATISFIABLE))) {
         winner = message->read<unsigned>();
-        ;
+        currentRunningSolvers[winner]= false;
         result = UniverseSolverResult::SATISFIABLE;
         onSatisfiableFound(winner);
         solved.release();
@@ -200,9 +201,13 @@ void AbstractParallelSolver::readMessage(const Message *message) {
         }
 
     } else if (NAME_OF(message, IS(PANO_MESSAGE_NEW_BOUND_FOUND))) {
-        string param(message->parameters, strlen(message->parameters) + 1);
+        auto src = message->read<unsigned>();
+        string param(message->parameters + sizeof(unsigned), strlen(message->parameters + sizeof(unsigned)) + 1);
         BigInteger newBound = bigIntegerValueOf(param);
-        onNewBoundFound(newBound);
+        result = Universe::UniverseSolverResult::SATISFIABLE;
+        LOG_F(INFO,"solver %d send current bound: %lld",src,newBound);
+        currentRunningSolvers[src]= false;
+        onNewBoundFound(newBound, src);
     }
 }
 
@@ -218,7 +223,7 @@ void AbstractParallelSolver::onSatisfiableFound(unsigned solverIndex) {
     // Nothing to do by default.
 }
 
-void AbstractParallelSolver::onNewBoundFound(const BigInteger &bound) {
+void AbstractParallelSolver::onNewBoundFound(const Universe::BigInteger &bound, unsigned int i) {
     throw UnsupportedOperationException("Optimization problems not supported");
 }
 
@@ -230,4 +235,44 @@ void AbstractParallelSolver::endSearch() {
     for (auto &solver : solvers) {
         solver->endSearch();
     }
+}
+
+UniverseSolverResult AbstractParallelSolver::getResult() {
+    return result;
+}
+
+BigInteger AbstractParallelSolver::getCurrentBound() {
+    if(minimization){
+        return upperBound;
+    }else{
+        return lowerBound;
+    }
+}
+
+BigInteger AbstractParallelSolver::getLowerBound() {
+    return lowerBound;
+}
+
+void AbstractParallelSolver::setLowerBound(const BigInteger &lb) {
+
+}
+
+BigInteger AbstractParallelSolver::getUpperBound() {
+    return upperBound;
+}
+
+void AbstractParallelSolver::setUpperBound(const BigInteger &ub) {
+
+}
+
+void AbstractParallelSolver::setBounds(const BigInteger &lb, const BigInteger &ub) {
+
+}
+
+bool AbstractParallelSolver::isMinimization() {
+    return minimization;
+}
+
+bool AbstractParallelSolver::isOptimization() {
+    return solvers[0]->isOptimization();
 }

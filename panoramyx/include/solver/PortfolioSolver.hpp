@@ -42,6 +42,7 @@ namespace Panoramyx {
      */
     class PortfolioSolver : public Panoramyx::AbstractParallelSolver {
 
+
     public:
 
         /**
@@ -97,7 +98,7 @@ namespace Panoramyx {
          *
          * @param bound The new bound that has been found.
          */
-        void onNewBoundFound(const Universe::BigInteger &bound) override;
+        void onNewBoundFound(const Universe::BigInteger &bound, unsigned int i) override;
 
         /**
          * Updates the search when a solver proved the unsatisfiability of its problem.
@@ -106,6 +107,8 @@ namespace Panoramyx {
          */
         void onUnsatisfiableFound(unsigned solverIndex) override;
 
+
+        void updateBounds();
     };
 
 }

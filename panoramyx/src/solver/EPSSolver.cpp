@@ -70,6 +70,7 @@ void EPSSolver::startSearch() {
                 nbCubes++;
                 DLOG_F(INFO, "generate cubes %d", nbCubes);
                 auto s = availableSolvers.get();
+                currentRunningSolvers[((RemoteSolver*)s)->getIndex()]=true;
                 s->solve(cube);
 
             } catch (Except::NoSuchElementException &e) {
