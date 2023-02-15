@@ -36,13 +36,15 @@ Universe::UniverseSolverResult GauloisSolver::solve() {
     loadMutex.lock();
     nbSolved++;
     auto r = solver->solve();
+    LOG_F(INFO, "result after solve(): %s",
+          r == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
     loadMutex.unlock();
     return r;
 }
 
 Universe::UniverseSolverResult GauloisSolver::solve(const std::string &filename) {
     nbSolved++;
-    load(filename);
+    loadInstance(filename);
     auto result = solver->solve();
     return result;
 }
@@ -83,7 +85,7 @@ void GauloisSolver::reset() {
 }
 
 std::vector<Universe::BigInteger> GauloisSolver::solution() {
-    return solver->solution();
+    return sol;
 }
 
 int GauloisSolver::nVariables() {
@@ -117,6 +119,9 @@ void GauloisSolver::readMessage(Message *m) {
         this->solve(filename, m);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE))) {
         this->solve(m);
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_INDEX))) {
+        this->index = m->read<unsigned>();
+        DLOG_F(INFO, "Setting index to %d", index);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE_ASSUMPTIONS))) {
         std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts;
         for (int i = 0, n = 0; n < m->nbParameters; n += 3) {
@@ -136,7 +141,7 @@ void GauloisSolver::readMessage(Message *m) {
         this->reset();
     } else if (strncmp(m->name, PANO_MESSAGE_LOAD, sizeof(m->name)) == 0) {
         std::string filename(m->parameters);
-        this->load(filename);
+        this->loadInstance(filename);
     } else if (strncmp(m->name, PANO_MESSAGE_INTERRUPT, sizeof(m->name)) == 0) {
         this->interrupt();
     } else if (strncmp(m->name, PANO_MESSAGE_SET_TIMEOUT, sizeof(m->name)) == 0) {
@@ -182,20 +187,27 @@ void GauloisSolver::readMessage(Message *m) {
         this->isMinimization(m);
     } else if (strncmp(m->name, PANO_MESSAGE_IS_OPTIMIZATION, sizeof(m->name)) == 0) {
         this->isOptimization(m);
+    } else if(NAME_OF(m, IS(PANO_MESSAGE_MAP_SOLUTION))){
+        this->mapSolution(m);
+    } else if(NAME_OF(m, IS(PANO_MESSAGE_N_VARIABLES))){
+        this->nVariables(m);
+    } else if(NAME_OF(m, IS(PANO_MESSAGE_N_CONSTRAINTS))){
+        this->nConstraints(m);
     }
 }
 
 std::vector<Universe::BigInteger> GauloisSolver::solution(Message *m) {
+    boundMutex.lock();
     MessageBuilder mb;
-    mb.named("solution");
-    const std::vector<Universe::BigInteger> &solution1 = solver->solution();
-    for (auto &big : solution1) {
+    mb.named(PANO_MESSAGE_SOLUTION);
+    for (auto &big : sol) {
         mb.withParameter(Universe::toString(big));
     }
     Message *r = mb.withTag(PANO_TAG_RESPONSE).build();
     comm->send(r, m->src);
     free(r);
-    return solution1;
+    boundMutex.unlock();
+    return sol;
 }
 
 int GauloisSolver::nVariables(Message *m) {
@@ -217,20 +229,38 @@ int GauloisSolver::nConstraints(Message *m) {
 }
 
 Universe::UniverseSolverResult GauloisSolver::solve(Message *m) {
-    int src = m->src;
-    std::thread t([this, src]() {
-        auto result = this->solve();
-        sendResult(src, result);
-        finished.release();
-    });
-    t.detach();
+    try {
+        int src = m->src;
+        std::thread t([this, src]() {
+            try {
+                auto result = this->solve();
+                sendResult(src, result);
+                finished.release();
+                easyjni::JavaVirtualMachineRegistry::detachCurrentThread();
+            }catch(std::exception& e){
+                std::cerr<<e.what()<<std::endl;
+            }
+        });
+        t.detach();
+    }catch(std::exception& e){
+        std::cerr<<e.what()<<std::endl;
+    }
 }
 
 void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
     MessageBuilder mb;
+    mb.withParameter(index);
+    boundMutex.lock();
     switch (result) {
         case Universe::UniverseSolverResult::SATISFIABLE:
-            mb.named(PANO_MESSAGE_SATISFIABLE);
+            if (optimization) {
+                currentBound=getOptimSolver()->getCurrentBound();
+                mb.named(PANO_MESSAGE_NEW_BOUND_FOUND).withParameter(currentBound);
+            } else {
+                mb.named(PANO_MESSAGE_SATISFIABLE);
+            }
+            currentSolution=solver->mapSolution();
+            sol = solver->solution();
             break;
         case Universe::UniverseSolverResult::UNSATISFIABLE:
             mb.named(PANO_MESSAGE_UNSATISFIABLE);
@@ -245,9 +275,12 @@ void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
             mb.named(PANO_MESSAGE_OPTIMUM_FOUND);
             break;
     }
+    boundMutex.unlock();
     Message *r = mb.withTag(PANO_TAG_SOLVE).build();
     comm->send(r, src);
     free(r);
+    LOG_F(INFO, "sending result: %s",
+          result == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
 }
 
 Universe::UniverseSolverResult GauloisSolver::solve(std::string filename, Message *m) {
@@ -273,14 +306,10 @@ GauloisSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteg
     t.detach();
 }
 
-void GauloisSolver::load(std::string filename) {
+void GauloisSolver::loadInstance(const std::string &filename) {
     loadMutex.lock();
-    ifstream input(filename);
-    Autis::Scanner scanner(input);
-    auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner,
-                                                             dynamic_cast<Universe::IUniverseCspSolver *>(solver));
-    parser->parse();
-    optimization = parser->isOptimization();
+    solver->loadInstance(filename);
+    optimization = solver->isOptimization();
     loadMutex.unlock();
 }
 
@@ -289,19 +318,34 @@ const map<std::string, Universe::IUniverseVariable *> &GauloisSolver::getVariabl
 }
 
 map<std::string, Universe::BigInteger> GauloisSolver::mapSolution() {
-    return std::map<std::string, Universe::BigInteger>();
+
+    return currentSolution;
 }
 
-void GauloisSolver::setLowerBound(const Universe::BigInteger &lb) {
+    bool GauloisSolver::isOptimization() {
+        return solver->isOptimization();
+    }
+
+    void GauloisSolver::setLowerBound(const Universe::BigInteger &lb) {
+    //TODO GMP case
+    boundMutex.lock();
+    LOG_F(INFO,"New lower bound %lld",lb);
     this->getOptimSolver()->setLowerBound(lb);
+    boundMutex.unlock();
 }
 
 void GauloisSolver::setUpperBound(const Universe::BigInteger &ub) {
+    //TODO GMP case
+    boundMutex.lock();
+    LOG_F(INFO,"New upper bound %lld",ub);
     this->getOptimSolver()->setUpperBound(ub);
+    boundMutex.unlock();
 }
 
 void GauloisSolver::setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) {
+    boundMutex.lock();
     this->getOptimSolver()->setBounds(lb, ub);
+    boundMutex.unlock();
 }
 
 Universe::BigInteger GauloisSolver::getCurrentBound() {
@@ -363,12 +407,27 @@ bool GauloisSolver::isMinimization(Message *m) {
 
 bool GauloisSolver::isOptimization(Message *m) {
     MessageBuilder mb;
-    Message *r = mb.named(PANO_MESSAGE_IS_OPTIMIZATION).withTag(PANO_TAG_RESPONSE).withParameter(optimization).build();
+    Message *r = mb.named(PANO_MESSAGE_IS_OPTIMIZATION).withTag(PANO_TAG_RESPONSE).withParameter(isOptimization()).build();
 
     DLOG_F(INFO, "send message to %d", m->src);
     comm->send(r, m->src);
     free(r);
     return optimization;
+}
+
+std::map<std::string, Universe::BigInteger> GauloisSolver::mapSolution(Message *m) {
+    boundMutex.lock();
+    MessageBuilder mb;
+    mb.named(PANO_MESSAGE_MAP_SOLUTION);
+    for (auto &kv : currentSolution) {
+        mb.withParameter(kv.first);
+        mb.withParameter(kv.second);
+    }
+    Message *r = mb.withTag(PANO_TAG_RESPONSE).build();
+    comm->send(r, m->src);
+    free(r);
+    boundMutex.unlock();
+    return currentSolution;
 }
 
 }  // namespace Panoramyx

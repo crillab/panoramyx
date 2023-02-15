@@ -36,12 +36,20 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
     bool interrupted = false;
     std::binary_semaphore finished = std::binary_semaphore(0);
     std::mutex loadMutex;
+    std::mutex boundMutex;
     int nbSolved = 0;
     bool optimization;
-    void readMessage(Message *m);
+    std::map<std::string,Universe::BigInteger> currentSolution;
+    Universe::BigInteger currentBound;
+
+    unsigned index;
 
     std::vector<Universe::BigInteger> solution(Message *m);
+    std::map<std::string,Universe::BigInteger> mapSolution(Message *m);
 
+    std::vector<Universe::BigInteger> sol;
+
+    void readMessage(Message *m);
     int nVariables(Message *m);
     int nConstraints(Message *m);
     Universe::BigInteger getLowerBound(Message *m);
@@ -92,7 +100,7 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
     void sendResult(int src, Universe::UniverseSolverResult result);
 
-    void load(std::string filename);
+    void loadInstance(const std::string& filename) override;
 
     const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 
@@ -112,6 +120,9 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
     Universe::BigInteger getLowerBound() override;
     Universe::BigInteger getUpperBound() override;
+
+    bool isOptimization() override;
+
 };
 
 using GallicSolver = GauloisSolver;
