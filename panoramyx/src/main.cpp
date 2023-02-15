@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include <csignal>
 
 #include "../../libs/autis/autis/include/core/Scanner.hpp"
 #include "../../libs/autis/autis/include/xcsp/AutisXcspParserAdapter.hpp"
@@ -28,6 +29,8 @@
 #include "../include/solver/EpsSolverBuilder.hpp"
 #include "../include/core/NullConsistencyChecker.hpp"
 #include "../include/solver/PortfolioSolverBuilder.hpp"
+#include "../include/optim/decomposition/LogarithmicRangeIterator.hpp"
+#include "../include/optim/decomposition/AggressiveRangeBaseAllocationStrategy.hpp"
 
 
 using namespace Panoramyx;
@@ -42,6 +45,38 @@ using namespace easyjni;
  * @license This project is released under the GNU LGPL3 License.
  */
 
+Abraracourcix *chief = nullptr;
+
+void atExit() {
+    if (chief != nullptr) {
+        Universe::UniverseSolverResult result = chief->getResult();
+        if(result==Universe::UniverseSolverResult::UNKNOWN){
+            std::cout<<"s UNKNOWN"<<std::endl;
+            exit(0);
+        }else if(result==Universe::UniverseSolverResult::UNSATISFIABLE){
+            std::cout<<"s UNSATISFIABLE"<<std::endl;
+            exit(0);
+        }else if(result==Universe::UniverseSolverResult::SATISFIABLE){
+            std::cout<<"s SATISFIABLE"<<std::endl;
+        }else if(result==Universe::UniverseSolverResult::OPTIMUM_FOUND){
+            std::cout<<"s OPTIMUM FOUND"<<std::endl;
+        }
+        auto bound = chief->getCurrentBound();
+        std::cout<<"o "<< bound << std::endl;
+        auto solution = chief->mapSolution();
+        std::cout << "v <instantiation type='solution' cost='"<<bound <<"'><list> ";
+
+        for(auto& kv:solution){
+            std::cout<<kv.first << " ";
+        }
+        std::cout<<"</list> <values> ";
+        for(auto& kv:solution){
+            std::cout<<kv.second << " ";
+        }
+        std::cout<<"</values></instantiation>"<<std::endl;
+        exit(0);
+    }
+}
 
 bool isJava(const std::string &s) {
     return std::find(s.begin(), s.end(), '/') != s.end();
@@ -53,7 +88,7 @@ argparse::ArgumentParser createPortfolioParser() {
     portfolio.add_argument("-a", "--allocation-strategy")
             .default_value(std::string{"Linear"})
             .action([](const std::string &value) {
-                static const std::vector<std::string> choices = {"Linear"};
+                static const std::vector<std::string> choices = {"Linear", "IncreasingLogarithmic", "DecreasingLogarithmic","AggressiveLinear", "AggressiveIncreasingLogarithmic", "AggressiveDecreasingLogarithmic"};
                 if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
                     return value;
                 }
@@ -73,7 +108,7 @@ argparse::ArgumentParser createEPSParser() {
                 }
                 throw runtime_error("Unknown cube generator " + value);
             });
-    eps.add_argument("-f", "--factor-cube-generator").default_value(30);
+    eps.add_argument("-f", "--factor-cube-generator").default_value(30).scan<'i',int>();
     eps.add_argument("--consistency-checker-strategy").default_value(std::string{"Null"})
             .action([](const std::string &value) {
                 static const std::vector<std::string> choices = {"Null", "Partial", "Final"};
@@ -210,7 +245,6 @@ void buildJVM(argparse::ArgumentParser &parser) {
         for (auto &j: javaOptions) {
             builder.addOption(j);
         }
-
         builder.setVersion(JNI_VERSION_10);
 
         auto jvm = builder.buildJavaVirtualMachine();
@@ -221,6 +255,21 @@ void buildJVM(argparse::ArgumentParser &parser) {
 IAllocationStrategy *parseAllocationStrategy(argparse::ArgumentParser &program, INetworkCommunication *pCommunication) {
     if (program.get<string>("allocation-strategy") == "Linear") {
         return new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); });
+    }
+    if (program.get<string>("allocation-strategy") == "IncreasingLogarithmic") {
+        return new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
+    }
+    if (program.get<string>("allocation-strategy") == "DecreasingLogarithmic") {
+        return new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
+    }
+    if (program.get<string>("allocation-strategy") == "AggressiveLinear") {
+        return new AggressiveRangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); });
+    }
+    if (program.get<string>("allocation-strategy") == "AggressiveIncreasingLogarithmic") {
+        return new AggressiveRangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
+    }
+    if (program.get<string>("allocation-strategy") == "AggressiveDecreasingLogarithmic") {
+        return new AggressiveRangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
     }
     throw runtime_error("invalid network communicator");
 }
@@ -238,7 +287,7 @@ int main(int argc, char **argv) {
     auto networkCommunication = parseNetworkCommunication(program, &argc, &argv);
     buildJVM(program);
     if (networkCommunication->getId() == 0) {
-        AbstractParallelSolver *chief;
+        atexit(atExit);
         AbstractSolverBuilder *asb;
         if (program.is_subcommand_used("eps")) {
             asb = (new EPSSolverBuilder())->withCubeGenerator(
