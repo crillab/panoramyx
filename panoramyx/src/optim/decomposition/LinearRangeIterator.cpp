@@ -20,7 +20,7 @@ namespace Panoramyx {
 
 
     LinearRangeIterator::LinearRangeIterator(Universe::BigInteger min, Universe::BigInteger max, int numberOfSteps)
-            : current(min), max(max), step(std::max((max - (min + 1)) / numberOfSteps, (Universe::BigInteger) 1)) {}
+            : current(min), max(max), step(numberOfSteps == 0 ? (max - min): std::max((max - (min + 1)) / numberOfSteps, (Universe::BigInteger) 1)) {}
 
     bool LinearRangeIterator::hasNext() const {
         return current < max;
