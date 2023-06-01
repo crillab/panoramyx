@@ -65,7 +65,7 @@ Universe::UniverseSolverResult RemoteSolver::solve(
         mb.withParameter(assumpt.isEqual());
         mb.withParameter(Universe::toString(assumpt.getValue()));
 
-        LOG_F(INFO, "add assumption: %d %s '%s'", assumpt.getVariableId(),
+        LOG_F(INFO, "add assumption: %s %s '%s'", assumpt.getVariableId().c_str(),
                assumpt.isEqual() ? "=" : "!=",
                Universe::toString(assumpt.getValue()).c_str());
     }
@@ -348,4 +348,27 @@ Universe::BigInteger RemoteSolver::getUpperBound() {
 
 unsigned int RemoteSolver::getIndex() const {
     return index;
+}
+
+void RemoteSolver::decisionVariables(const std::vector<std::string> &variables) {
+//TODO
+}
+
+void RemoteSolver::addSearchListener(Universe::IUniverseSearchListener *listener) {
+    IUniverseSolver::addSearchListener(listener);
+    //TODO
+}
+
+void RemoteSolver::setLogStream(std::ostream &stream) {
+    //TODO
+}
+
+std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool excludeAux) {
+    //TODO
+    return std::map<std::string, Universe::BigInteger>();
+}
+
+Universe::IOptimizationSolver *RemoteSolver::toOptimizationSolver() {
+    //TODO
+    return IUniverseSolver::toOptimizationSolver();
 }

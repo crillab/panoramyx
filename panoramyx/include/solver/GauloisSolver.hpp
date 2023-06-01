@@ -123,6 +123,16 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
     bool isOptimization() override;
 
+    void decisionVariables(const std::vector<std::string> &variables) override;
+
+    void addSearchListener(Universe::IUniverseSearchListener *listener) override;
+
+    void setLogStream(std::ostream &stream) override;
+
+    std::map<std::string, Universe::BigInteger> mapSolution(bool excludeAux) override;
+
+    Universe::IOptimizationSolver *toOptimizationSolver() override;
+
 };
 
 using GallicSolver = GauloisSolver;

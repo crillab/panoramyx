@@ -13,6 +13,9 @@
 
 #include <mutex>
 #include <optional>
+#include <vector>
+#include <ostream>
+#include <map>
 
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 #include "../network/INetworkCommunication.hpp"
@@ -80,7 +83,17 @@ namespace Panoramyx {
 
         void endSearch();
 
-        void loadInstance(const std::string &filename);
+        void loadInstance(const std::string &filename) override;
+
+        void decisionVariables(const std::vector<std::string> &variables) override;
+
+        void addSearchListener(Universe::IUniverseSearchListener *listener) override;
+
+        void setLogStream(std::ostream &stream) override;
+
+        std::map<std::string, Universe::BigInteger> mapSolution(bool excludeAux) override;
+
+        IOptimizationSolver *toOptimizationSolver() override;
 
         [[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 

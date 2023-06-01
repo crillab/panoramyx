@@ -276,3 +276,27 @@ bool AbstractParallelSolver::isMinimization() {
 bool AbstractParallelSolver::isOptimization() {
     return solvers[0]->isOptimization();
 }
+
+void AbstractParallelSolver::decisionVariables(const vector<std::string> &variables) {
+//TODO
+}
+
+void AbstractParallelSolver::addSearchListener(Universe::IUniverseSearchListener *listener) {
+    IUniverseSolver::addSearchListener(listener);
+    //TODO
+}
+
+void AbstractParallelSolver::setLogStream(ostream &stream) {
+    //TODO
+
+}
+
+map<std::string, Universe::BigInteger> AbstractParallelSolver::mapSolution(bool excludeAux) {
+    //TODO
+    return std::map<std::string, Universe::BigInteger>();
+}
+
+IOptimizationSolver *AbstractParallelSolver::toOptimizationSolver() {
+    //TODO
+    return IUniverseSolver::toOptimizationSolver();
+}

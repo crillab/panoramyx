@@ -33,6 +33,9 @@
 #define PANORAMYX_ABSTRACTPARALLELSOLVER_HPP
 
 #include <vector>
+#include <ostream>
+#include <map>
+
 
 #include "../../../libs/autis/libs/universe/universe/include/core/IUniverseSolver.hpp"
 
@@ -265,6 +268,17 @@ namespace Panoramyx {
 
         bool isOptimization() override;
 
+        void decisionVariables(const std::vector<std::string> &variables) override;
+
+        void addSearchListener(Universe::IUniverseSearchListener *listener) override;
+
+        void setLogStream(std::ostream &stream) override;
+
+        std::map<std::string, Universe::BigInteger> mapSolution(bool excludeAux) override;
+
+        Universe::IOptimizationSolver *toOptimizationSolver() override;
+
+
     protected:
 
         /**
@@ -328,6 +342,7 @@ namespace Panoramyx {
          * Terminates the search.
          */
         virtual void endSearch();
+
 
     private:
 

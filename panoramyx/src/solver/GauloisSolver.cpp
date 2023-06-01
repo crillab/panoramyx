@@ -122,13 +122,15 @@ void GauloisSolver::readMessage(Message *m) {
     } else if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE_ASSUMPTIONS))) {
         std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts;
         for (int i = 0, n = 0; n < m->nbParameters; n += 3) {
-            int varId = m->read<int>(i);
-            i += sizeof(int);
+            int s = (int)strlen(m->parameters+i);
+            char *ptr = m->parameters + i;
+            std::string varId(ptr, s + 1);
+            i += s;
             bool equal = m->read<bool>(i);
             i += sizeof(bool);
-            char *ptr = m->parameters + i;
+            ptr = m->parameters + i;
             std::string param(ptr, strlen(ptr) + 1);
-            LOG_F(INFO, "%d %s '%s'", varId, equal ? "=" : "!=", param.c_str());
+            LOG_F(INFO, "%s %s '%s'", varId.c_str(), equal ? "=" : "!=", param.c_str());
             Universe::BigInteger tmp = Universe::bigIntegerValueOf(param);
             assumpts.emplace_back(varId, equal, tmp);
             i += param.size();
@@ -432,5 +434,28 @@ std::map<std::string, Universe::BigInteger> GauloisSolver::mapSolution(Message *
     boundMutex.unlock();
     return currentSolution;
 }
+
+    void GauloisSolver::decisionVariables(const vector<std::string> &variables) {
+//TODO
+    }
+
+    void GauloisSolver::addSearchListener(Universe::IUniverseSearchListener *listener) {
+        IUniverseSolver::addSearchListener(listener);
+//TODO
+    }
+
+    void GauloisSolver::setLogStream(ostream &stream) {
+//TODO
+    }
+
+    map<std::string, Universe::BigInteger> GauloisSolver::mapSolution(bool excludeAux) {
+        //TODO
+        return std::map<std::string, Universe::BigInteger>();
+    }
+
+    Universe::IOptimizationSolver *GauloisSolver::toOptimizationSolver() {
+        //TODO
+    return IUniverseSolver::toOptimizationSolver();
+    }
 
 }  // namespace Panoramyx

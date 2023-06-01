@@ -143,7 +143,7 @@ int StreamLexicographicCube::backtrack() {
 
 void StreamLexicographicCube::assume(int varIndex, int valIndex) {
     // Adding the assumption to the cube.
-    current.emplace_back(variables[varIndex]->getId(),
+    current.emplace_back(variables[varIndex]->getName(),
                          true,
                          variables[varIndex]->getDomain()->getValues().at(valIndex));
 
