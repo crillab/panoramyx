@@ -33,12 +33,10 @@ GauloisSolver::GauloisSolver(Universe::IUniverseSolver *solver, INetworkCommunic
 }
 
 Universe::UniverseSolverResult GauloisSolver::solve() {
-    loadMutex.lock();
     nbSolved++;
     auto r = solver->solve();
     LOG_F(INFO, "result after solve(): %s",
           r == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
-    loadMutex.unlock();
     return r;
 }
 
@@ -51,12 +49,11 @@ Universe::UniverseSolverResult GauloisSolver::solve(const std::string &filename)
 
 Universe::UniverseSolverResult
 GauloisSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &asumpts) {
-    loadMutex.lock();
+
     nbSolved++;
     auto r = solver->solve(asumpts);
     LOG_F(INFO, "result after solve(assumpts): %s",
            r == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
-    loadMutex.unlock();
     return r;
 }
 
@@ -233,8 +230,10 @@ Universe::UniverseSolverResult GauloisSolver::solve(Message *m) {
         int src = m->src;
         std::thread t([this, src]() {
             try {
+                loadMutex.lock();
                 auto result = this->solve();
                 sendResult(src, result);
+                loadMutex.unlock();
                 finished.release();
                 easyjni::JavaVirtualMachineRegistry::detachCurrentThread();
             }catch(std::exception& e){
@@ -286,8 +285,10 @@ void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
 Universe::UniverseSolverResult GauloisSolver::solve(std::string filename, Message *m) {
     int src = m->src;
     std::thread t([this, src, filename]() {
+        loadMutex.lock();
         auto result = this->solve(filename);
         sendResult(src, result);
+        loadMutex.unlock();
         finished.release();
     });
     t.detach();
@@ -298,8 +299,10 @@ GauloisSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteg
     int src = m->src;
     std::thread t([this, src, asumpts]() {
         DLOG_F(INFO, "Run solve(assumpts,m) in a new thread.");
+        loadMutex.lock();
         auto result = this->solve(asumpts);
         sendResult(src, result);
+        loadMutex.unlock();
         easyjni::JavaVirtualMachineRegistry::detachCurrentThread();
         finished.release();
     });
