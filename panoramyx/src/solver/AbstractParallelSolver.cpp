@@ -220,7 +220,7 @@ void AbstractParallelSolver::beforeSearch() {
 }
 
 void AbstractParallelSolver::onSatisfiableFound(unsigned solverIndex) {
-    // Nothing to do by default.
+    bestSolution=solvers[solverIndex]->mapSolution();
 }
 
 void AbstractParallelSolver::onNewBoundFound(const Universe::BigInteger &bound, unsigned int i) {
@@ -278,25 +278,28 @@ bool AbstractParallelSolver::isOptimization() {
 }
 
 void AbstractParallelSolver::decisionVariables(const vector<std::string> &variables) {
-//TODO
+    for(auto& solver:solvers){
+        solver->decisionVariables(variables);
+    }
 }
 
 void AbstractParallelSolver::addSearchListener(Universe::IUniverseSearchListener *listener) {
-    IUniverseSolver::addSearchListener(listener);
-    //TODO
+    for(auto& solver:solvers){
+        solver->addSearchListener(listener);
+    }
 }
 
 void AbstractParallelSolver::setLogStream(ostream &stream) {
     //TODO
-
 }
 
 map<std::string, Universe::BigInteger> AbstractParallelSolver::mapSolution(bool excludeAux) {
-    //TODO
-    return std::map<std::string, Universe::BigInteger>();
+    if (result == UniverseSolverResult::SATISFIABLE || result == UniverseSolverResult::OPTIMUM_FOUND) {
+        return bestSolution;
+    }
+    throw IllegalStateException("problem has no solution yet");
 }
 
 IOptimizationSolver *AbstractParallelSolver::toOptimizationSolver() {
-    //TODO
-    return IUniverseSolver::toOptimizationSolver();
+    return this;
 }

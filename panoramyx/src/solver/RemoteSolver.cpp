@@ -11,6 +11,7 @@
 #include "../../include/solver/RemoteSolver.hpp"
 
 #include "../../include/network/Message.hpp"
+#include "../../../libs/autis/libs/exception/except/except.hpp"
 
 using namespace Panoramyx;
 
@@ -216,37 +217,7 @@ void RemoteSolver::loadInstance(const std::string &filename) {
 }
 
 std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution() {
-    mutex.lock();
-    MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_MAP_SOLUTION)
-            .withTag(PANO_TAG_RESPONSE)
-            .build();
-    comm->send(m, rank);
-    free(m);
-    unsigned long size = 100*nVariables()*(PANO_VARIABLE_NAME_MAX_CHAR+PANO_NUMBER_MAX_CHAR+2)+sizeof(Message);
-
-    m = comm->receive(PANO_TAG_RESPONSE, rank,size);
-    mutex.unlock();
-    std::map<std::string,Universe::BigInteger> bigbig;
-    char *ptrName = m->parameters;
-    char *ptrValue = nullptr;
-    char *ptr = m->parameters;
-    for (int i = 0, n = 0; n < m->nbParameters; i++) {
-        if (ptr[i] == '\0') {
-            if(ptrValue==nullptr){
-                ptrValue=ptr+i+1;
-            }else{
-                std::string name(ptrName,ptrValue-ptrName-1);
-                std::string value(ptrValue,ptr+i-ptrValue);
-                bigbig[name]=Universe::bigIntegerValueOf(value);
-                ptrValue= nullptr;
-                ptrName=ptr+i+1;
-            }
-            n++;
-        }
-    }
-    free(m);
-    return bigbig;
+    return this->mapSolution(false);
 }
 
 void RemoteSolver::setLowerBound(const Universe::BigInteger &lb) {
@@ -351,24 +322,58 @@ unsigned int RemoteSolver::getIndex() const {
 }
 
 void RemoteSolver::decisionVariables(const std::vector<std::string> &variables) {
-//TODO
+        MessageBuilder mb;
+        mb.named(PANO_MESSAGE_DECISION_VARIABLES);
+        for (auto &v : variables) {
+            mb.withParameter(v);
+        }
+        Message *m = mb.withTag(PANO_TAG_SOLVE).build();
+        comm->send(m, rank);
+        free(m);
 }
 
 void RemoteSolver::addSearchListener(Universe::IUniverseSearchListener *listener) {
-    IUniverseSolver::addSearchListener(listener);
-    //TODO
+    throw Except::UnsupportedOperationException("addSearchListener on RemoteSolver is not supported.");
 }
 
 void RemoteSolver::setLogStream(std::ostream &stream) {
-    //TODO
+    throw Except::UnsupportedOperationException("setLogStream on RemoteSolver is not supported.");
 }
 
 std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool excludeAux) {
-    //TODO
-    return std::map<std::string, Universe::BigInteger>();
+    mutex.lock();
+    MessageBuilder mb;
+    Message *m = mb.named(PANO_MESSAGE_MAP_SOLUTION)
+            .withTag(PANO_TAG_RESPONSE).withParameter(excludeAux)
+            .build();
+    comm->send(m, rank);
+    free(m);
+    unsigned long size = 100*nVariables()*(PANO_VARIABLE_NAME_MAX_CHAR+PANO_NUMBER_MAX_CHAR+2)+sizeof(Message);
+
+    m = comm->receive(PANO_TAG_RESPONSE, rank,size);
+    mutex.unlock();
+    std::map<std::string,Universe::BigInteger> bigbig;
+    char *ptrName = m->parameters;
+    char *ptrValue = nullptr;
+    char *ptr = m->parameters;
+    for (int i = 0, n = 0; n < m->nbParameters; i++) {
+        if (ptr[i] == '\0') {
+            if(ptrValue==nullptr){
+                ptrValue=ptr+i+1;
+            }else{
+                std::string name(ptrName,ptrValue-ptrName-1);
+                std::string value(ptrValue,ptr+i-ptrValue);
+                bigbig[name]=Universe::bigIntegerValueOf(value);
+                ptrValue= nullptr;
+                ptrName=ptr+i+1;
+            }
+            n++;
+        }
+    }
+    free(m);
+    return bigbig;
 }
 
 Universe::IOptimizationSolver *RemoteSolver::toOptimizationSolver() {
-    //TODO
-    return IUniverseSolver::toOptimizationSolver();
+    return this;
 }

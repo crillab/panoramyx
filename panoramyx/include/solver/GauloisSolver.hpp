@@ -124,6 +124,7 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
     bool isOptimization() override;
 
     void decisionVariables(const std::vector<std::string> &variables) override;
+    void decisionVariables(Message* message);
 
     void addSearchListener(Universe::IUniverseSearchListener *listener) override;
 
