@@ -15,7 +15,9 @@
 
 using namespace Panoramyx;
 
-RemoteSolver::RemoteSolver(int rank) : rank(rank) {}
+RemoteSolver::RemoteSolver(int rank) : rank(rank) {
+
+}
 
 bool RemoteSolver::isOptimization() {
     if (!isOptim) {
@@ -37,6 +39,8 @@ bool RemoteSolver::isOptimization() {
 }
 
 Universe::UniverseSolverResult RemoteSolver::solve() {
+    nVariables();
+    nConstraints();
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_SOLVE).withTag(PANO_TAG_SOLVE).build();
     comm->send(m, rank);
@@ -46,6 +50,7 @@ Universe::UniverseSolverResult RemoteSolver::solve() {
 
 Universe::UniverseSolverResult RemoteSolver::solve(
     const std::string &filename) {
+    //todo nVariables ? nConstraints ? in this case
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_SOLVE_FILENAME)
                      .withParameter(filename)
@@ -59,6 +64,8 @@ Universe::UniverseSolverResult RemoteSolver::solve(
 Universe::UniverseSolverResult RemoteSolver::solve(
     const std::vector<Universe::UniverseAssumption<Universe::BigInteger>>
         &assumpts) {
+    nVariables();
+    nConstraints();
     MessageBuilder mb;
     mb.named(PANO_MESSAGE_SOLVE_ASSUMPTIONS);
     for (auto &assumpt : assumpts) {
@@ -346,11 +353,14 @@ std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool exclu
     Message *m = mb.named(PANO_MESSAGE_MAP_SOLUTION)
             .withTag(PANO_TAG_RESPONSE).withParameter(excludeAux)
             .build();
+    DLOG_F(INFO, "avant send");
     comm->send(m, rank);
+    DLOG_F(INFO, "après send");
     free(m);
     unsigned long size = 100*nVariables()*(PANO_VARIABLE_NAME_MAX_CHAR+PANO_NUMBER_MAX_CHAR+2)+sizeof(Message);
-
+    DLOG_F(INFO, "avant receive");
     m = comm->receive(PANO_TAG_RESPONSE, rank,size);
+    DLOG_F(INFO, "après receive", m->src);
     mutex.unlock();
     std::map<std::string,Universe::BigInteger> bigbig;
     char *ptrName = m->parameters;
@@ -376,4 +386,80 @@ std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool exclu
 
 Universe::IOptimizationSolver *RemoteSolver::toOptimizationSolver() {
     return this;
+}
+
+const std::vector<std::string> &RemoteSolver::getAuxiliaryVariables() {
+    if(!auxiliaryVariables.empty()){
+        return auxiliaryVariables;
+    }
+    mutex.lock();
+    MessageBuilder mb;
+    Message *m = mb.named(PANO_MESSAGE_AUX_VAR)
+            .withTag(PANO_TAG_RESPONSE)
+            .build();
+    comm->send(m, rank);
+    free(m);
+    unsigned long size = 100*nVariables()*(PANO_VARIABLE_NAME_MAX_CHAR+1)+sizeof(Message);
+
+    m = comm->receive(PANO_TAG_RESPONSE, rank,size);
+    mutex.unlock();
+
+    int n = m->nbParameters;
+    char *ptrName = m->parameters;
+    for (int i = 0; i<n; i++) {
+        std::string name(ptrName,strlen(ptrName)+1);
+        auxiliaryVariables.push_back(name);
+        ptrName+=name.size()+1;
+    }
+    return auxiliaryVariables;
+}
+
+void RemoteSolver::valueHeuristicStatic(const std::vector<std::string> &variables,
+                                        const std::vector<Universe::BigInteger> &orderedValues) {
+    MessageBuilder mb;
+    mb.named(PANO_MESSAGE_VALUE_HEURISTIC_STATIC);
+    mb.withParameter((int)variables.size());
+    for (auto &v : variables) {
+        mb.withParameter(v);
+    }
+    mb.withParameter((int)orderedValues.size());
+    for (auto &v : orderedValues) {
+        mb.withParameter(Universe::toString(v));
+    }
+    Message *m = mb.withTag(PANO_TAG_SOLVE).build();
+    comm->send(m, rank);
+    free(m);
+}
+
+bool RemoteSolver::checkSolution()  {
+    mutex.lock();
+    MessageBuilder mb;
+    mb.named(PANO_MESSAGE_CHECK_SOLUTION);
+    Message *m = mb.withTag(PANO_TAG_RESPONSE).build();
+    comm->send(m, rank);
+    free(m);
+
+    m = comm->receive(PANO_TAG_RESPONSE, rank, PANO_DEFAULT_MESSAGE_SIZE);
+    bool b = m->read<bool>();
+    mutex.unlock();
+    free(m);
+    return b;
+}
+
+bool RemoteSolver::checkSolution(const std::map<std::string, Universe::BigInteger> &assignment)  {
+    mutex.lock();
+    MessageBuilder mb;
+    mb.named(PANO_MESSAGE_CHECK_SOLUTION_ASSIGNMENT);
+    for (auto &kv: assignment) {
+        mb.withParameter(kv.first);
+        mb.withParameter(kv.second);
+    }
+    Message *r = mb.withTag(PANO_TAG_RESPONSE).build();
+    comm->send(r, rank);
+    free(r);
+    r = comm->receive(PANO_TAG_RESPONSE, rank, PANO_DEFAULT_MESSAGE_SIZE);
+    bool b = r->read<bool>();
+    mutex.unlock();
+    free(r);
+    return b;
 }

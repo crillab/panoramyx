@@ -45,6 +45,7 @@ namespace Panoramyx {
         int nbVariables = -1;
         int nbConstraints = -1;
         std::optional<bool> isOptim;
+        std::vector<std::string> auxiliaryVariables;
     public:
         explicit RemoteSolver(int rank);
 
@@ -113,6 +114,15 @@ namespace Panoramyx {
         Universe::BigInteger getUpperBound() override;
 
         unsigned int getIndex() const;
+
+        const std::vector<std::string> &getAuxiliaryVariables() override;
+
+        void valueHeuristicStatic(const std::vector<std::string> &variables,
+                                  const std::vector<Universe::BigInteger> &orderedValues) override;
+
+        bool checkSolution() override;
+
+        bool checkSolution(const std::map<std::string, Universe::BigInteger> &assignment)  override;
     };
 
 }

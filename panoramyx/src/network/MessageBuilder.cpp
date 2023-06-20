@@ -68,6 +68,7 @@ MessageBuilder &MessageBuilder::withParameter(string p) {
     size += p.size() + 1;
     message = static_cast<Message *>(realloc(message, size));
     memcpy(message->parameters + message->size, p.c_str(), p.size() + 1);
+    message->parameters[message->size+p.size()]='\0';
     message->size += p.size() + 1;
     return *this;
 }

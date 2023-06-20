@@ -134,6 +134,24 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
     Universe::IOptimizationSolver *toOptimizationSolver() override;
 
+    const std::vector<std::string> &getAuxiliaryVariables() override;
+
+    void valueHeuristicStatic(const std::vector<std::string> &variables,
+                              const std::vector<Universe::BigInteger> &orderedValues) override;
+
+    void removeSearchListener(Universe::IUniverseSearchListener *listener) override;
+
+    bool checkSolution() override;
+
+    bool checkSolution(const std::map<std::string, Universe::BigInteger> &assignment) override;
+
+    void getAuxiliaryVariables(Message *pMessage);
+
+    void checkSolutionAssignment(Message *pMessage);
+
+    void valueHeuristicStatic(Message *pMessage);
+
+    void checkSolution(Message *pMessage);
 };
 
 using GallicSolver = GauloisSolver;

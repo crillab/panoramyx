@@ -125,12 +125,13 @@ namespace Panoramyx {
                 int s = (int) strlen(m->parameters + i);
                 char *ptr = m->parameters + i;
                 std::string varId(ptr, s + 1);
-                i += s;
+                i += s+1;
                 bool equal = m->read<bool>(i);
                 i += sizeof(bool);
                 ptr = m->parameters + i;
                 std::string param(ptr, strlen(ptr) + 1);
                 LOG_F(INFO, "%s %s '%s'", varId.c_str(), equal ? "=" : "!=", param.c_str());
+                LOG_F(INFO, "%ld %ld %d", param.size(), strlen(ptr),s );
                 Universe::BigInteger tmp = Universe::bigIntegerValueOf(param);
                 assumpts.emplace_back(varId, equal, tmp);
                 i += param.size();
@@ -194,6 +195,14 @@ namespace Panoramyx {
             this->nConstraints(m);
         }else if(NAME_OF(m,IS(PANO_MESSAGE_DECISION_VARIABLES))){
             this->decisionVariables(m);
+        }else if(NAME_OF(m,IS(PANO_MESSAGE_AUX_VAR))){
+            this->getAuxiliaryVariables(m);
+        }else if(NAME_OF(m,IS(PANO_MESSAGE_CHECK_SOLUTION))){
+            this->checkSolution(m);
+        }else if(NAME_OF(m,IS(PANO_MESSAGE_CHECK_SOLUTION_ASSIGNMENT))){
+            this->checkSolutionAssignment(m);
+        }else if(NAME_OF(m,IS(PANO_MESSAGE_VALUE_HEURISTIC_STATIC))){
+            this->valueHeuristicStatic(m);
         }
     }
 
@@ -234,9 +243,13 @@ namespace Panoramyx {
             int src = m->src;
             std::thread t([this, src]() {
                 try {
+                    DLOG_F(INFO, "before load mutex");
                     loadMutex.lock();
+                    DLOG_F(INFO, "after load mutex");
                     auto result = this->solve();
+                    DLOG_F(INFO, "after solve");
                     sendResult(src, result);
+                    DLOG_F(INFO, "after send");
                     loadMutex.unlock();
                     finished.release();
                     easyjni::JavaVirtualMachineRegistry::detachCurrentThread();
@@ -248,12 +261,15 @@ namespace Panoramyx {
         } catch (std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
+        return Universe::UniverseSolverResult::UNKNOWN;
     }
 
     void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
         MessageBuilder mb;
         mb.withParameter(index);
+        DLOG_F(INFO, "avant boundMutex.lock()");
         boundMutex.lock();
+        DLOG_F(INFO, "après boundMutex.lock()");
         switch (result) {
             case Universe::UniverseSolverResult::SATISFIABLE:
                 if (optimization) {
@@ -304,6 +320,7 @@ namespace Panoramyx {
         std::thread t([this, src, asumpts]() {
             DLOG_F(INFO, "Run solve(assumpts,m) in a new thread.");
             loadMutex.lock();
+            DLOG_F(INFO, "après loadmutex.lock()");
             auto result = this->solve(asumpts);
             sendResult(src, result);
             loadMutex.unlock();
@@ -321,7 +338,7 @@ namespace Panoramyx {
     }
 
     const map<std::string, Universe::IUniverseVariable *> &GauloisSolver::getVariablesMapping() {
-        return {};
+        return solver->getVariablesMapping();
     }
 
     map<std::string, Universe::BigInteger> GauloisSolver::mapSolution() {
@@ -424,7 +441,9 @@ namespace Panoramyx {
     }
 
     std::map<std::string, Universe::BigInteger> GauloisSolver::mapSolution(Message *m) {
+        DLOG_F(INFO, "log avant %d", m->src);
         boundMutex.lock();
+        DLOG_F(INFO, "log après");
         MessageBuilder mb;
         mb.named(PANO_MESSAGE_MAP_SOLUTION);
         for (auto &kv: currentSolution) {
@@ -435,6 +454,7 @@ namespace Panoramyx {
         comm->send(r, m->src);
         free(r);
         boundMutex.unlock();
+
         return currentSolution;
     }
 
@@ -470,4 +490,90 @@ namespace Panoramyx {
         this->decisionVariables(decisions);
     }
 
+    const vector<std::string> &GauloisSolver::getAuxiliaryVariables() {
+        return solver->getAuxiliaryVariables();
+    }
+
+    void GauloisSolver::valueHeuristicStatic(const vector<std::string> &variables,
+                                             const vector<Universe::BigInteger> &orderedValues) {
+        return solver->valueHeuristicStatic(variables,orderedValues);
+    }
+
+    void GauloisSolver::removeSearchListener(Universe::IUniverseSearchListener *listener) {
+        solver->removeSearchListener(listener);
+    }
+
+    bool GauloisSolver::checkSolution()  {
+        return solver->checkSolution();
+    }
+
+    bool GauloisSolver::checkSolution(const map<std::string, Universe::BigInteger> &assignment)  {
+        return solver->checkSolution(assignment);
+    }
+
+    void GauloisSolver::getAuxiliaryVariables(Message *pMessage) {
+        MessageBuilder mb;
+        mb.named(PANO_MESSAGE_MAP_SOLUTION);
+        for (auto &kv: solver->getAuxiliaryVariables()) {
+            mb.withParameter(kv);
+        }
+        Message *r = mb.withTag(PANO_TAG_RESPONSE).build();
+        comm->send(r, pMessage->src);
+        free(r);
+    }
+
+    void GauloisSolver::checkSolutionAssignment(Message *pMessage) {
+        std::map<std::string,Universe::BigInteger> bigbig;
+        char *ptrName = pMessage->parameters;
+        char *ptrValue = nullptr;
+        char *ptr = pMessage->parameters;
+        for (int i = 0, n = 0; n < pMessage->nbParameters; i++) {
+            if (ptr[i] == '\0') {
+                if(ptrValue==nullptr){
+                    ptrValue=ptr+i+1;
+                }else{
+                    std::string name(ptrName,ptrValue-ptrName-1);
+                    std::string value(ptrValue,ptr+i-ptrValue);
+                    bigbig[name]=Universe::bigIntegerValueOf(value);
+                    ptrValue= nullptr;
+                    ptrName=ptr+i+1;
+                }
+                n++;
+            }
+        }
+        bool b = solver->checkSolution(bigbig);
+        MessageBuilder mb;
+        Message *r = mb.named(PANO_MESSAGE_CHECK_SOLUTION_ASSIGNMENT).withTag(PANO_TAG_RESPONSE).withParameter(b).build();
+        comm->send(r, pMessage->src);
+        free(r);
+
+    }
+
+    void GauloisSolver::checkSolution(Message *pMessage) {
+        bool b = solver->checkSolution();
+        MessageBuilder mb;
+        Message *r = mb.named(PANO_MESSAGE_CHECK_SOLUTION).withTag(PANO_TAG_RESPONSE).withParameter(b).build();
+        comm->send(r, pMessage->src);
+        free(r);
+    }
+
+    void GauloisSolver::valueHeuristicStatic(Message *pMessage) {
+        std::vector<std::string> names;
+        std::vector<Universe::BigInteger> ordered;
+        int n = pMessage->read<int>();
+        char *ptrName = pMessage->parameters+sizeof(int);
+        for (int i = 0; i<n; i++) {
+            std::string name(ptrName,strlen(ptrName)+1);
+            names.push_back(name);
+            ptrName+=name.size()+1;
+        }
+        n = *((int*)ptrName);
+        ptrName=ptrName+sizeof(int);
+        for (int i = 0; i<n; i++) {
+            std::string big(ptrName,strlen(ptrName)+1);
+            ordered.push_back(Universe::bigIntegerValueOf(big));
+            ptrName+=big.size()+1;
+        }
+        this->valueHeuristicStatic(names,ordered);
+    }
 }  // namespace Panoramyx

@@ -278,6 +278,15 @@ namespace Panoramyx {
 
         Universe::IOptimizationSolver *toOptimizationSolver() override;
 
+        const std::vector<std::string> &getAuxiliaryVariables() override;
+
+        void valueHeuristicStatic(const std::vector<std::string> &variables,
+                                  const std::vector<Universe::BigInteger> &orderedValues) override;
+
+        bool checkSolution()  override;
+
+        bool checkSolution(const std::map<std::string, Universe::BigInteger> &assignment)  override;
+
 
     protected:
 

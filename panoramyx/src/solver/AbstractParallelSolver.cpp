@@ -303,3 +303,22 @@ map<std::string, Universe::BigInteger> AbstractParallelSolver::mapSolution(bool 
 IOptimizationSolver *AbstractParallelSolver::toOptimizationSolver() {
     return this;
 }
+
+const vector<std::string> &AbstractParallelSolver::getAuxiliaryVariables() {
+    throw UnsupportedOperationException("Parallel solver has too many auxiliary variables!");
+}
+
+void AbstractParallelSolver::valueHeuristicStatic(const vector<std::string> &variables,
+                                                  const vector<Universe::BigInteger> &orderedValues) {
+    for(auto& solver:solvers){
+        solver->valueHeuristicStatic(variables,orderedValues);
+    }
+}
+
+bool AbstractParallelSolver::checkSolution() {
+    return solvers[winner]->checkSolution();
+}
+
+bool AbstractParallelSolver::checkSolution(const map<std::string, Universe::BigInteger> &assignment) {
+    return solvers[0]->checkSolution(assignment);
+}
