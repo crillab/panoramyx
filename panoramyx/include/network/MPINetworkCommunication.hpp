@@ -88,6 +88,8 @@ namespace Panoramyx {
          */
         int nbProcesses() override;
 
+        void start(std::function<void()> runnable) override;
+
         /**
          * Receives a message.
          *
@@ -108,6 +110,8 @@ namespace Panoramyx {
         void send(Message *message, int dest) override;
 
         void finalize() override;
+
+
     };
 
 }

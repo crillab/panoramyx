@@ -32,6 +32,7 @@
 #include <cstdlib>
 
 #include <mpi.h>
+#include <functional>
 
 #include "../../include/network/MPINetworkCommunication.hpp"
 
@@ -59,6 +60,10 @@ int MPINetworkCommunication::nbProcesses() {
         MPI_Comm_size(MPI_COMM_WORLD, &worldSize);
     }
     return worldSize;
+}
+
+void MPINetworkCommunication::start(std::function<void()> runnable) {
+    runnable();
 }
 
 Message *MPINetworkCommunication::receive(int tag, int src, unsigned long size) {

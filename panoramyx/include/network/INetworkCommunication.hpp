@@ -33,7 +33,7 @@
 #define PANORAMYX_INETWORKCOMMUNICATION_HPP
 
 #include <cstring>
-
+#include <functional>
 #include "Message.hpp"
 
 namespace Panoramyx {
@@ -66,6 +66,9 @@ namespace Panoramyx {
          * @return The number of processes.
          */
         virtual int nbProcesses() = 0;
+
+
+        virtual void start(std::function<void()> runnable)=0;
 
         /**
          * Receives a message.

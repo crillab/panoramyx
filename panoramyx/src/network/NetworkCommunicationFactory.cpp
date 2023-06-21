@@ -10,6 +10,7 @@
 #include <mpi.h>
 #include "../../include/network/NetworkCommunicationFactory.hpp"
 #include "../../include/network/MPINetworkCommunication.hpp"
+#include "../../include/network/ThreadCommunication.hpp"
 
 namespace Panoramyx {
 
@@ -27,6 +28,10 @@ namespace Panoramyx {
         int provided;
         MPI_Init_thread(argc, argv, MPI_THREAD_MULTIPLE, &provided);
         return MPINetworkCommunication::getInstance();
+    }
+
+    INetworkCommunication *NetworkCommunicationFactory::createThreadCommunication(int nb) {
+        return new ThreadCommunication(nb);
     }
 
 } // Panoramyx

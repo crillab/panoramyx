@@ -28,7 +28,7 @@ bool RemoteSolver::isOptimization() {
         comm->send(m, rank);
         free(m);
         DLOG_F(INFO, "Wait answer");
-        m = comm->receive(PANO_TAG_RESPONSE, PANO_ANY_SOURCE, PANO_DEFAULT_MESSAGE_SIZE);
+        m = comm->receive(PANO_TAG_RESPONSE, rank, PANO_DEFAULT_MESSAGE_SIZE);
         DLOG_F(INFO, "after answer");
         mutex.unlock();
         isOptim = m->read<bool>();

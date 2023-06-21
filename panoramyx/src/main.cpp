@@ -129,12 +129,17 @@ void addCommonArguments(argparse::ArgumentParser &parser) {
     parser.add_argument("-c", "--network-communicator")
             .default_value(std::string{"MPI"})
             .action([](const std::string &value) {
-                static const std::vector<std::string> choices = {"MPI"};
+                static const std::vector<std::string> choices = {"MPI","thread"};
                 if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
                     return value;
                 }
                 throw runtime_error("Unknown communicator value " + value);
             });
+    parser.add_argument("--nthread")
+            .default_value<std::vector<int>>({})
+            .scan<'i', int>()
+            .append()
+            .help("specify the number of threads");
     parser.add_argument("--factory")
             .default_value<std::vector<std::string>>({})
             .append()
@@ -164,6 +169,8 @@ INetworkCommunication *parseNetworkCommunication(argparse::ArgumentParser &progr
     NetworkCommunicationFactory networkCommunicationFactory(argc, argv);
     if (program.get<string>("network-communicator") == "MPI") {
         return networkCommunicationFactory.createMPINetworkCommunication();
+    }else if (program.get<string>("network-communicator") == "thread") {
+        return networkCommunicationFactory.createThreadCommunication(program.get<int>("nthread"));
     }
     throw runtime_error("invalid network communicator");
 }
@@ -286,59 +293,61 @@ int main(int argc, char **argv) {
     program.parse_args(argc, argv);
     auto networkCommunication = parseNetworkCommunication(program, &argc, &argv);
     buildJVM(program);
-    if (networkCommunication->getId() == 0) {
-        atexit(atExit);
-        AbstractSolverBuilder *asb;
-        if (program.is_subcommand_used("eps")) {
-            asb = (new EPSSolverBuilder())->withCubeGenerator(
-                    parseCubeGenerator(program.at<argparse::ArgumentParser>("eps"),
-                                       networkCommunication))->withNetworkCommunicator(
-                    networkCommunication)->withJavaOption(
-                    splitJavaOptions(program.get<string>("java-options")))->withJars(
-                    program.get<std::vector<string>>("jars"));
+    networkCommunication->start([=,&program]() {
+        if (networkCommunication->getId() == 0) {
+            atexit(atExit);
+            AbstractSolverBuilder *asb;
+            if (program.is_subcommand_used("eps")) {
+                asb = (new EPSSolverBuilder())->withCubeGenerator(
+                        parseCubeGenerator(program.at<argparse::ArgumentParser>("eps"),
+                                           networkCommunication))->withNetworkCommunicator(
+                        networkCommunication)->withJavaOption(
+                        splitJavaOptions(program.get<string>("java-options")))->withJars(
+                        program.get<std::vector<string>>("jars"));
 
-        }else{
-            asb = (new PortfolioSolverBuilder())->withAllocationStrategy(
-                    parseAllocationStrategy(program.at<argparse::ArgumentParser>("portfolio"),
-                                       networkCommunication))->withNetworkCommunicator(
-                    networkCommunication)->withJavaOption(
-                    splitJavaOptions(program.get<string>("java-options")))->withJars(
-                    program.get<std::vector<string>>("jars"));
+            } else {
+                asb = (new PortfolioSolverBuilder())->withAllocationStrategy(
+                        parseAllocationStrategy(program.at<argparse::ArgumentParser>("portfolio"),
+                                                networkCommunication))->withNetworkCommunicator(
+                        networkCommunication)->withJavaOption(
+                        splitJavaOptions(program.get<string>("java-options")))->withJars(
+                        program.get<std::vector<string>>("jars"));
 
-        }
-        chief = asb->build();
+            }
+            chief = asb->build();
 
-        for (int i = 1; i < networkCommunication->nbProcesses(); i++) {
-            chief->addSolver(new RemoteSolver(i));
-        }
-        chief->loadInstance(program.get<string>("instance"));
-        auto r = chief->solve();
-        std::cout << (int) r << std::endl;
-    } else {
-        auto configs = parseSolverConfiguration(program);
-        auto logdir = program.get<string>("log-directory");
-        if (!std::filesystem::is_directory(logdir)) {
-            std::filesystem::create_directory(logdir);
-        }
-
-        auto localConfig = configs[networkCommunication->getId() % configs.size()];
-        auto factoryString = localConfig.get<string>("factory");
-        Universe::IUniverseSolver *solver;
-        if (isJava(factoryString)) {
-            Universe::UniverseJavaSolverFactory factory(factoryString);
-            solver = factory.createCspSolver();
-
+            for (int i = 1; i < networkCommunication->nbProcesses(); i++) {
+                chief->addSolver(new RemoteSolver(i));
+            }
+            chief->loadInstance(program.get<string>("instance"));
+            auto r = chief->solve();
+            std::cout << (int) r << std::endl;
         } else {
-            //todo
+            auto configs = parseSolverConfiguration(program);
+            auto logdir = program.get<string>("log-directory");
+            if (!std::filesystem::is_directory(logdir)) {
+                std::filesystem::create_directory(logdir);
+            }
+
+            auto localConfig = configs[networkCommunication->getId() % configs.size()];
+            auto factoryString = localConfig.get<string>("factory");
+            Universe::IUniverseSolver *solver = nullptr;
+            if (isJava(factoryString)) {
+                Universe::UniverseJavaSolverFactory factory(factoryString);
+                solver = factory.createCspSolver();
+
+            } else {
+                //todo
+            }
+            solver->setVerbosity(localConfig.get<int>("verbosity"));
+            auto *gaulois = new GauloisSolver(solver, networkCommunication);
+            gaulois->setLogFile(logdir + std::filesystem::path::preferred_separator + "log_gaulois_" +
+                                std::to_string(networkCommunication->getId()) + "_" + std::to_string(getpid()) +
+                                ".log");
+            gaulois->start();
+
         }
-        solver->setVerbosity(localConfig.get<int>("verbosity"));
-        auto *gaulois = new GauloisSolver(solver, networkCommunication);
-        gaulois->setLogFile(logdir + std::filesystem::path::preferred_separator + "log_gaulois_" +
-                            std::to_string(networkCommunication->getId())+"_"+std::to_string(getpid())+".log");
-        gaulois->start();
-
-    }
-
+    });
     networkCommunication->finalize();
 
 

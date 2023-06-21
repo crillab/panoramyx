@@ -33,6 +33,8 @@ namespace Panoramyx {
     public:
         NetworkCommunicationFactory(int* argc,char***argv);
         INetworkCommunication* createMPINetworkCommunication();
+
+        INetworkCommunication *createThreadCommunication(int nb);
     };
 
 } // Panoramyx
