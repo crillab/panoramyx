@@ -34,6 +34,7 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
     Universe::IUniverseSolver *solver;
     INetworkCommunication *comm;
     bool interrupted = false;
+    bool finishedB = false;
     std::binary_semaphore finished = std::binary_semaphore(0);
     std::mutex loadMutex;
     std::mutex boundMutex;

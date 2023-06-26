@@ -121,6 +121,8 @@ namespace Panoramyx {
 
         std::vector<bool> currentRunningSolvers;
 
+        std::mutex solutionMutex;
+
     public:
 
         /**

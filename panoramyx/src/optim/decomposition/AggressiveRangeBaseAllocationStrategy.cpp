@@ -41,8 +41,10 @@ namespace Panoramyx {
             DLOG_F(INFO, "adding completely new bound %lld", b);
         }
 
+        while(result.size()!=currentBounds.size()){
+            result.push_back(result.back());
+        }
 
-        assert(result.size() == currentBounds.size());
         return result;
     }
 

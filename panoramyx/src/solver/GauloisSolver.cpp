@@ -58,8 +58,10 @@ namespace Panoramyx {
     }
 
     void GauloisSolver::interrupt() {
+        DLOG_F(INFO,"interrupt !");
         interrupted = true;
         solver->interrupt();
+        DLOG_F(INFO,"after interrupt !");
     }
 
     void GauloisSolver::setVerbosity(int level) {
@@ -99,9 +101,12 @@ namespace Panoramyx {
     }
 
     void GauloisSolver::start() {
-        while (!interrupted) {
+        while (!finishedB) {
             auto message = comm->receive(PANO_ANY_TAG, MPI_ANY_SOURCE, PANO_DEFAULT_MESSAGE_SIZE);
             readMessage(message);
+            if(NAME_OF(message,PANO_MESSAGE_END_SEARCH)){
+                break;
+            }
             free(message);
         }
         for (int i = 0; i < nbSolved; i++) {
@@ -157,11 +162,14 @@ namespace Panoramyx {
             std::string filename(m->parameters);
             this->setLogFile(filename);
         } else if (strncmp(m->name, PANO_MESSAGE_END_SEARCH, sizeof(m->name)) == 0) {
+            boundMutex.lock();
+            interrupt();
             MessageBuilder mb;
             Message *r = mb.named(PANO_MESSAGE_END_SEARCH).withTag(PANO_TAG_SOLVE).build();
             comm->send(r, m->src);
             free(r);
-            interrupt();
+            finishedB=true;
+            boundMutex.unlock();
         } else if (strncmp(m->name, PANO_MESSAGE_LOWER_BOUND, sizeof(m->name)) == 0) {
             std::string param(m->parameters, strlen(m->parameters) + 1);
             Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
@@ -270,6 +278,10 @@ namespace Panoramyx {
         DLOG_F(INFO, "avant boundMutex.lock()");
         boundMutex.lock();
         DLOG_F(INFO, "après boundMutex.lock()");
+        if(interrupted){
+            boundMutex.unlock();
+            return;
+        }
         switch (result) {
             case Universe::UniverseSolverResult::SATISFIABLE:
                 if (optimization) {

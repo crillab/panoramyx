@@ -93,6 +93,7 @@ void EPSSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &assump
 void EPSSolver::onSatisfiableFound(unsigned solverIndex) {
     AbstractParallelSolver::onSatisfiableFound(solverIndex);
     availableSolvers.clear();
+    this->interrupt();
     cubes.release();
 }
 

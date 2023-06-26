@@ -47,8 +47,9 @@ void AbstractCubeGenerator::setConsistencyChecker(IConsistencyChecker *checker) 
 }
 
 void AbstractCubeGenerator::loadInstance(const std::string &filename) {
-    std::ifstream input(filename);
-    Autis::Scanner scanner(input);
-    auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver*>(solver));
-    parser->parse();
+//    std::ifstream input(filename);
+//    Autis::Scanner scanner(input);
+//    auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver*>(solver));
+//    parser->parse();
+    solver->loadInstance(filename);
 }

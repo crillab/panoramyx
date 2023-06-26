@@ -171,7 +171,7 @@ map<string, BigInteger> AbstractParallelSolver::mapSolution() {
 
 void AbstractParallelSolver::readMessages() {
     thread receiver([this]() {
-        while (!interrupted) {
+        while (runningSolvers>0) {
             auto message = communicator->receive(PANO_TAG_SOLVE, PANO_ANY_SOURCE, PANO_DEFAULT_MESSAGE_SIZE);
             readMessage(message);
             free(message);
@@ -220,7 +220,9 @@ void AbstractParallelSolver::beforeSearch() {
 }
 
 void AbstractParallelSolver::onSatisfiableFound(unsigned solverIndex) {
+    solutionMutex.lock();
     bestSolution=solvers[solverIndex]->mapSolution();
+    solutionMutex.unlock();
 }
 
 void AbstractParallelSolver::onNewBoundFound(const Universe::BigInteger &bound, unsigned int i) {
@@ -295,7 +297,10 @@ void AbstractParallelSolver::setLogStream(ostream &stream) {
 
 map<std::string, Universe::BigInteger> AbstractParallelSolver::mapSolution(bool excludeAux) {
     if (result == UniverseSolverResult::SATISFIABLE || result == UniverseSolverResult::OPTIMUM_FOUND) {
-        return bestSolution;
+        solutionMutex.lock();
+        auto local = bestSolution;
+        solutionMutex.unlock();
+        return local;
     }
     throw IllegalStateException("problem has no solution yet");
 }
