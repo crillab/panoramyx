@@ -42,13 +42,6 @@ namespace Panoramyx {
      */
     class LexicographicCubeGenerator : public Panoramyx::AbstractCubeGenerator {
 
-    private:
-
-        /**
-         * The maximum number of cubes to generate.
-         */
-        int nbCubesMax;
-
     public:
 
         /**

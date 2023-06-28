@@ -463,3 +463,7 @@ bool RemoteSolver::checkSolution(const std::map<std::string, Universe::BigIntege
     free(r);
     return b;
 }
+
+const std::vector<Universe::IUniverseConstraint *> &RemoteSolver::getConstraints() {
+    throw Except::UnsupportedOperationException("Constraints are too far (far) away !");
+}

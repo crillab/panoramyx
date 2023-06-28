@@ -121,3 +121,4 @@ void EPSSolver::loadInstance(const string &filename) {
     AbstractParallelSolver::loadInstance(filename);
     this->generator->loadInstance(filename);
 }
+

@@ -105,6 +105,8 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
     const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 
+    const std::vector<Universe::IUniverseConstraint *> &getConstraints() override;
+
     std::map<std::string, Universe::BigInteger> mapSolution() override;
 
     void setLowerBound(const Universe::BigInteger &lb) override;
@@ -153,6 +155,8 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
     void valueHeuristicStatic(Message *pMessage);
 
     void checkSolution(Message *pMessage);
+
+
 };
 
 using GallicSolver = GauloisSolver;

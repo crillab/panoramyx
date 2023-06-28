@@ -47,7 +47,7 @@ bool FinalConsistencyChecker::checkPartial(const vector<UniverseAssumption<BigIn
 }
 
 bool FinalConsistencyChecker::checkFinal(const vector<UniverseAssumption<BigInteger>> &cube) {
-    auto result = solver->solve(cube);
     solver->reset();
+    auto result = solver->solve(cube);
     return result != Universe::UniverseSolverResult::UNSATISFIABLE;
 }

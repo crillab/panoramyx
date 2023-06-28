@@ -54,7 +54,13 @@ namespace Panoramyx {
          */
         Panoramyx::IConsistencyChecker *consistencyChecker;
 
+        /**
+         * The maximum number of cubes to generate.
+         */
+        int nbCubesMax;
     public:
+
+        explicit AbstractCubeGenerator(int nbCubesMax);
 
         /**
          * Destroys this AbstractCubeGenerator.

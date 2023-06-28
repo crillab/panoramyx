@@ -31,6 +31,7 @@
 #include "../include/solver/PortfolioSolverBuilder.hpp"
 #include "../include/optim/decomposition/LogarithmicRangeIterator.hpp"
 #include "../include/optim/decomposition/AggressiveRangeBaseAllocationStrategy.hpp"
+#include "../include/decomposition/CartesianProductIterativeRefinementCubeGenerator.hpp"
 
 
 using namespace Panoramyx;
@@ -102,7 +103,7 @@ argparse::ArgumentParser createEPSParser() {
     eps.add_argument("-g", "--cube-generator")
             .default_value<string>(std::string{"Lexicographic"})
             .action([](const std::string &value) {
-                static const std::vector<std::string> choices = {"Lexicographic"};
+                static const std::vector<std::string> choices = {"Lexicographic","CPIR"};
                 if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
                     return value;
                 }
@@ -204,7 +205,13 @@ ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &program, INetworkCo
                 networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"));
         parseConsistencyChecker(program, cg);
         return cg;
+    }else if (program.get<string>("cube-generator") == "CPIR") {
+        auto cg = new CartesianProductIterativeRefinementCubeGenerator(
+                networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"));
+        parseConsistencyChecker(program, cg);
+        return cg;
     }
+
     throw runtime_error("invalid network communicator");
 }
 

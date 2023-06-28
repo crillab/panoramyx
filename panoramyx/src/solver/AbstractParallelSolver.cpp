@@ -327,3 +327,7 @@ bool AbstractParallelSolver::checkSolution() {
 bool AbstractParallelSolver::checkSolution(const map<std::string, Universe::BigInteger> &assignment) {
     return solvers[0]->checkSolution(assignment);
 }
+
+const vector<IUniverseConstraint *> &AbstractParallelSolver::getConstraints() {
+    throw UnsupportedOperationException("Parallel solver has too many constraints!");
+}

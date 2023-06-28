@@ -534,6 +534,11 @@ namespace Panoramyx {
         free(r);
     }
 
+    const vector<Universe::IUniverseConstraint *> &GauloisSolver::getConstraints() {
+        return solver->getConstraints();
+    }
+
+
     void GauloisSolver::checkSolutionAssignment(Message *pMessage) {
         std::map<std::string,Universe::BigInteger> bigbig;
         char *ptrName = pMessage->parameters;

@@ -123,6 +123,8 @@ namespace Panoramyx {
         bool checkSolution() override;
 
         bool checkSolution(const std::map<std::string, Universe::BigInteger> &assignment)  override;
+
+        const std::vector<Universe::IUniverseConstraint *> &getConstraints() override;
     };
 
 }

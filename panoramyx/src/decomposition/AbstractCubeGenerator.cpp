@@ -38,6 +38,8 @@
 using namespace Panoramyx;
 using namespace Universe;
 
+AbstractCubeGenerator::AbstractCubeGenerator(int nbCubesMax) : nbCubesMax(nbCubesMax) {}
+
 void AbstractCubeGenerator::setSolver(IUniverseSolver *s) {
     this->solver = s;
 }
@@ -53,3 +55,5 @@ void AbstractCubeGenerator::loadInstance(const std::string &filename) {
 //    parser->parse();
     solver->loadInstance(filename);
 }
+
+

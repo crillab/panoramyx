@@ -170,6 +170,8 @@ namespace Panoramyx {
          */
         [[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 
+        const std::vector<Universe::IUniverseConstraint *> &getConstraints() override;
+
         /**
          * Gives the number of constraints defined in this solver.
          *

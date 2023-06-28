@@ -32,12 +32,12 @@
 #include "../../include/decomposition/LexicographicCubeGenerator.hpp"
 #include "../../include/decomposition/StreamLexicographicCube.hpp"
 
+
 using namespace Panoramyx;
 using namespace Universe;
 using namespace std;
 
-LexicographicCubeGenerator::LexicographicCubeGenerator(int nbCubesMax) :
-        nbCubesMax(nbCubesMax) {
+LexicographicCubeGenerator::LexicographicCubeGenerator(int nbCubesMax): Panoramyx::AbstractCubeGenerator(nbCubesMax) {
     // Nothing to do: everything is already initialized.
 }
 

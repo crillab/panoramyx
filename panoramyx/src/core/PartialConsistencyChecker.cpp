@@ -42,8 +42,8 @@ PartialConsistencyChecker::PartialConsistencyChecker(IUniverseSolver *solver) :
 }
 
 bool PartialConsistencyChecker::checkPartial(const vector<UniverseAssumption<BigInteger>> &cube) {
-    auto result = solver->solve(cube);
     solver->reset();
+    auto result = solver->solve(cube);
     return result != Universe::UniverseSolverResult::UNSATISFIABLE;
 }
 
