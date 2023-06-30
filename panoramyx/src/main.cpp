@@ -1,5 +1,5 @@
 #include <mpi.h>
-
+#include <unistd.h>
 #include <fstream>
 #include <iostream>
 #include <filesystem>
