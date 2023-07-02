@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg-configuration.schema.json",
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/crillab/vcpkg-registry",
+      "baseline": "8d8c18cb82d423a81f594ed18ab5f1429e548953",
+      "packages": [
+        "crillab-*",
+        "xcsp3*",
+        "loguru",
+        "argparse"
+      ]
+    }
+  ],
+  "default-registry": {
+    "kind": "git",
+    "repository": "https://github.com/microsoft/vcpkg",
+    "baseline": "9055f88ba53a99f51e3c733fe9c79703dc23d57d"
+  }
+}

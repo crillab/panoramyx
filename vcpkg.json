@@ -1,0 +1,11 @@
+{
+  "name": "crillab-panoramyx",
+  "version-semver": "0.1.0",
+  "dependencies": [
+    "libxml2",
+    "loguru",
+    "argparse",
+    "crillab-autis",
+    "mpi"
+  ]
+}
