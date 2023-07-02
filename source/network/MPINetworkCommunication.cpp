@@ -43,7 +43,7 @@ INetworkCommunication *MPINetworkCommunication::instance = nullptr;
 INetworkCommunication *MPINetworkCommunication::getInstance() {
     if (!instance) {
         instance = new MPINetworkCommunication();
-        #ifdef not defined(_WIN32)
+        #if 0
         MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI::ERRORS_THROW_EXCEPTIONS);
         #endif
     }

@@ -46,8 +46,9 @@ add_library(
 )
 add_library(crillab-panoramyx::crillab-panoramyx ALIAS crillab-panoramyx_crillab-panoramyx)
 target_link_libraries(crillab-panoramyx_crillab-panoramyx crillab-autis::crillab-autis loguru ${MPI_CXX_LIBRARIES})
+if(WIN32)
 target_compile_options(crillab-panoramyx_crillab-panoramyx PRIVATE /MT)
-
+endif()
 
 if(NOT BUILD_SHARED_LIBS)
   target_compile_definitions(crillab-panoramyx_crillab-panoramyx PUBLIC CRILLAB_PANORAMYX_STATIC_DEFINE)
@@ -85,7 +86,9 @@ endif()
 
 add_executable(mainpano example/main.cpp)
 target_link_libraries(mainpano crillab-panoramyx_crillab-panoramyx)
+if(WIN32)
 target_compile_options(mainpano PRIVATE /MT)
+endif()
 # ---- Developer mode ----
 
 if(NOT crillab-panoramyx_DEVELOPER_MODE)
