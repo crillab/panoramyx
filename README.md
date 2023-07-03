@@ -28,7 +28,7 @@ cmake --build build
 With `vcpkg_root` is the path to your vcpkg install folder. 
 
 
-### Using as dependencies with vcpkg
+<!-- ### Using as dependencies with vcpkg
 
 We assume that you have configured the registry of `crillab`, see [here](https://crillab.github.io/tootatis/utility) for more information. 
 
@@ -51,4 +51,4 @@ Finally, link the library to your target:
 
 ```cmake
 target_link_libraries(<your_target> crillab-panoramyx::crillab-panoramyx)
-```
+``` -->
