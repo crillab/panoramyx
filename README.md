@@ -21,7 +21,7 @@ This library is designed for simplified use in projects using `CMake` and [`vcpk
 ```sh
 git clone https://github.com/crillab/panoramyx
 cd panoramyx 
-cmake -S . -B build -D -DCMAKE_TOOLCHAIN_FILE=<vcpkg_root>/scripts/buildsystems/vcpkg.cmake"
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE="<vcpkg_root>/scripts/buildsystems/vcpkg.cmake"
 cmake --build build
 ```
 
@@ -52,9 +52,3 @@ Finally, link the library to your target:
 ```cmake
 target_link_libraries(<your_target> crillab-panoramyx::crillab-panoramyx)
 ```
-
-
-
-## Contributing
-
-See the [CONTRIBUTING](CONTRIBUTING.md) document.
