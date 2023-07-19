@@ -52,7 +52,6 @@
           <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>StreamPriorityQueueAdapter <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="StreamPriorityQueueAdapter_8hpp.html">&lt;StreamPriorityQueueAdapter.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -66,6 +65,7 @@
             </li>
           </ul>
         </div>
+<p>The <a href="classPanoramyx_1_1StreamPriorityQueueAdapter.html" class="m-doc">StreamPriorityQueueAdapter</a> adapts a priority queue of ProblemUnderAssumptions to a stream of assumptions.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
@@ -79,14 +79,14 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a338e4504509b092b00c39ff5ce97cc0d">
-              <span class="m-doc-wrap-bumper"><a href="#a338e4504509b092b00c39ff5ce97cc0d" class="m-doc-self">StreamPriorityQueueAdapter</a>(</span><span class="m-doc-wrap">std::priority_queue&lt;<a href="classPanoramyx_1_1ProblemUnderAssumption.html" class="m-doc">ProblemUnderAssumption</a>&gt;&amp; priorityQueue) <span class="m-label m-flat m-info">explicit</span> </span>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a456bdf54ef4ec0d433bd64170a0ec1ff" class="m-doc">StreamPriorityQueueAdapter</a>(</span><span class="m-doc-wrap">std::priority_queue&lt;<a href="classPanoramyx_1_1ProblemUnderAssumption.html" class="m-doc">Panoramyx::<wbr />ProblemUnderAssumption</a>&gt;&amp; priorityQueue) <span class="m-label m-flat m-info">explicit</span> </span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a5a2ee1210a28c7939e926f32f5cec1a2">
-              <span class="m-doc-wrap-bumper"><a href="#a5a2ee1210a28c7939e926f32f5cec1a2" class="m-doc-self">~StreamPriorityQueueAdapter</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a5a2ee1210a28c7939e926f32f5cec1a2" class="m-doc">~StreamPriorityQueueAdapter</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pub-methods">
@@ -104,6 +104,29 @@
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a456bdf54ef4ec0d433bd64170a0ec1ff"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />StreamPriorityQueueAdapter::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a456bdf54ef4ec0d433bd64170a0ec1ff" class="m-doc-self">StreamPriorityQueueAdapter</a>(</span><span class="m-doc-wrap">std::priority_queue&lt;<a href="classPanoramyx_1_1ProblemUnderAssumption.html" class="m-doc">Panoramyx::<wbr />ProblemUnderAssumption</a>&gt;&amp; priorityQueue) <span class="m-label m-info">explicit</span> </span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">priorityQueue</td>
+                  <td>The priority queue to adapt.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Creates a new <a href="classPanoramyx_1_1StreamPriorityQueueAdapter.html" class="m-doc">StreamPriorityQueueAdapter</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="a5a2ee1210a28c7939e926f32f5cec1a2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />StreamPriorityQueueAdapter::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5a2ee1210a28c7939e926f32f5cec1a2" class="m-doc-self">~StreamPriorityQueueAdapter</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span> <span class="m-label m-info">defaulted</span></span></span>
+            </h3>
+<p>Destroys this <a href="classPanoramyx_1_1StreamPriorityQueueAdapter.html" class="m-doc">StreamPriorityQueueAdapter</a>.</p>
+          </div></section>
           <section class="m-doc-details" id="aaa94cacb055ba1c8b656d918be8ff43d"><div>
             <h3>
               <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />StreamPriorityQueueAdapter::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aaa94cacb055ba1c8b656d918be8ff43d" class="m-doc-self">hasNext</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-warning">override</span></span></span>
@@ -112,11 +135,11 @@
               <tfoot>
                 <tr>
                   <th style="width: 1%">Returns</th>
-                  <td>Whether there is another element in this stream.</td>
+                  <td>Whether there is another assumption in this stream.</td>
                 </tr>
               </tfoot>
             </table>
-<p>Checks whether there is another element in this stream.</p>
+<p>Checks whether there is another assumption in this stream.</p>
           </div></section>
           <section class="m-doc-details" id="a14f59db6878afbf70574200312df49e7"><div>
             <h3>
@@ -130,7 +153,7 @@
                 </tr>
               </tfoot>
             </table>
-<p>Gives the next element in this stream. The behavior of this method is undefined if <a href="classPanoramyx_1_1StreamPriorityQueueAdapter.html#aaa94cacb055ba1c8b656d918be8ff43d" class="m-doc">hasNext()</a> returned false.</p>
+<p>Gives the next assumption in this stream. The behavior of this method is undefined if <a href="classPanoramyx_1_1StreamPriorityQueueAdapter.html#aaa94cacb055ba1c8b656d918be8ff43d" class="m-doc">hasNext()</a> returned false.</p>
           </div></section>
         </section>
       </div>
