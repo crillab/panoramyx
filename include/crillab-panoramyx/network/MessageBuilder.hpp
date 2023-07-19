@@ -96,7 +96,8 @@ namespace Panoramyx {
          * Adds a parameter to the message that is being built.
          *
          * @tparam T The type of the parameter to add.
-         * @param tag The tag of the message.
+         *
+         * @param param The parameter to add to the message.
          *
          * @return This message builder.
          */
@@ -109,8 +110,25 @@ namespace Panoramyx {
             message->size += sizeof(T);
             return *this;
         }
+
+        /**
+         * Adds a string parameter to the message that is being built.
+         *
+         * @param param The parameter to add to the message.
+         *
+         * @return This message builder.
+         */
         MessageBuilder &withParameter(std::string param);
+
+        /**
+         * Adds a big integer parameter to the message that is being built.
+         *
+         * @param param The parameter to add to the message.
+         *
+         * @return This message builder.
+         */
         MessageBuilder &withParameter(Universe::BigInteger param);
+
         /**
          * Builds the message.
          *

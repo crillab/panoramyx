@@ -49,12 +49,7 @@ namespace Panoramyx {
     public:
         explicit RemoteSolver(int rank);
 
-        Universe::UniverseSolverResult solve() override;
-
-        Universe::UniverseSolverResult solve(const std::string &filename) override;
-
-        Universe::UniverseSolverResult
-        solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override;
+        void setIndex(unsigned i);
 
         bool isOptimization() override;
 
@@ -76,8 +71,6 @@ namespace Panoramyx {
 
         void setLogFile(const std::string &filename) override;
 
-        void setIndex(unsigned i);
-
         void setComm(INetworkCommunication *c);
 
         ~RemoteSolver() override = default;
@@ -91,6 +84,13 @@ namespace Panoramyx {
         void addSearchListener(Universe::IUniverseSearchListener *listener) override;
 
         void setLogStream(std::ostream &stream) override;
+
+        Universe::UniverseSolverResult solve() override;
+
+        Universe::UniverseSolverResult solve(const std::string &filename) override;
+
+        Universe::UniverseSolverResult
+        solve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override;
 
         std::map<std::string, Universe::BigInteger> mapSolution(bool excludeAux) override;
 

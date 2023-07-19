@@ -23,7 +23,7 @@ namespace Panoramyx {
         return new PortfolioSolver(networkCommunication,allocationStrategy);
     }
 
-    PortfolioSolverBuilder *PortfolioSolverBuilder::withAllocationStrategy(IAllocationStrategy *allocationStrategy) {
+    PortfolioSolverBuilder *PortfolioSolverBuilder::withAllocationStrategy(IBoundAllocationStrategy *allocationStrategy) {
         this->allocationStrategy=allocationStrategy;
         return this;
     }

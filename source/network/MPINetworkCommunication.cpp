@@ -30,22 +30,22 @@
  */
 
 #include <cstdlib>
-
-#include <mpi.h>
 #include <functional>
 
-#include "crillab-panoramyx/network/MPINetworkCommunication.hpp"
+#include <mpi.h>
+
+#include <crillab-panoramyx/network/MPINetworkCommunication.hpp>
+
+using namespace std;
 
 using namespace Panoramyx;
 
 INetworkCommunication *MPINetworkCommunication::instance = nullptr;
 
 INetworkCommunication *MPINetworkCommunication::getInstance() {
-    if (!instance) {
+    if (instance == nullptr) {
         instance = new MPINetworkCommunication();
-        #if 0
-        MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI::ERRORS_THROW_EXCEPTIONS);
-        #endif
+        MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_ARE_FATAL);
     }
     return instance;
 }
@@ -64,19 +64,19 @@ int MPINetworkCommunication::nbProcesses() {
     return worldSize;
 }
 
-void MPINetworkCommunication::start(std::function<void()> runnable) {
+void MPINetworkCommunication::start(function<void()> runnable) {
     runnable();
 }
 
 Message *MPINetworkCommunication::receive(int tag, int src, unsigned long size) {
-    auto *m = (Message *) (malloc(size));
-    MPI_Recv(m, (int) size, MPI_BYTE, src, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    return m;
+    auto *message = static_cast<Message *>(malloc(size));
+    MPI_Recv(message, (int) size, MPI_BYTE, src, tag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    return message;
 }
 
-void MPINetworkCommunication::send(Message *m, int dest) {
-    m->src = getId();
-    MPI_Send(m, (int) (sizeof(Message) + m->size), MPI_BYTE, dest, m->tag, MPI_COMM_WORLD);
+void MPINetworkCommunication::send(Message *message, int dest) {
+    message->src = getId();
+    MPI_Send(message, (int) (sizeof(Message) + message->size), MPI_BYTE, dest, message->tag, MPI_COMM_WORLD);
 }
 
 void MPINetworkCommunication::finalize() {

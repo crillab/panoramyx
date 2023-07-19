@@ -41,14 +41,14 @@ namespace Panoramyx {
      * that relies on MPI (Message Passing Interface) to communicate between
      * different processes.
      */
-    class MPINetworkCommunication : public INetworkCommunication {
+    class MPINetworkCommunication : public Panoramyx::INetworkCommunication {
 
     private:
 
         /**
          * The unique instance of this class.
          */
-        static INetworkCommunication *instance;
+        static Panoramyx::INetworkCommunication *instance;
 
         /**
          * The rank of the current communicator, as assigned by MPI.
@@ -88,6 +88,11 @@ namespace Panoramyx {
          */
         int nbProcesses() override;
 
+        /**
+         * Executes the given runnable as many times as needed by this strategy.
+         *
+         * @param runnable The runnable to execute.
+         */
         void start(std::function<void()> runnable) override;
 
         /**
@@ -109,8 +114,10 @@ namespace Panoramyx {
          */
         void send(Message *message, int dest) override;
 
+        /**
+         * Finalizes the communication between the different communicators.
+         */
         void finalize() override;
-
 
     };
 

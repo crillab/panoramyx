@@ -41,7 +41,7 @@
 
 #include "RemoteSolver.hpp"
 #include "../network/Message.hpp"
-#include "../optim/decomposition/IAllocationStrategy.hpp"
+#include "../optim/decomposition/IBoundAllocationStrategy.hpp"
 #include "../utils/BlockingDeque.hpp"
 
 namespace Panoramyx {
@@ -72,7 +72,7 @@ namespace Panoramyx {
         /**
          * The allocation strategy used to allocate bounds to the different solvers.
          */
-        Panoramyx::IAllocationStrategy *allocationStrategy;
+        Panoramyx::IBoundAllocationStrategy *allocationStrategy;
 
         /**
          * The bounds that are currently assigned to the different solvers.
@@ -132,7 +132,7 @@ namespace Panoramyx {
          * @param allocationStrategy The allocation strategy used to allocate bounds to the different solvers.
          */
         explicit AbstractParallelSolver(
-                Panoramyx::INetworkCommunication *comm, Panoramyx::IAllocationStrategy *allocationStrategy = nullptr);
+                Panoramyx::INetworkCommunication *comm, Panoramyx::IBoundAllocationStrategy *allocationStrategy = nullptr);
 
         /**
          * Destroys this AbstractParallelSolver.

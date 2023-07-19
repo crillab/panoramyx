@@ -28,9 +28,9 @@ namespace Panoramyx {
 
     class PortfolioSolverBuilder:public AbstractSolverBuilder {
     private:
-        IAllocationStrategy* allocationStrategy;
+        IBoundAllocationStrategy* allocationStrategy;
     public:
-        PortfolioSolverBuilder* withAllocationStrategy(IAllocationStrategy* allocationStrategy);
+        PortfolioSolverBuilder* withAllocationStrategy(IBoundAllocationStrategy* allocationStrategy);
         AbstractParallelSolver *build() override;
     };
 

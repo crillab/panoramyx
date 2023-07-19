@@ -30,11 +30,10 @@
  */
 
 #include <cstring>
-#include <iostream>
 
 #include <crillab-universe/core/UniverseType.hpp>
 
-#include "crillab-panoramyx/network/MessageBuilder.hpp"
+#include <crillab-panoramyx/network/MessageBuilder.hpp>
 
 using namespace std;
 
@@ -68,14 +67,13 @@ MessageBuilder &MessageBuilder::withParameter(string p) {
     size += p.size() + 1;
     message = static_cast<Message *>(realloc(message, size));
     memcpy(message->parameters + message->size, p.c_str(), p.size() + 1);
-    message->parameters[message->size+p.size()]='\0';
+    message->parameters[message->size + p.size()] = '\0';
     message->size += p.size() + 1;
     return *this;
 }
 
 MessageBuilder &MessageBuilder::withParameter(BigInteger param) {
-    this->withParameter(Universe::toString(param));
-    return *this;
+    return this->withParameter(Universe::toString(param));
 }
 
 Message *MessageBuilder::build() {

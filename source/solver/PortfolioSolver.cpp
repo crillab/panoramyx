@@ -38,7 +38,7 @@ using namespace Except;
 using namespace Panoramyx;
 using namespace Universe;
 
-PortfolioSolver::PortfolioSolver(INetworkCommunication *comm, IAllocationStrategy *allocationStrategy) :
+PortfolioSolver::PortfolioSolver(INetworkCommunication *comm, IBoundAllocationStrategy *allocationStrategy) :
         AbstractParallelSolver(comm, allocationStrategy) {
     // Nothing to do: everything is already initialized.
 }

@@ -17,7 +17,7 @@
 #include "crillab-panoramyx/network/INetworkCommunication.hpp"
 #include "crillab-panoramyx/network/MPINetworkCommunication.hpp"
 #include "crillab-panoramyx/optim/decomposition/LinearRangeIterator.hpp"
-#include "crillab-panoramyx/optim/decomposition/RangeBaseAllocationStrategy.hpp"
+#include "crillab-panoramyx/optim/decomposition/RangeBasedAllocationStrategy.hpp"
 #include "crillab-panoramyx/solver/AbstractParallelSolver.hpp"
 #include "crillab-panoramyx/solver/EPSSolver.hpp"
 #include "crillab-panoramyx/solver/GauloisSolver.hpp"
@@ -32,7 +32,7 @@
 #include "crillab-panoramyx/core/NullConsistencyChecker.hpp"
 #include "crillab-panoramyx/solver/PortfolioSolverBuilder.hpp"
 #include "crillab-panoramyx/optim/decomposition/LogarithmicRangeIterator.hpp"
-#include "crillab-panoramyx/optim/decomposition/AggressiveRangeBaseAllocationStrategy.hpp"
+#include "crillab-panoramyx/optim/decomposition/AggressiveRangeBasedAllocationStrategy.hpp"
 #include "crillab-panoramyx/decomposition/CartesianProductIterativeRefinementCubeGenerator.hpp"
 
 
@@ -277,24 +277,24 @@ void buildJVM(argparse::ArgumentParser &parser) {
     }
 }
 
-IAllocationStrategy *parseAllocationStrategy(argparse::ArgumentParser &program, INetworkCommunication *pCommunication) {
+IBoundAllocationStrategy *parseAllocationStrategy(argparse::ArgumentParser &program, INetworkCommunication *pCommunication) {
     if (program.get<string>("allocation-strategy") == "Linear") {
-        return new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); });
+        return new RangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); });
     }
     if (program.get<string>("allocation-strategy") == "IncreasingLogarithmic") {
-        return new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
+        return new RangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
     }
     if (program.get<string>("allocation-strategy") == "DecreasingLogarithmic") {
-        return new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
+        return new RangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
     }
     if (program.get<string>("allocation-strategy") == "AggressiveLinear") {
-        return new AggressiveRangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); });
+        return new AggressiveRangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); });
     }
     if (program.get<string>("allocation-strategy") == "AggressiveIncreasingLogarithmic") {
-        return new AggressiveRangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
+        return new AggressiveRangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
     }
     if (program.get<string>("allocation-strategy") == "AggressiveDecreasingLogarithmic") {
-        return new AggressiveRangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
+        return new AggressiveRangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LogarithmicRangeIterator(min, max, nb); });
     }
     throw runtime_error("invalid network communicator");
 }
@@ -398,7 +398,7 @@ int main(int argc, char **argv) {
 //     // auto cubeGenerator = new LexicographicCubeGenerator(100);
 //     // cubeGenerator->setSolver(ace);
 //     // cubeGenerator->setConsistencyChecker(new PartialConsistencyChecker(ace));
-//     Abraracourcix* chief = new PortfolioSolver(comm, new RangeBaseAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); }));
+//     Abraracourcix* chief = new PortfolioSolver(comm, new RangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); }));
 //     for (int i = 1; i < comm->nbProcesses(); i++) {
 //         chief->addSolver(new RemoteSolver(i));
 //     }

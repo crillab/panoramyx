@@ -52,7 +52,7 @@ namespace Panoramyx {
          * @param allocationStrategy The allocation strategy used to allocate bounds to the different solvers.
          */
         explicit PortfolioSolver(
-                Panoramyx::INetworkCommunication *comm, Panoramyx::IAllocationStrategy *allocationStrategy = nullptr);
+                Panoramyx::INetworkCommunication *comm, Panoramyx::IBoundAllocationStrategy *allocationStrategy = nullptr);
 
         /**
          * Destroys this PortfolioSolver.

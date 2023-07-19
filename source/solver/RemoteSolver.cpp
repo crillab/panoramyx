@@ -210,7 +210,7 @@ void RemoteSolver::endSearch() {
 
 void RemoteSolver::loadInstance(const std::string &filename) {
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_LOAD)
+    Message *m = mb.named(PANO_MESSAGE_LOAD_INSTANCE)
                      .withParameter(filename)
                      .withTag(PANO_TAG_SOLVE)
                      .build();
@@ -394,7 +394,7 @@ const std::vector<std::string> &RemoteSolver::getAuxiliaryVariables() {
     }
     mutex.lock();
     MessageBuilder mb;
-    Message *m = mb.named(PANO_MESSAGE_AUX_VAR)
+    Message *m = mb.named(PANO_MESSAGE_GET_AUXILIARY_VARIABLES)
             .withTag(PANO_TAG_RESPONSE)
             .build();
     comm->send(m, rank);

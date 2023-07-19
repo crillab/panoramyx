@@ -34,6 +34,7 @@
 
 #include <cstring>
 #include <functional>
+
 #include "Message.hpp"
 
 namespace Panoramyx {
@@ -42,7 +43,7 @@ namespace Panoramyx {
      * The INetworkCommunication defines en interface for a strategy allowing to
      * exchange information through the network.
      * This interface is designed to allow communication using various approaches,
-     * such as, e.g., MPI, UNIX pipes, etc.
+     * such as, e.g., MPI, threads, UNIX pipes, etc.
      */
     class INetworkCommunication {
 
@@ -67,8 +68,12 @@ namespace Panoramyx {
          */
         virtual int nbProcesses() = 0;
 
-
-        virtual void start(std::function<void()> runnable)=0;
+        /**
+         * Executes the given runnable as many times as needed by this strategy.
+         *
+         * @param runnable The runnable to execute.
+         */
+        virtual void start(std::function<void()> runnable) = 0;
 
         /**
          * Receives a message.
@@ -79,7 +84,7 @@ namespace Panoramyx {
          *
          * @return The received message.
          */
-        virtual Message *receive(int tag, int src, unsigned long size=PANO_DEFAULT_MESSAGE_SIZE) = 0;
+        virtual Message *receive(int tag, int src, unsigned long size = PANO_DEFAULT_MESSAGE_SIZE) = 0;
 
         /**
          * Sends a message.
@@ -89,8 +94,11 @@ namespace Panoramyx {
          */
         virtual void send(Message *message, int dest) = 0;
 
-
+        /**
+         * Finalizes the communication between the different communicators.
+         */
         virtual void finalize()=0;
+
     };
 
 }

@@ -36,56 +36,58 @@
 
 #define PANO_ANY_SOURCE (-1)
 
+#define PANO_ANY_TAG (-1)
 #define PANO_TAG_RESPONSE 1
 #define PANO_TAG_SOLVE 2
 #define PANO_TAG_CONFIG 4
-#define PANO_ANY_TAG (-1)
 
 #define PANO_DEFAULT_MESSAGE_SIZE 1024
-#define PANO_DEFAULT_RAB 512
 #define PANO_NUMBER_MAX_CHAR 20
 #define PANO_VARIABLE_NAME_MAX_CHAR 20
 
 #define PANO_MESSAGE_INDEX "idx"
-#define PANO_MESSAGE_LOAD "lod"
+#define PANO_MESSAGE_RESET "rst"
+#define PANO_MESSAGE_N_VARIABLES "nv"
+#define PANO_MESSAGE_GET_VARIABLES_MAPPING "vmp"
+#define PANO_MESSAGE_GET_AUXILIARY_VARIABLES "aux"
+#define PANO_MESSAGE_GET_CONSTRAINTS "ctr"
+#define PANO_MESSAGE_DECISION_VARIABLES "dec"
+#define PANO_MESSAGE_VALUE_HEURISTIC_STATIC "vhs"
+#define PANO_MESSAGE_N_CONSTRAINTS "nc"
+#define PANO_MESSAGE_IS_OPTIMIZATION "op?"
+#define PANO_MESSAGE_IS_MINIMIZATION "min"
+#define PANO_MESSAGE_SET_TIMEOUT "t"
+#define PANO_MESSAGE_SET_TIMEOUT_MS "tm"
+#define PANO_MESSAGE_SET_VERBOSITY "v"
+#define PANO_MESSAGE_ADD_SEARCH_LISTENER "adl"
+#define PANO_MESSAGE_SET_LOG_FILE "log"
+#define PANO_MESSAGE_SET_LOG_STREAM "lgs"
+#define PANO_MESSAGE_LOAD_INSTANCE "lod"
 #define PANO_MESSAGE_SOLVE "s"
 #define PANO_MESSAGE_SOLVE_FILENAME "sf"
 #define PANO_MESSAGE_SOLVE_ASSUMPTIONS "sa"
 #define PANO_MESSAGE_INTERRUPT "i"
-#define PANO_MESSAGE_SET_VERBOSITY "v"
-#define PANO_MESSAGE_SET_TIMEOUT "t"
-#define PANO_MESSAGE_SET_TIMEOUT_MS "tm"
-#define PANO_MESSAGE_SET_LOG_FILE "log"
-#define PANO_MESSAGE_N_VARIABLES "nv"
-#define PANO_MESSAGE_N_CONSTRAINTS "nc"
-#define PANO_MESSAGE_END_SEARCH "end"
 #define PANO_MESSAGE_SOLUTION "sol"
 #define PANO_MESSAGE_MAP_SOLUTION "map"
-#define PANO_MESSAGE_RESET "rst"
-#define PANO_MESSAGE_DECISION_VARIABLES "dec"
-#define PANO_MESSAGE_AUX_VAR "aux"
 #define PANO_MESSAGE_CHECK_SOLUTION "chk"
 #define PANO_MESSAGE_CHECK_SOLUTION_ASSIGNMENT "cka"
-#define PANO_MESSAGE_VALUE_HEURISTIC_STATIC "vhs"
+#define PANO_MESSAGE_END_SEARCH "end"
 
 #define PANO_MESSAGE_SATISFIABLE "sat"
 #define PANO_MESSAGE_UNSATISFIABLE "ust"
+#define PANO_MESSAGE_OPTIMUM_FOUND "opt"
 #define PANO_MESSAGE_UNSUPPORTED "usp"
 #define PANO_MESSAGE_UNKNOWN "unk"
-#define PANO_MESSAGE_OPTIMUM_FOUND "opt"
 
-#define PANO_MESSAGE_NEW_BOUND_FOUND "bnd"
 #define PANO_MESSAGE_LOWER_BOUND "low"
 #define PANO_MESSAGE_UPPER_BOUND "upp"
 #define PANO_MESSAGE_LOWER_UPPER_BOUND "lub"
 #define PANO_MESSAGE_GET_CURRENT_BOUND "cur"
 #define PANO_MESSAGE_GET_LOWER_BOUND "lb?"
 #define PANO_MESSAGE_GET_UPPER_BOUND "ub?"
+#define PANO_MESSAGE_NEW_BOUND_FOUND "bnd"
 
-#define PANO_MESSAGE_IS_MINIMIZATION "min"
-#define PANO_MESSAGE_IS_OPTIMIZATION "op?"
-
-#define IS(elt) (elt)
+#define IS(str) (str)
 #define NAME_OF(msg, n) (strncmp((msg)->name, (n), sizeof((msg)->name)) == 0)
 
 namespace Panoramyx {
@@ -100,13 +102,14 @@ namespace Panoramyx {
          * Reads a value from this message.
          *
          * @tparam T The type of the value to read.
-         * @param i The byte index at which to read the value in the message.
+         *
+         * @param index The byte index at which to read the value in the message.
          *
          * @return The read value.
          */
         template<typename T>
-        inline T read(int i = 0) const {
-            return *((const T *) (parameters + i));
+        inline T read(int index = 0) const {
+            return *((const T *) (parameters + index));
         }
 
         /**

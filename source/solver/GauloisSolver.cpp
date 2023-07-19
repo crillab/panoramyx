@@ -144,7 +144,7 @@ namespace Panoramyx {
             this->solve(assumpts, m);
         } else if (strncmp(m->name, PANO_MESSAGE_RESET, sizeof(m->name)) == 0) {
             this->reset();
-        } else if (strncmp(m->name, PANO_MESSAGE_LOAD, sizeof(m->name)) == 0) {
+        } else if (strncmp(m->name, PANO_MESSAGE_LOAD_INSTANCE, sizeof(m->name)) == 0) {
             std::string filename(m->parameters);
             this->loadInstance(filename);
         } else if (strncmp(m->name, PANO_MESSAGE_INTERRUPT, sizeof(m->name)) == 0) {
@@ -203,7 +203,7 @@ namespace Panoramyx {
             this->nConstraints(m);
         }else if(NAME_OF(m,IS(PANO_MESSAGE_DECISION_VARIABLES))){
             this->decisionVariables(m);
-        }else if(NAME_OF(m,IS(PANO_MESSAGE_AUX_VAR))){
+        }else if(NAME_OF(m,IS(PANO_MESSAGE_GET_AUXILIARY_VARIABLES))){
             this->getAuxiliaryVariables(m);
         }else if(NAME_OF(m,IS(PANO_MESSAGE_CHECK_SOLUTION))){
             this->checkSolution(m);

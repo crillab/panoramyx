@@ -43,19 +43,19 @@ using namespace Except;
 using namespace Panoramyx;
 using namespace Universe;
 
-AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm, IAllocationStrategy *allocationStrategy) : communicator(comm),
-                                                                                                                       solvers(),
-                                                                                                                       runningSolvers(0),
-                                                                                                                       allocationStrategy(allocationStrategy),
-                                                                                                                       currentBounds(),
-                                                                                                                       minimization(true),
-                                                                                                                       lowerBound(0),
-                                                                                                                       upperBound(0),
-                                                                                                                       interrupted(false),
-                                                                                                                       solved(0),
-                                                                                                                       result(Universe::UniverseSolverResult::UNKNOWN),
-                                                                                                                       winner(-1),
-                                                                                                                       end(0) {
+AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm, IBoundAllocationStrategy *allocationStrategy) : communicator(comm),
+                                                                                                                            solvers(),
+                                                                                                                            runningSolvers(0),
+                                                                                                                            allocationStrategy(allocationStrategy),
+                                                                                                                            currentBounds(),
+                                                                                                                            minimization(true),
+                                                                                                                            lowerBound(0),
+                                                                                                                            upperBound(0),
+                                                                                                                            interrupted(false),
+                                                                                                                            solved(0),
+                                                                                                                            result(Universe::UniverseSolverResult::UNKNOWN),
+                                                                                                                            winner(-1),
+                                                                                                                            end(0) {
     currentBounds.push_back(0);
 }
 

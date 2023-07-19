@@ -60,11 +60,18 @@ namespace Panoramyx {
         virtual void setSolver(Universe::IUniverseSolver *solver) = 0;
 
         /**
-         * Sets the consistencyChecker used to check the consistency of the generated cubes.
+         * Sets the consistency checker used to check the consistency of the generated cubes.
          *
          * @param checker The consistency checker to set.
          */
         virtual void setConsistencyChecker(Panoramyx::IConsistencyChecker *checker) = 0;
+
+        /**
+         * Loads teh instance to solve.
+         *
+         * @param filename The path of the file containing the instance to solve.
+         */
+        virtual void loadInstance(const std::string &filename) = 0;
 
         /**
          * Generates the cubes representing the assumptions to distribute among the
@@ -74,7 +81,6 @@ namespace Panoramyx {
          */
         virtual Panoramyx::Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> *generateCubes() = 0;
 
-        virtual void loadInstance(const std::string &filename)=0;
     };
 
 }
