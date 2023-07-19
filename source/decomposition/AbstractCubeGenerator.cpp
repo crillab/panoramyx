@@ -30,30 +30,27 @@
  */
 
 #include <fstream>
-#include "crillab-panoramyx/decomposition/AbstractCubeGenerator.hpp"
-#include <crillab-universe/csp/IUniverseCspSolver.hpp>
-#include <crillab-autis/core/Scanner.hpp>
-#include <crillab-autis/xcsp/AutisXcspParserAdapter.hpp>
+
+#include <crillab-panoramyx/decomposition/AbstractCubeGenerator.hpp>
+
+using namespace std;
 
 using namespace Panoramyx;
 using namespace Universe;
 
-AbstractCubeGenerator::AbstractCubeGenerator(int nbCubesMax) : nbCubesMax(nbCubesMax) {}
+AbstractCubeGenerator::AbstractCubeGenerator(int nbCubesMax) :
+        nbCubesMax(nbCubesMax) {
+    // Nothing to do: everything is already initialized.
+}
 
-void AbstractCubeGenerator::setSolver(IUniverseSolver *s) {
-    this->solver = s;
+void AbstractCubeGenerator::setSolver(IUniverseSolver *solver) {
+    this->solver = solver;
 }
 
 void AbstractCubeGenerator::setConsistencyChecker(IConsistencyChecker *checker) {
     this->consistencyChecker = checker;
 }
 
-void AbstractCubeGenerator::loadInstance(const std::string &filename) {
-//    std::ifstream input(filename);
-//    Autis::Scanner scanner(input);
-//    auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver*>(solver));
-//    parser->parse();
+void AbstractCubeGenerator::loadInstance(const string &filename) {
     solver->loadInstance(filename);
 }
-
-

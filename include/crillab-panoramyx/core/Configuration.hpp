@@ -32,9 +32,9 @@
 #ifndef PANORAMYX_CONFIGURATION_HPP
 #define PANORAMYX_CONFIGURATION_HPP
 
+#include <any>
 #include <string>
 #include <unordered_map>
-#include <any>
 
 namespace Panoramyx {
 
@@ -53,6 +53,17 @@ namespace Panoramyx {
     public:
 
         /**
+         * Sets the configuration value for the given key.
+         *
+         * @param key The key to set the value of.
+         * @param value The value to set.
+         */
+        template <typename T>
+        void set(const std::string &key,T value){
+            map[key] = value;
+        }
+
+        /**
          * Gives the configured value for the given key.
          *
          * @param key The key to get the value of.
@@ -61,14 +72,8 @@ namespace Panoramyx {
          */
          template <typename T>
          T get(const std::string &key){
-            return std::any_cast<T>(map[key]);
+             return std::any_cast<T>(map[key]);
          }
-
-        template <typename T>
-        void set(const std::string &key,T value){
-            map[key]=value;
-        }
-
 
     };
 

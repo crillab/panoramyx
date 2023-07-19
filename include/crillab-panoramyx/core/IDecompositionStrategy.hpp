@@ -19,7 +19,7 @@
  */
 
 /**
- * @file ISolverConfigurationStrategy.hpp
+ * @file IDecompositionStrategy.hpp
  * @brief Defines a strategy for decomposing problems.
  *
  * @author Thibault Falque

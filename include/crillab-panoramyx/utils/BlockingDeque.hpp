@@ -58,7 +58,7 @@ namespace Panoramyx {
         std::deque<E> deque;
 
         /**
-         * The mutex ensuring that only one thread can access to deque at a given time.
+         * The mutex ensuring that only one thread can access to the queue at a given time.
          */
         std::mutex mutex;
 

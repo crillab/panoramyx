@@ -29,7 +29,7 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include "crillab-panoramyx/core/NullConsistencyChecker.hpp"
+#include <crillab-panoramyx/core/NullConsistencyChecker.hpp>
 
 using namespace std;
 

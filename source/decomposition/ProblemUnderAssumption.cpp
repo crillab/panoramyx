@@ -1,45 +1,67 @@
 /**
-* @date 28/06/23
-* @file ProblemUnderAssumption.cpp
-* @brief 
-* @author Thibault Falque
-* @author Romain Wallon 
-* @license This project is released under the GNU LGPL3 License.
-*/
-
-
-#include "crillab-panoramyx/decomposition/ProblemUnderAssumption.hpp"
-
-namespace Panoramyx {
+ * PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY.
+ * Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
+ */
 
 /**
-@class ProblemUnderAssumption
-@brief Definition of the class ProblemUnderAssumption. 
-@file ProblemUnderAssumption.cpp
-*/
-    ProblemUnderAssumption::ProblemUnderAssumption(
-            const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts, long score) : assumpts(
-            assumpts), score(score) {}
+ * @file ProblemUnderAssumption.cpp
+ * @brief Stores the information regarding a assumptions under which a problem is to be considered.
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @copyright Copyright (c) 2022-2023 - Univ Artois & CNRS & Exakis Nelite.
+ * @license This project is released under the GNU LGPL3 License.
+ */
 
-    const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &ProblemUnderAssumption::getAssumpts() const {
-        return assumpts;
-    }
+#include <crillab-panoramyx/decomposition/ProblemUnderAssumption.hpp>
 
-    bool ProblemUnderAssumption::operator<(const ProblemUnderAssumption &rhs) const {
-        return score < rhs.score;
-    }
+using namespace std;
 
-    bool ProblemUnderAssumption::operator>(const ProblemUnderAssumption &rhs) const {
-        return rhs < *this;
-    }
+using namespace Panoramyx;
+using namespace Universe;
 
-    bool ProblemUnderAssumption::operator<=(const ProblemUnderAssumption &rhs) const {
-        return !(rhs < *this);
-    }
+ProblemUnderAssumption::ProblemUnderAssumption(const vector<UniverseAssumption<BigInteger>> &assumptions, long score) :
+        assumptions(assumptions),
+        score(score) {
+    // Nothing to do: everything is already initialized.
+}
 
-    bool ProblemUnderAssumption::operator>=(const ProblemUnderAssumption &rhs) const {
-        return !(*this < rhs);
-    }
+const vector<UniverseAssumption<BigInteger>> &ProblemUnderAssumption::getAssumptions() const {
+    return assumptions;
+}
 
+long ProblemUnderAssumption::getScore() const {
+    return score;
+}
 
-} // Panoramyx
+bool ProblemUnderAssumption::operator<(const ProblemUnderAssumption &rhs) const {
+    return score < rhs.score;
+}
+
+bool ProblemUnderAssumption::operator>(const ProblemUnderAssumption &rhs) const {
+    return rhs < *this;
+}
+
+bool ProblemUnderAssumption::operator<=(const ProblemUnderAssumption &rhs) const {
+    return !(rhs < *this);
+}
+
+bool ProblemUnderAssumption::operator>=(const ProblemUnderAssumption &rhs) const {
+    return !(*this < rhs);
+}

@@ -29,15 +29,16 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include "crillab-panoramyx/decomposition/LexicographicCubeGenerator.hpp"
-#include "crillab-panoramyx/decomposition/StreamLexicographicCube.hpp"
+#include <crillab-panoramyx/decomposition/LexicographicCubeGenerator.hpp>
+#include <crillab-panoramyx/decomposition/StreamLexicographicCube.hpp>
 
+using namespace std;
 
 using namespace Panoramyx;
 using namespace Universe;
-using namespace std;
 
-LexicographicCubeGenerator::LexicographicCubeGenerator(int nbCubesMax): Panoramyx::AbstractCubeGenerator(nbCubesMax) {
+LexicographicCubeGenerator::LexicographicCubeGenerator(int nbCubesMax) :
+        Panoramyx::AbstractCubeGenerator(nbCubesMax) {
     // Nothing to do: everything is already initialized.
 }
 

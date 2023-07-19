@@ -47,7 +47,8 @@ namespace Panoramyx {
      * The StreamLexicographicCube provides a stream of lexicographic cubes, that are
      * generated on the fly as the stream is being iterated over.
      */
-    class StreamLexicographicCube : public Panoramyx::Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> {
+    class StreamLexicographicCube :
+            public Panoramyx::Stream<std::vector<Universe::UniverseAssumption<Universe::BigInteger>>> {
 
     private:
 

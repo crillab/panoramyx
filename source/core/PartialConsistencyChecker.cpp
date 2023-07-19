@@ -29,7 +29,7 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include "crillab-panoramyx/core/PartialConsistencyChecker.hpp"
+#include <crillab-panoramyx/core/PartialConsistencyChecker.hpp>
 
 using namespace std;
 
@@ -43,11 +43,11 @@ PartialConsistencyChecker::PartialConsistencyChecker(IUniverseSolver *solver) :
 
 bool PartialConsistencyChecker::checkPartial(const vector<UniverseAssumption<BigInteger>> &cube) {
     solver->reset();
-    auto result = solver->solve(cube);
-    return result != Universe::UniverseSolverResult::UNSATISFIABLE;
+    UniverseSolverResult result = solver->solve(cube);
+    return result != UniverseSolverResult::UNSATISFIABLE;
 }
 
-bool PartialConsistencyChecker::checkFinal(const std::vector<UniverseAssumption<BigInteger>> &) {
+bool PartialConsistencyChecker::checkFinal(const vector<UniverseAssumption<BigInteger>> &) {
     // Final checks are not needed.
     return true;
 }

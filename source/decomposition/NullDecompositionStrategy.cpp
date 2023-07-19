@@ -29,7 +29,7 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include "crillab-panoramyx/decomposition/NullDecompositionStrategy.hpp"
+#include <crillab-panoramyx/decomposition/NullDecompositionStrategy.hpp>
 
 using namespace Panoramyx;
 using namespace Universe;

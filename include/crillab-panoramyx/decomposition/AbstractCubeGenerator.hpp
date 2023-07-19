@@ -32,6 +32,8 @@
 #ifndef PANORAMYX_ABSTRACTCUBEGENERATOR_HPP
 #define PANORAMYX_ABSTRACTCUBEGENERATOR_HPP
 
+#include <crillab-universe/core/IUniverseSolver.hpp>
+
 #include "../core/IConsistencyChecker.hpp"
 #include "../solver/ICubeGenerator.hpp"
 
@@ -50,7 +52,7 @@ namespace Panoramyx {
         Universe::IUniverseSolver *solver;
 
         /**
-         * The consistency checker used to check whether the generated cube are consistent.
+         * The consistency checker used to check whether the generated cubes are consistent.
          */
         Panoramyx::IConsistencyChecker *consistencyChecker;
 
@@ -58,8 +60,14 @@ namespace Panoramyx {
          * The maximum number of cubes to generate.
          */
         int nbCubesMax;
+
     public:
 
+        /**
+         * Creates a new AbstractCubeGenerator.
+         *
+         * @param nbCubesMax The maximum number of cubes to generate.
+         */
         explicit AbstractCubeGenerator(int nbCubesMax);
 
         /**
@@ -75,13 +83,19 @@ namespace Panoramyx {
         void setSolver(Universe::IUniverseSolver *solver) override;
 
         /**
-         * Sets the consistency checker used to check whether the generated cube are consistent.
+         * Sets the consistency checker used to check whether the generated cubes are consistent.
          *
          * @param checker The consistency checker to set.
          */
         void setConsistencyChecker(Panoramyx::IConsistencyChecker *checker) override;
 
+        /**
+         * Loads the instance to generate cubes from.
+         *
+         * @param filename The file to load the instance from.
+         */
         void loadInstance(const std::string &filename) override;
+
     };
 
 }

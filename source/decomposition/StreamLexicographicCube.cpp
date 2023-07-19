@@ -29,10 +29,11 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include "crillab-panoramyx/decomposition/StreamLexicographicCube.hpp"
-#include <loguru/loguru.hpp>
-using namespace Universe;
+#include <crillab-panoramyx/decomposition/StreamLexicographicCube.hpp>
+
 using namespace std;
+
+using namespace Universe;
 using namespace Panoramyx;
 
 StreamLexicographicCube::StreamLexicographicCube(const map<string, IUniverseVariable *> &mapping,
@@ -85,10 +86,6 @@ void StreamLexicographicCube::generateFirst() {
         }
     }
 
-    for(auto& c:current){
-        DLOG_F(INFO,"%s = %lld",c.getVariableId().c_str(),c.getValue());
-    }
-
     if (!consistencyChecker->checkPartial(current) || !consistencyChecker->checkFinal(current)) {
         // The first cube is inconsistent, we must generate another one.
         generateNext();
@@ -109,11 +106,7 @@ void StreamLexicographicCube::generateNext() {
 
         // Assuming the next value for the current variable.
         assume(varIndex, indexesCurrentValues[varIndex] + 1);
-        for(auto& c:current){
-            DLOG_F(INFO,"%s = %lld",c.getVariableId().c_str(),c.getValue());
-        }
         partiallyConsistent = consistencyChecker->checkPartial(current);
-
 
         // Completing the cube with the remaining variables.
         for (varIndex++; partiallyConsistent && (varIndex < variables.size()); varIndex++) {
@@ -129,11 +122,6 @@ void StreamLexicographicCube::generateNext() {
                 current.pop_back();
             }
         }
-
-        for(auto& c:current){
-            DLOG_F(INFO,"%s = %lld",c.getVariableId().c_str(),c.getValue());
-        }
-
     } while (!partiallyConsistent || !consistencyChecker->checkFinal(current));
 }
 
