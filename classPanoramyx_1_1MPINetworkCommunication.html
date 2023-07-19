@@ -105,10 +105,10 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a2de4c072564b49b9d3be08336786982e" class="m-doc">nbProcesses</a>(</span><span class="m-doc-wrap">) -&gt; int <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
-            <dt id="a2e15a101cc80f7c111f85b49b624b74b">
-              <span class="m-doc-wrap-bumper">void <a href="#a2e15a101cc80f7c111f85b49b624b74b" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-flat m-warning">override</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a2e15a101cc80f7c111f85b49b624b74b" class="m-doc">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#aeea7f818c841fbab0edd33dec26c5944" class="m-doc">receive</a>(</span><span class="m-doc-wrap">int tag,
               int src,
@@ -120,10 +120,10 @@
               int dest) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
-            <dt id="a1ce77d62281c226e84a31be3382553a9">
-              <span class="m-doc-wrap-bumper">void <a href="#a1ce77d62281c226e84a31be3382553a9" class="m-doc-self">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a1ce77d62281c226e84a31be3382553a9" class="m-doc">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section>
@@ -175,6 +175,23 @@
               </tfoot>
             </table>
 <p>Gives the number of processes that are currently communicating.</p>
+          </div></section>
+          <section class="m-doc-details" id="a2e15a101cc80f7c111f85b49b624b74b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />MPINetworkCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a2e15a101cc80f7c111f85b49b624b74b" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">runnable</td>
+                  <td>The runnable to execute.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Executes the given runnable as many times as needed by this strategy.</p>
           </div></section>
           <section class="m-doc-details" id="aeea7f818c841fbab0edd33dec26c5944"><div>
             <h3>
@@ -230,6 +247,12 @@
               </tbody>
             </table>
 <p>Sends a message.</p>
+          </div></section>
+          <section class="m-doc-details" id="a1ce77d62281c226e84a31be3382553a9"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />MPINetworkCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1ce77d62281c226e84a31be3382553a9" class="m-doc-self">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+<p>Finalizes the communication between the different communicators.</p>
           </div></section>
         </section>
       </div>

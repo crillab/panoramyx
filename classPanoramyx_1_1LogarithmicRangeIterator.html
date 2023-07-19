@@ -52,7 +52,6 @@
           <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>LogarithmicRangeIterator <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="LogarithmicRangeIterator_8hpp.html">&lt;LogarithmicRangeIterator.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -67,6 +66,7 @@
             </li>
           </ul>
         </div>
+<p>The <a href="classPanoramyx_1_1LogarithmicRangeIterator.html" class="m-doc">LogarithmicRangeIterator</a> defines an iterator over an interval that applies a logarithmic step between elements.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
@@ -80,17 +80,17 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a70c20218382acac11136f72dcd4b4382">
-              <span class="m-doc-wrap-bumper"><a href="#a70c20218382acac11136f72dcd4b4382" class="m-doc-self">LogarithmicRangeIterator</a>(</span><span class="m-doc-wrap">Universe::BigInteger min,
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a70c20218382acac11136f72dcd4b4382" class="m-doc">LogarithmicRangeIterator</a>(</span><span class="m-doc-wrap">Universe::BigInteger min,
               Universe::BigInteger max,
               int numberOfSteps,
               bool increasing = true)</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a79e7d0be25f67d8fd4dcc0bad49fa320">
-              <span class="m-doc-wrap-bumper"><a href="#a79e7d0be25f67d8fd4dcc0bad49fa320" class="m-doc-self">~LogarithmicRangeIterator</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a79e7d0be25f67d8fd4dcc0bad49fa320" class="m-doc">~LogarithmicRangeIterator</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pub-methods">
@@ -109,14 +109,52 @@
         <section id="pro-methods">
           <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
-            <dt id="ad50545a722ec1ba3d574295606f8eb84">
-              <span class="m-doc-wrap-bumper">auto <a href="#ad50545a722ec1ba3d574295606f8eb84" class="m-doc-self">computeNextValue</a>(</span><span class="m-doc-wrap">int step) -&gt; long double <span class="m-label m-flat m-warning">virtual</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ad50545a722ec1ba3d574295606f8eb84" class="m-doc">computeNextValue</a>(</span><span class="m-doc-wrap">int step) -&gt; long double <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a70c20218382acac11136f72dcd4b4382"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />LogarithmicRangeIterator::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a70c20218382acac11136f72dcd4b4382" class="m-doc-self">LogarithmicRangeIterator</a>(</span><span class="m-doc-wrap">Universe::BigInteger min,
+              Universe::BigInteger max,
+              int numberOfSteps,
+              bool increasing = true)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">min</td>
+                  <td>The minimum value of the interval on which the iteration is performed (inclusive).</td>
+                </tr>
+                <tr>
+                  <td>max</td>
+                  <td>The maximum value of the interval on which the iteration is performed (exclusive).</td>
+                </tr>
+                <tr>
+                  <td>numberOfSteps</td>
+                  <td>The number of steps for the iteration.</td>
+                </tr>
+                <tr>
+                  <td>increasing</td>
+                  <td>Whether the step is increasing.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Creates a new <a href="classPanoramyx_1_1LogarithmicRangeIterator.html" class="m-doc">LogarithmicRangeIterator</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="a79e7d0be25f67d8fd4dcc0bad49fa320"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />LogarithmicRangeIterator::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a79e7d0be25f67d8fd4dcc0bad49fa320" class="m-doc-self">~LogarithmicRangeIterator</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span> <span class="m-label m-info">defaulted</span></span></span>
+            </h3>
+<p>Destroys this <a href="classPanoramyx_1_1LogarithmicRangeIterator.html" class="m-doc">LogarithmicRangeIterator</a>.</p>
+          </div></section>
           <section class="m-doc-details" id="a9c88241eff16d96dd25fb9c1b8e63760"><div>
             <h3>
               <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />LogarithmicRangeIterator::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9c88241eff16d96dd25fb9c1b8e63760" class="m-doc-self">hasNext</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-warning">override</span></span></span>
@@ -144,6 +182,23 @@
               </tfoot>
             </table>
 <p>Gives the next element in this stream. The behavior of this method is undefined if <a href="classPanoramyx_1_1LogarithmicRangeIterator.html#a9c88241eff16d96dd25fb9c1b8e63760" class="m-doc">hasNext()</a> returned false.</p>
+          </div></section>
+          <section class="m-doc-details" id="ad50545a722ec1ba3d574295606f8eb84"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">long double Panoramyx::<wbr />LogarithmicRangeIterator::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad50545a722ec1ba3d574295606f8eb84" class="m-doc-self">computeNextValue</a>(</span><span class="m-doc-wrap">int step) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">step</td>
+                  <td>The index of the step.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Computes the next value of the iteration.</p>
           </div></section>
         </section>
       </div>

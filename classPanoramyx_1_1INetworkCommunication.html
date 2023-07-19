@@ -65,7 +65,7 @@
             </li>
           </ul>
         </div>
-<p>The <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a> defines en interface for a strategy allowing to exchange information through the network. This interface is designed to allow communication using various approaches, such as, e.g., MPI, UNIX pipes, etc.</p>
+<p>The <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a> defines en interface for a strategy allowing to exchange information through the network. This interface is designed to allow communication using various approaches, such as, e.g., MPI, threads, UNIX pipes, etc.</p>
         <section id="derived-classes">
           <h2><a href="#derived-classes">Derived classes</a></h2>
           <dl class="m-doc">
@@ -76,7 +76,7 @@
             <dt>
               class <a href="classPanoramyx_1_1ThreadCommunication.html" class="m-doc">ThreadCommunication</a>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="typeless-methods">
@@ -99,10 +99,10 @@
               <span class="m-doc-wrap-bumper">auto <a href="#af1686ba5f66ba4ae745add4233e48f7a" class="m-doc">nbProcesses</a>(</span><span class="m-doc-wrap">) -&gt; int <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd></dd>
-            <dt id="ada3ffc40428f3251ab988a25b2811494">
-              <span class="m-doc-wrap-bumper">void <a href="#ada3ffc40428f3251ab988a25b2811494" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ada3ffc40428f3251ab988a25b2811494" class="m-doc">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#ac655bfd1e5aed6424685e5bf4cc3736d" class="m-doc">receive</a>(</span><span class="m-doc-wrap">int tag,
               int src,
@@ -114,10 +114,10 @@
               int dest) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd></dd>
-            <dt id="a6da89118523467b5d858cb9602e544b9">
-              <span class="m-doc-wrap-bumper">void <a href="#a6da89118523467b5d858cb9602e544b9" class="m-doc-self">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a6da89118523467b5d858cb9602e544b9" class="m-doc">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section>
@@ -155,6 +155,23 @@
               </tfoot>
             </table>
 <p>Gives the number of processes that are currently communicating.</p>
+          </div></section>
+          <section class="m-doc-details" id="ada3ffc40428f3251ab988a25b2811494"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />INetworkCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ada3ffc40428f3251ab988a25b2811494" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-warning">pure virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">runnable</td>
+                  <td>The runnable to execute.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Executes the given runnable as many times as needed by this strategy.</p>
           </div></section>
           <section class="m-doc-details" id="ac655bfd1e5aed6424685e5bf4cc3736d"><div>
             <h3>
@@ -210,6 +227,12 @@
               </tbody>
             </table>
 <p>Sends a message.</p>
+          </div></section>
+          <section class="m-doc-details" id="a6da89118523467b5d858cb9602e544b9"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />INetworkCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6da89118523467b5d858cb9602e544b9" class="m-doc-self">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">pure virtual</span></span></span>
+            </h3>
+<p>Finalizes the communication between the different communicators.</p>
           </div></section>
         </section>
       </div>

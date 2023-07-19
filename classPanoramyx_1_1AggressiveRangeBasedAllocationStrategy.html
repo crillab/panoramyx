@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Panoramyx::NetworkCommunicationFactory class | crillab-panoramyx</title>
+  <title>Panoramyx::AggressiveRangeBasedAllocationStrategy class | crillab-panoramyx</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -49,8 +49,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>NetworkCommunicationFactory <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="NetworkCommunicationFactory_8hpp.html">&lt;NetworkCommunicationFactory.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>AggressiveRangeBasedAllocationStrategy <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="AggressiveRangeBasedAllocationStrategy_8hpp.html">&lt;AggressiveRangeBasedAllocationStrategy.hpp&gt;</a></div>
         </h1>
         <div class="m-block m-default">
           <h3>Contents</h3>
@@ -58,19 +58,32 @@
             <li>
               Reference
               <ul>
+                <li><a href="#base-classes">Base classes</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
-<p>The <a href="classPanoramyx_1_1NetworkCommunicationFactory.html" class="m-doc">NetworkCommunicationFactory</a> allows to instantiate implementations of <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>.</p>
+<p>The <a href="classPanoramyx_1_1AggressiveRangeBasedAllocationStrategy.html" class="m-doc">AggressiveRangeBasedAllocationStrategy</a> defines a bound allocation that divides a range of bounds into several sub-intervals and aggressively assigns these bounds to the solvers.</p>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classPanoramyx_1_1IBoundAllocationStrategy.html" class="m-doc">IBoundAllocationStrategy</a>
+            </dt>
+            <dd></dd>
+          </dl>
+        </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper"><a href="#aa4f9c3404c7be550bcd1839794a23bbb" class="m-doc">NetworkCommunicationFactory</a>(</span><span class="m-doc-wrap">int* argc,
-              char*** argv)</span>
+              <span class="m-doc-wrap-bumper"><a href="#a158ab01209f481d2ce0a6c629ba9534c" class="m-doc">AggressiveRangeBasedAllocationStrategy</a>(</span><span class="m-doc-wrap">std::function&lt;<a href="classPanoramyx_1_1Stream.html" class="m-doc">Stream</a>&lt;Universe::BigInteger&gt;*(Universe::BigInteger, Universe::BigInteger, int)&gt; rangeIterator) <span class="m-label m-flat m-info">explicit</span> </span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a582908adbd8b93c03627d483211ee372" class="m-doc">~AggressiveRangeBasedAllocationStrategy</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd></dd>
           </dl>
@@ -79,21 +92,22 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a77e7ec3f8bbf2d9ae504ba963a06e55d" class="m-doc">createMPINetworkCommunication</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>*</span>
+              <span class="m-doc-wrap-bumper">void <a href="#a9a76b5c9ac9a37f73fdc9e0b2f53899b" class="m-doc">setMinimization</a>(</span><span class="m-doc-wrap">bool min) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a479f5c5befc6b23b5294f8485f226d6a" class="m-doc">createThreadCommunication</a>(</span><span class="m-doc-wrap">int nbThreads) -&gt; <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>*</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a544385796fdd9044ebfdd8d08f29cae4" class="m-doc">computeBoundAllocation</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::BigInteger&gt;&amp; currentBounds,
+              const Universe::BigInteger&amp; currentMin,
+              const Universe::BigInteger&amp; currentMax) -&gt; std::vector&lt;Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="aa4f9c3404c7be550bcd1839794a23bbb"><div>
+          <section class="m-doc-details" id="a158ab01209f481d2ce0a6c629ba9534c"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />NetworkCommunicationFactory::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aa4f9c3404c7be550bcd1839794a23bbb" class="m-doc-self">NetworkCommunicationFactory</a>(</span><span class="m-doc-wrap">int* argc,
-              char*** argv)</span></span>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />AggressiveRangeBasedAllocationStrategy::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a158ab01209f481d2ce0a6c629ba9534c" class="m-doc-self">AggressiveRangeBasedAllocationStrategy</a>(</span><span class="m-doc-wrap">std::function&lt;<a href="classPanoramyx_1_1Stream.html" class="m-doc">Stream</a>&lt;Universe::BigInteger&gt;*(Universe::BigInteger, Universe::BigInteger, int)&gt; rangeIterator) <span class="m-label m-info">explicit</span> </span></span>
             </h3>
             <table class="m-table m-fullwidth m-flat">
               <thead>
@@ -101,34 +115,22 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">argc</td>
-                  <td>The pointer to the number of arguments given to the main function.</td>
-                </tr>
-                <tr>
-                  <td>argv</td>
-                  <td>The pointer to the array of arguments given to the main function.</td>
+                  <td style="width: 1%">rangeIterator</td>
+                  <td>The factory allowing to instantiate the iterator over the range.</td>
                 </tr>
               </tbody>
             </table>
-<p>Creates a new <a href="classPanoramyx_1_1NetworkCommunicationFactory.html" class="m-doc">NetworkCommunicationFactory</a>.</p>
+<p>Creates a new <a href="classPanoramyx_1_1AggressiveRangeBasedAllocationStrategy.html" class="m-doc">AggressiveRangeBasedAllocationStrategy</a>.</p>
           </div></section>
-          <section class="m-doc-details" id="a77e7ec3f8bbf2d9ae504ba963a06e55d"><div>
+          <section class="m-doc-details" id="a582908adbd8b93c03627d483211ee372"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* Panoramyx::<wbr />NetworkCommunicationFactory::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a77e7ec3f8bbf2d9ae504ba963a06e55d" class="m-doc-self">createMPINetworkCommunication</a>(</span><span class="m-doc-wrap">)</span></span>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />AggressiveRangeBasedAllocationStrategy::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a582908adbd8b93c03627d483211ee372" class="m-doc-self">~AggressiveRangeBasedAllocationStrategy</a>(</span><span class="m-doc-wrap">) <span class="m-label m-info">defaulted</span></span></span>
             </h3>
-            <table class="m-table m-fullwidth m-flat">
-              <tfoot>
-                <tr>
-                  <th style="width: 1%">Returns</th>
-                  <td>The created instance.</td>
-                </tr>
-              </tfoot>
-            </table>
-<p>Creates an instance of <a href="classPanoramyx_1_1MPINetworkCommunication.html" class="m-doc">MPINetworkCommunication</a>.</p>
+<p>Destroys this <a href="classPanoramyx_1_1AggressiveRangeBasedAllocationStrategy.html" class="m-doc">AggressiveRangeBasedAllocationStrategy</a>.</p>
           </div></section>
-          <section class="m-doc-details" id="a479f5c5befc6b23b5294f8485f226d6a"><div>
+          <section class="m-doc-details" id="a9a76b5c9ac9a37f73fdc9e0b2f53899b"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* Panoramyx::<wbr />NetworkCommunicationFactory::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a479f5c5befc6b23b5294f8485f226d6a" class="m-doc-self">createThreadCommunication</a>(</span><span class="m-doc-wrap">int nbThreads)</span></span>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AggressiveRangeBasedAllocationStrategy::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9a76b5c9ac9a37f73fdc9e0b2f53899b" class="m-doc-self">setMinimization</a>(</span><span class="m-doc-wrap">bool min) <span class="m-label m-warning">override</span></span></span>
             </h3>
             <table class="m-table m-fullwidth m-flat">
               <thead>
@@ -136,18 +138,45 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">nbThreads</td>
-                  <td>The number of threads to run.</td>
+                  <td style="width: 1%">min</td>
+                  <td>Whether the problem is a minimization problem.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets whether the problem to solve is a minimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="a544385796fdd9044ebfdd8d08f29cae4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::vector&lt;Universe::BigInteger&gt; Panoramyx::<wbr />AggressiveRangeBasedAllocationStrategy::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a544385796fdd9044ebfdd8d08f29cae4" class="m-doc-self">computeBoundAllocation</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::BigInteger&gt;&amp; currentBounds,
+              const Universe::BigInteger&amp; currentMin,
+              const Universe::BigInteger&amp; currentMax) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">currentBounds</td>
+                  <td>The current bounds that are assigned to the solvers.</td>
+                </tr>
+                <tr>
+                  <td>currentMin</td>
+                  <td>The current minimum bound found by one of the solvers.</td>
+                </tr>
+                <tr>
+                  <td>currentMax</td>
+                  <td>The current maximum bound found by one of the solvers.</td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
                   <th>Returns</th>
-                  <td>The created instance.</td>
+                  <td>The new vector of bounds.</td>
                 </tr>
               </tfoot>
             </table>
-<p>Creates an instance of <a href="classPanoramyx_1_1ThreadCommunication.html" class="m-doc">ThreadCommunication</a>.</p>
+<p>Computes the bound allocation to apply. Identical bounds means the previous bound should not be updated. Bounds equal to the current maximum should be ignored (there is not enough bounds for all solvers).</p>
           </div></section>
         </section>
       </div>

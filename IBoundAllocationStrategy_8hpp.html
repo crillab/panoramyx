@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Panoramyx::RangeBaseAllocationStrategy class | crillab-panoramyx</title>
+  <title>crillab-panoramyx/optim/decomposition/IBoundAllocationStrategy.hpp file | crillab-panoramyx</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -49,54 +49,36 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>RangeBaseAllocationStrategy <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="RangeBaseAllocationStrategy_8hpp.html">&lt;RangeBaseAllocationStrategy.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="dir_ae3cef7cb587072333a3bfd49a486b99.html">crillab-panoramyx</a>/</span><span class="m-breadcrumb"><a href="dir_0aae0d8c03673f62ecc4a5fef01019cf.html">optim</a>/</span><span class="m-breadcrumb"><a href="dir_17c4ba903c99f032292c1359b028003e.html">decomposition</a>/</span>IBoundAllocationStrategy.hpp <span class="m-thin">file</span>
         </h1>
-        <p><span></span></p>
+        <p>Defines a strategy for allocating bounds for optimization problems.</p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#base-classes">Base classes</a></li>
-                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#namespaces">Namespaces</a></li>
+                <li><a href="#nested-classes">Classes</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="base-classes">
-          <h2><a href="#base-classes">Base classes</a></h2>
+<p>PANORAMYX - Programming pArallel coNstraint sOlveRs mAde aMazingly easY. Copyright (c) 2022-2023 - Univ Artois &amp; CNRS &amp; Exakis Nelite. All rights reserved.</p><p>This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.</p><p>This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.</p><p>You should have received a copy of the GNU Lesser General Public License along with this library. If not, see <a href=".html" class="m-doc">http:/<wbr />/<wbr />www.gnu.org/<wbr />licenses</a>.</p><aside class="m-note m-default"><h4>Author</h4><p>Thibault Falque</p><p>Romain Wallon</p></aside><aside class="m-note m-default"><h4>Copyright</h4><p>Copyright (c) 2022-2023 - Univ Artois &amp; CNRS &amp; Exakis Nelite. @license This project is released under the GNU LGPL3 License.</p></aside>
+        <section id="namespaces">
+          <h2><a href="#namespaces">Namespaces</a></h2>
+          <dl class="m-doc">
+            <dt>namespace <a href="namespacePanoramyx.html" class="m-doc">Panoramyx</a></dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classPanoramyx_1_1IAllocationStrategy.html" class="m-doc">IAllocationStrategy</a>
+              class <a href="classPanoramyx_1_1IBoundAllocationStrategy.html" class="m-doc">Panoramyx::IBoundAllocationStrategy</a>
             </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="typeless-methods">
-          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
-          <dl class="m-doc">
-            <dt id="a65a42b996acaa125287a29c526c2e732">
-              <span class="m-doc-wrap-bumper"><a href="#a65a42b996acaa125287a29c526c2e732" class="m-doc-self">RangeBaseAllocationStrategy</a>(</span><span class="m-doc-wrap">std::function&lt;<a href="classPanoramyx_1_1Stream.html" class="m-doc">Stream</a>&lt;Universe::BigInteger&gt;*(Universe::BigInteger, Universe::BigInteger, int)&gt; rangeIterator) <span class="m-label m-flat m-info">explicit</span> </span>
-            </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
-          <dl class="m-doc">
-            <dt id="a8729d6f78e70657cf69b79778f17c305">
-              <span class="m-doc-wrap-bumper">auto <a href="#a8729d6f78e70657cf69b79778f17c305" class="m-doc-self">computeBoundAllocation</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::BigInteger&gt;&amp; currentBounds,
-              const Universe::BigInteger&amp; currentMin,
-              const Universe::BigInteger&amp; currentMax) -&gt; std::vector&lt;Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a68f3c3cfadea63b5f4658261d3ca65b1">
-              <span class="m-doc-wrap-bumper">void <a href="#a68f3c3cfadea63b5f4658261d3ca65b1" class="m-doc-self">setMinimization</a>(</span><span class="m-doc-wrap">bool min) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
       </div>

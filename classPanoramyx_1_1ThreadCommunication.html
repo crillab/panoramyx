@@ -52,7 +52,6 @@
           <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>ThreadCommunication <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="ThreadCommunication_8hpp.html">&lt;ThreadCommunication.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -66,6 +65,7 @@
             </li>
           </ul>
         </div>
+<p>The <a href="classPanoramyx_1_1ThreadCommunication.html" class="m-doc">ThreadCommunication</a> is an implementation of <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a> that relies on threads to run different operations in parallel and uses blocking queues to communicate between threads.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
@@ -78,14 +78,14 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="a6e456a5d1d5dec71f46b74039c5a22d6">
-              <span class="m-doc-wrap-bumper"><a href="#a6e456a5d1d5dec71f46b74039c5a22d6" class="m-doc-self">ThreadCommunication</a>(</span><span class="m-doc-wrap">int nbThreads) <span class="m-label m-flat m-info">explicit</span> </span>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a6e456a5d1d5dec71f46b74039c5a22d6" class="m-doc">ThreadCommunication</a>(</span><span class="m-doc-wrap">int nbThreads) <span class="m-label m-flat m-info">explicit</span> </span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="ad8c8aa13a5f02b816a059948286869ca">
-              <span class="m-doc-wrap-bumper"><a href="#ad8c8aa13a5f02b816a059948286869ca" class="m-doc-self">~ThreadCommunication</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#ad8c8aa13a5f02b816a059948286869ca" class="m-doc">~ThreadCommunication</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pub-methods">
@@ -100,6 +100,10 @@
             </dt>
             <dd></dd>
             <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#acf683e92cb7ca3a0dd627439b90cd152" class="m-doc">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#ac0868ad9df5e5749f5e5c17c4503bc1d" class="m-doc">receive</a>(</span><span class="m-doc-wrap">int tag,
               int src,
               unsigned long size) -&gt; <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* <span class="m-label m-flat m-warning">override</span></span>
@@ -110,18 +114,37 @@
               int dest) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
-            <dt id="ab901a45fc10a0e28806a7f2dae4887da">
-              <span class="m-doc-wrap-bumper">void <a href="#ab901a45fc10a0e28806a7f2dae4887da" class="m-doc-self">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ab901a45fc10a0e28806a7f2dae4887da" class="m-doc">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="acf683e92cb7ca3a0dd627439b90cd152">
-              <span class="m-doc-wrap-bumper">void <a href="#acf683e92cb7ca3a0dd627439b90cd152" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a6e456a5d1d5dec71f46b74039c5a22d6"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />ThreadCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6e456a5d1d5dec71f46b74039c5a22d6" class="m-doc-self">ThreadCommunication</a>(</span><span class="m-doc-wrap">int nbThreads) <span class="m-label m-info">explicit</span> </span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">nbThreads</td>
+                  <td>The number of threads to run.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Creates a new <a href="classPanoramyx_1_1ThreadCommunication.html" class="m-doc">ThreadCommunication</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="ad8c8aa13a5f02b816a059948286869ca"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />ThreadCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad8c8aa13a5f02b816a059948286869ca" class="m-doc-self">~ThreadCommunication</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span> <span class="m-label m-info">defaulted</span></span></span>
+            </h3>
+<p>Destroys this <a href="classPanoramyx_1_1ThreadCommunication.html" class="m-doc">ThreadCommunication</a>.</p>
+          </div></section>
           <section class="m-doc-details" id="aba3ce32c1f1c85897fd74ba21984b684"><div>
             <h3>
               <span class="m-doc-wrap-bumper">int Panoramyx::<wbr />ThreadCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aba3ce32c1f1c85897fd74ba21984b684" class="m-doc-self">getId</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
@@ -149,6 +172,23 @@
               </tfoot>
             </table>
 <p>Gives the number of processes that are currently communicating.</p>
+          </div></section>
+          <section class="m-doc-details" id="acf683e92cb7ca3a0dd627439b90cd152"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />ThreadCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#acf683e92cb7ca3a0dd627439b90cd152" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">std::function&lt;void()&gt; runnable) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">runnable</td>
+                  <td>The runnable to execute.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Executes the given runnable as many times as needed by this strategy.</p>
           </div></section>
           <section class="m-doc-details" id="ac0868ad9df5e5749f5e5c17c4503bc1d"><div>
             <h3>
@@ -204,6 +244,12 @@
               </tbody>
             </table>
 <p>Sends a message.</p>
+          </div></section>
+          <section class="m-doc-details" id="ab901a45fc10a0e28806a7f2dae4887da"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />ThreadCommunication::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab901a45fc10a0e28806a7f2dae4887da" class="m-doc-self">finalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+<p>Finalizes the communication between the different communicators.</p>
           </div></section>
         </section>
       </div>
