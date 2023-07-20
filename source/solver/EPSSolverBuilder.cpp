@@ -19,8 +19,8 @@
  */
 
 /**
- * @file PortfolioSolverBuilder.cpp
- * @brief The builder for portfolio solvers.
+ * @file EPSSolverBuilder.cpp
+ * @brief The builder for EPS solvers.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -29,16 +29,16 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include <crillab-panoramyx/solver/PortfolioSolverBuilder.hpp>
-#include <crillab-panoramyx/solver/PortfolioSolver.hpp>
+#include <crillab-panoramyx/solver/EPSSolverBuilder.hpp>
+#include <crillab-panoramyx/solver/EPSSolver.hpp>
 
 using namespace Panoramyx;
 
-PortfolioSolverBuilder *PortfolioSolverBuilder::withAllocationStrategy(IBoundAllocationStrategy *allocationStrategy) {
-    this->allocationStrategy = allocationStrategy;
+EPSSolverBuilder *EPSSolverBuilder::withCubeGenerator(ICubeGenerator *cubeGenerator) {
+    this->cubeGenerator = cubeGenerator;
     return this;
 }
 
-AbstractParallelSolver *PortfolioSolverBuilder::build() {
-    return new PortfolioSolver(networkCommunication, allocationStrategy);
+AbstractParallelSolver *EPSSolverBuilder::build() {
+    return new EPSSolver(this->networkCommunication, this->cubeGenerator);
 }

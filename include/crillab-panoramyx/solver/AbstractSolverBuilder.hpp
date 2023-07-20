@@ -29,44 +29,109 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#ifndef PANORAMYX_ABSTRACTBUILDERSOLVER_HPP
-#define PANORAMYX_ABSTRACTBUILDERSOLVER_HPP
+#ifndef PANORAMYX_ABSTRACTSOLVERBUILDER_HPP
+#define PANORAMYX_ABSTRACTSOLVERBUILDER_HPP
 
-#include <vector>
 #include <string>
-#include "../network/INetworkCommunication.hpp"
-#include "../core/Configuration.hpp"
+#include <vector>
+
 #include "AbstractParallelSolver.hpp"
+#include "../core/Configuration.hpp"
+#include "../network/INetworkCommunication.hpp"
 
-namespace Panoramyx{
+namespace Panoramyx {
 
+    /**
+     * The AbstractSolverBuilder is the parent class of all the solvers builders.
+     */
+    class AbstractSolverBuilder {
 
-class AbstractSolverBuilder{
-protected:
-    INetworkCommunication* networkCommunication;
-    std::vector<std::string> jars;
-    std::vector<std::string> javaOptions;
+    protected:
 
-    void buildJVM();
+        /**
+         * The network communication used to communicate between the solvers.
+         */
+        Panoramyx::INetworkCommunication *networkCommunication;
 
-public:
-    AbstractSolverBuilder*withJars(const std::vector<std::string> &jars){
-        this->jars.insert(this->jars.end(),jars.begin(),jars.end());
-        return this;
-    }
-    AbstractSolverBuilder*withJavaOption(const std::vector<std::string> &javaOptions){
-        this->javaOptions.insert(this->javaOptions.end(),javaOptions.begin(),javaOptions.end());
-        return this;
-    }
-    AbstractSolverBuilder*withNetworkCommunicator(INetworkCommunication* networkCommunication) {
-        this->networkCommunication=networkCommunication;
-        return this;
-    }
+        /**
+         * The options for the JVM to run (if some solvers are written in Java).
+         */
+        std::vector<std::string> javaOptions;
 
+        /**
+         * The path to the JAR files defining Java solvers (if any).
+         */
+        std::vector<std::string> jars;
 
+    public:
 
-    virtual AbstractParallelSolver* build()=0;
-};
+        /**
+         * Destroys this AbstractSolverBuilder.
+         */
+        virtual ~AbstractSolverBuilder() = default;
+
+        /**
+         * Adds an option for the JVM to run (if some solvers are written in Java).
+         *
+         * @param javaOption The Java option to add.
+         *
+         * @return This solver builder.
+         */
+        Panoramyx::AbstractSolverBuilder *withJavaOption(const std::string &javaOption);
+
+        /**
+         * Adds options for the JVM to run (if some solvers are written in Java).
+         *
+         * @param javaOptions The Java options to add.
+         *
+         * @return This solver builder.
+         */
+        Panoramyx::AbstractSolverBuilder *withJavaOptions(const std::vector<std::string> &javaOptions);
+
+        /**
+         * Adds the path of a JAR file defining Java solvers.
+         *
+         * @param jar The path to the JAR file to add.
+         *
+         * @return This solver builder.
+         */
+        Panoramyx::AbstractSolverBuilder *withJar(const std::string &jar);
+
+        /**
+         * Adds the paths of JAR files defining Java solvers.
+         *
+         * @param jars The paths to the JAR files to add.
+         *
+         * @return This solver builder.
+         */
+        Panoramyx::AbstractSolverBuilder *withJars(const std::vector<std::string> &jars);
+
+        /**
+         * Sets the network communication to use to communicate between the solvers.
+         *
+         * @param networkCommunication The network communication to use.
+         *
+         * @return This solver builder.
+         */
+        Panoramyx::AbstractSolverBuilder *withNetworkCommunicator(
+                Panoramyx::INetworkCommunication *networkCommunication);
+
+        /**
+         * Builds the solver.
+         *
+         * @return The built solver.
+         */
+        virtual AbstractParallelSolver *build() = 0;
+
+    protected:
+
+        /**
+         * Builds the JVM to run Java solvers (if any).
+         */
+        void buildJVM();
+
+    };
 
 }
+
 #endif

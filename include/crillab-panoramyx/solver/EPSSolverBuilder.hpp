@@ -19,8 +19,8 @@
  */
 
 /**
- * @file PortfolioSolverBuilder.hpp
- * @brief The builder for portfolio solvers.
+ * @file EPSSolverBuilder.hpp
+ * @brief The builder for EPS solvers.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -29,36 +29,36 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#ifndef PANORAMYX_PORTFOLIOSOLVERBUILDER_HPP
-#define PANORAMYX_PORTFOLIOSOLVERBUILDER_HPP
+#ifndef PANORAMYX_EPSSOLVERBUILDER_HPP
+#define PANORAMYX_EPSSOLVERBUILDER_HPP
 
 #include "AbstractSolverBuilder.hpp"
+#include "ICubeGenerator.hpp"
 
 namespace Panoramyx {
 
     /**
-     * The PortfolioSolverBuilder allows to build portfolio solvers.
+     * The EPSSolverBuilder allows to build EPS solvers.
      */
-    class PortfolioSolverBuilder : public Panoramyx::AbstractSolverBuilder {
+    class EPSSolverBuilder : public Panoramyx::AbstractSolverBuilder {
 
     private:
 
         /**
-         * The bound allocation strategy used to distribute objective bounds among the solvers.
+         * The cube generator used to generate the cubes distributed among the solvers.
          */
-        Panoramyx::IBoundAllocationStrategy *allocationStrategy;
+        Panoramyx::ICubeGenerator *cubeGenerator = nullptr;
 
     public:
 
         /**
-         * Sets the bound allocation strategy to use to distribute objective bounds among the solvers.
+         * Sets the cube generator to use to generate the cubes distributed among the solvers.
          *
-         * @param allocationStrategy The bound allocation strategy to use.
+         * @param cubeGenerator The cube generator to use.
          *
          * @return This builder.
          */
-        Panoramyx::PortfolioSolverBuilder *withAllocationStrategy(
-                Panoramyx::IBoundAllocationStrategy *allocationStrategy);
+        Panoramyx::EPSSolverBuilder *withCubeGenerator(Panoramyx::ICubeGenerator *cubeGenerator);
 
         /**
          * Builds the solver.

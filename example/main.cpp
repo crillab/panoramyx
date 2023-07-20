@@ -28,7 +28,7 @@
 #include "crillab-panoramyx/core/panoramyx.hpp"
 #include "crillab-panoramyx/network/NetworkCommunicationFactory.hpp"
 #include "crillab-panoramyx/solver/AbstractSolverBuilder.hpp"
-#include "crillab-panoramyx/solver/EpsSolverBuilder.hpp"
+#include "crillab-panoramyx/solver/EPSSolverBuilder.hpp"
 #include "crillab-panoramyx/core/NullConsistencyChecker.hpp"
 #include "crillab-panoramyx/solver/PortfolioSolverBuilder.hpp"
 #include "crillab-panoramyx/optim/decomposition/LogarithmicRangeIterator.hpp"
@@ -319,7 +319,7 @@ int main(int argc, char **argv) {
                 asb = (new EPSSolverBuilder())->withCubeGenerator(
                         parseCubeGenerator(program.at<argparse::ArgumentParser>("eps"),
                                            networkCommunication))->withNetworkCommunicator(
-                        networkCommunication)->withJavaOption(
+                        networkCommunication)->withJavaOptions(
                         splitJavaOptions(program.get<string>("java-options")))->withJars(
                         program.get<std::vector<string>>("jars"));
 
@@ -327,7 +327,7 @@ int main(int argc, char **argv) {
                 asb = (new PortfolioSolverBuilder())->withAllocationStrategy(
                         parseAllocationStrategy(program.at<argparse::ArgumentParser>("portfolio"),
                                                 networkCommunication))->withNetworkCommunicator(
-                        networkCommunication)->withJavaOption(
+                        networkCommunication)->withJavaOptions(
                         splitJavaOptions(program.get<string>("java-options")))->withJars(
                         program.get<std::vector<string>>("jars"));
 
