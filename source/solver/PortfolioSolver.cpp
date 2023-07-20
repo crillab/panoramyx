@@ -177,7 +177,7 @@ void PortfolioSolver::updateBounds() {
         }
 
         // Actually assigning the bounds to the solver.
-        DLOG_F(INFO, "assigning bounds for solver #%d: %s .. %s", i,
+        DLOG_F(INFO, "assigning bounds for solver #%lu: %s .. %s", i,
                Universe::toString(currentBounds[i]).c_str(),
                Universe::toString(currentBounds[i + 1]).c_str());
 

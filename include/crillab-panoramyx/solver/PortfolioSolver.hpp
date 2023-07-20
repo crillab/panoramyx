@@ -109,7 +109,7 @@ namespace Panoramyx {
         /**
          * Updates the bounds allocated to the different solvers when new information is obtained.
          */
-        virtual void updateBounds();
+        void updateBounds() override;
 
         /**
          * Assigns bounds to the i-th solver.

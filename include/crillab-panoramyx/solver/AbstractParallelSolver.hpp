@@ -32,10 +32,9 @@
 #ifndef PANORAMYX_ABSTRACTPARALLELSOLVER_HPP
 #define PANORAMYX_ABSTRACTPARALLELSOLVER_HPP
 
-#include <vector>
-#include <ostream>
 #include <map>
-
+#include <ostream>
+#include <vector>
 
 #include <crillab-universe/core/IUniverseSolver.hpp>
 
@@ -53,21 +52,11 @@ namespace Panoramyx {
     class AbstractParallelSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
 
     protected:
-        std::map<std::string, Universe::BigInteger> bestSolution;
+
         /**
          * The interface used to communicate with the different solvers.
          */
         INetworkCommunication *communicator;
-
-        /**
-         * The solvers that run in parallel.
-         */
-        std::vector<Panoramyx::RemoteSolver *> solvers;
-
-        /**
-         * The number of solvers that are currently running.
-         */
-        int runningSolvers;
 
         /**
          * The allocation strategy used to allocate bounds to the different solvers.
@@ -75,9 +64,19 @@ namespace Panoramyx {
         Panoramyx::IBoundAllocationStrategy *allocationStrategy;
 
         /**
-         * The bounds that are currently assigned to the different solvers.
+         * The solvers that run in parallel.
          */
-        std::vector<Universe::BigInteger> currentBounds;
+        std::vector<Panoramyx::RemoteSolver *> solvers;
+
+        /**
+         * The vector telling which solvers are currently running.
+         */
+        std::vector<bool> currentRunningSolvers;
+
+        /**
+         * The number of solvers that are currently running.
+         */
+        int runningSolvers;
 
         /**
          * Whether the problem to solve is a minimization problem.
@@ -95,19 +94,9 @@ namespace Panoramyx {
         Universe::BigInteger upperBound;
 
         /**
-         * Whether the solver has been interrupted.
+         * The bounds that are currently assigned to the different solvers.
          */
-        bool interrupted;
-
-        /**
-         * The semaphore allowing to wait for a final answer from the solvers.
-         */
-        std::binary_semaphore solved;
-
-        /**
-         * The result of the solving process.
-         */
-        Universe::UniverseSolverResult result;
+        std::vector<Universe::BigInteger> currentBounds;
 
         /**
          * The index of the solver that found the answer.
@@ -115,13 +104,34 @@ namespace Panoramyx {
         unsigned winner;
 
         /**
+         * The result of the solving process.
+         */
+        Universe::UniverseSolverResult result;
+
+        /**
+         * The assignment corresponding to the current (best) solution.
+         */
+        std::map<std::string, Universe::BigInteger> bestSolution;
+
+        /**
+         * The mutex avoiding to read and write the best solution at the same time.
+         */
+        std::mutex solutionMutex;
+
+        /**
+         * The semaphore allowing to wait for a final answer from the solvers.
+         */
+        std::binary_semaphore solved;
+
+        /**
+         * Whether the solver has been interrupted.
+         */
+        bool interrupted;
+
+        /**
          * The semaphore allowing to wait for the solvers to terminate properly.
          */
         std::binary_semaphore end;
-
-        std::vector<bool> currentRunningSolvers;
-
-        std::mutex solutionMutex;
 
     public:
 
@@ -131,8 +141,8 @@ namespace Panoramyx {
          * @param comm The interface used to communicate with the different solvers.
          * @param allocationStrategy The allocation strategy used to allocate bounds to the different solvers.
          */
-        explicit AbstractParallelSolver(
-                Panoramyx::INetworkCommunication *comm, Panoramyx::IBoundAllocationStrategy *allocationStrategy = nullptr);
+        explicit AbstractParallelSolver(Panoramyx::INetworkCommunication *comm,
+                                        Panoramyx::IBoundAllocationStrategy *allocationStrategy = nullptr);
 
         /**
          * Destroys this AbstractParallelSolver.
@@ -145,11 +155,6 @@ namespace Panoramyx {
          * @param solver The solver to add.
          */
         void addSolver(Panoramyx::RemoteSolver *solver);
-
-        /**
-         * Loads a problem instance from a file.
-         */
-        virtual void loadInstance(const std::string &filename);
 
         /**
          * Resets this solver in its original state.
@@ -170,7 +175,14 @@ namespace Panoramyx {
          */
         [[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *> &getVariablesMapping() override;
 
-        const std::vector<Universe::IUniverseConstraint *> &getConstraints() override;
+        /**
+         * Gives the vector of the auxiliary variables used by the solver.
+         * These variables are those that the solver defines to help it represent the
+         * problem (for instance, to reify constraints).
+         *
+         * @return The list of the auxiliary variables, given by their name.
+         */
+        const std::vector<std::string> &getAuxiliaryVariables() override;
 
         /**
          * Gives the number of constraints defined in this solver.
@@ -178,6 +190,37 @@ namespace Panoramyx {
          * @return The number of constraints.
          */
         int nConstraints() override;
+
+        /**
+         * Gives the list of the constraints in this solver.
+         *
+         * @return The list of the constraints.
+         */
+        const std::vector<Universe::IUniverseConstraint *> &getConstraints() override;
+
+        /**
+         * Advises this solver to focus on some variables to make decisions.
+         *
+         * @param variables The variables on which to make decisions.
+         */
+        void decisionVariables(const std::vector<std::string> &variables) override;
+
+        /**
+         * Forces a static order on the values to try for some variables.
+         *
+         * @param variables The variables for which a static order is set.
+         * @param orderedValues The values to try for the specified variables, in the desired
+         *        order.
+         */
+        void valueHeuristicStatic(const std::vector<std::string> &variables,
+                                  const std::vector<Universe::BigInteger> &orderedValues) override;
+
+        /**
+         * Checks whether the associated problem is an optimization problem.
+         *
+         * @return Whether the problem is an optimization problem.
+         */
+        bool isOptimization() override;
 
         /**
          * Sets the time limit before interrupting the search.
@@ -201,11 +244,31 @@ namespace Panoramyx {
         void setVerbosity(int level) override;
 
         /**
+         * Adds a listener to this solver, which listens to the events occurring in
+         * the solver during the search.
+         *
+         * @param listener The listener to add.
+         */
+        void addSearchListener(Universe::IUniverseSearchListener *listener) override;
+
+        /**
          * Sets the log file to be used by the solver.
          *
          * @param filename The name of the log file.
          */
         void setLogFile(const std::string &filename) override;
+
+        /**
+         * Sets the output stream to be used by the solver for logging.
+         *
+         * @param stream The logging output stream.
+         */
+        void setLogStream(std::ostream &stream) override;
+
+        /**
+         * Loads a problem instance from a file.
+         */
+        void loadInstance(const std::string &filename) override;
 
         /**
          * Solves the problem associated to this solver.
@@ -240,6 +303,13 @@ namespace Panoramyx {
         void interrupt() override;
 
         /**
+         * Gives the current result obtained by this solver so far.
+         *
+         * @return The result obtained by this solver.
+         */
+        Universe::UniverseSolverResult getResult();
+
+        /**
          * Gives the solution found by this solver (if any).
          *
          * @return The solution found by this solver.
@@ -254,43 +324,94 @@ namespace Panoramyx {
          */
         std::map<std::string, Universe::BigInteger> mapSolution() override;
 
-        Universe::UniverseSolverResult getResult();
-
-        Universe::BigInteger getCurrentBound() override;
-
-        Universe::BigInteger getLowerBound() override;
-
-        void setLowerBound(const Universe::BigInteger &lb) override;
-
-        Universe::BigInteger getUpperBound() override;
-
-        void setUpperBound(const Universe::BigInteger &ub) override;
-
-        void setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) override;
-
-        bool isMinimization() override;
-
-        bool isOptimization() override;
-
-        void decisionVariables(const std::vector<std::string> &variables) override;
-
-        void addSearchListener(Universe::IUniverseSearchListener *listener) override;
-
-        void setLogStream(std::ostream &stream) override;
-
+        /**
+         * Gives the mapping between the names of the variables and the assignment found
+         * by this solver (if any).
+         *
+         * @param excludeAux Whether auxiliary variables should be excluded from the solution.
+         *
+         * @return The solution found by this solver.
+         */
         std::map<std::string, Universe::BigInteger> mapSolution(bool excludeAux) override;
 
-        Universe::IOptimizationSolver *toOptimizationSolver() override;
-
-        const std::vector<std::string> &getAuxiliaryVariables() override;
-
-        void valueHeuristicStatic(const std::vector<std::string> &variables,
-                                  const std::vector<Universe::BigInteger> &orderedValues) override;
-
+        /**
+         * Checks the last solution that has been computed by the solver.
+         * Said differently, this method ensures that the last solution satisfies all the
+         * constraints of the problem solved by the solver.
+         *
+         * @return Whether the last solution is correct.
+         */
         bool checkSolution()  override;
 
+        /**
+         * Checks whether the given assignment is a solution of the problem.
+         * Said differently, this method ensures that the given assignment satisfies all the
+         * constraints of the problem solved by the solver.
+         *
+         * @param assignment The assignment to check as a solution.
+         *
+         * @return Whether the given assignment is a solution of the problem.
+         */
         bool checkSolution(const std::map<std::string, Universe::BigInteger> &assignment)  override;
 
+        /**
+         * Casts this solver into an IOptimizationSolver.
+         *
+         * @return The casted optimization solver.
+         */
+        Universe::IOptimizationSolver *toOptimizationSolver() override;
+
+        /**
+         * Checks whether the optimization problem is a minimization problem.
+         *
+         * @return Whether the underlying problem is a minimization problem.
+         */
+        bool isMinimization() override;
+
+        /**
+         * Sets the bounds for the optimization problem to solve.
+         *
+         * @param lb The lower bound to set.
+         * @param ub The upper bound to set.
+         */
+        void setBounds(const Universe::BigInteger &lb, const Universe::BigInteger &ub) override;
+
+        /**
+         * Sets the lower bound for the optimization problem to solve.
+         *
+         * @param lb The lower bound to set.
+         */
+        void setLowerBound(const Universe::BigInteger &lb) override;
+
+        /**
+         * Gives the current (best) lower bound of the underlying optimization problem.
+         *
+         * @return The current lower bound.
+         */
+        Universe::BigInteger getLowerBound() override;
+
+        /**
+         * Sets the upper bound for the optimization problem to solve.
+         *
+         * @param ub The upper bound to set.
+         */
+        void setUpperBound(const Universe::BigInteger &ub) override;
+
+        /**
+         * Gives the current (best) upper bound of the underlying optimization problem.
+         *
+         * @return The current upper bound.
+         */
+        Universe::BigInteger getUpperBound() override;
+
+        /**
+         * Gives the current (best) bound that have been found by this solver.
+         * It is the current lower or upper bound, depending on whether the problem is a
+         * minimization or maximization problem.
+         *
+         * @return The current bound.
+         */
+        Universe::BigInteger getCurrentBound() override;
 
     protected:
 
@@ -352,10 +473,14 @@ namespace Panoramyx {
         virtual void onUnsatisfiableFound(unsigned int solverIndex);
 
         /**
+         * Updates the bounds allocated to the different solvers when new information is obtained.
+         */
+        virtual void updateBounds();
+
+        /**
          * Terminates the search.
          */
         virtual void endSearch();
-
 
     private:
 

@@ -29,13 +29,12 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#include "crillab-panoramyx/solver/AbstractParallelSolver.hpp"
+#include <thread>
 
 #include <mpi.h>
 
-#include <thread>
-
-#include "crillab-panoramyx/network/Message.hpp"
+#include <crillab-panoramyx/solver/AbstractParallelSolver.hpp>
+#include <crillab-panoramyx/network/Message.hpp>
 
 using namespace std;
 
@@ -43,41 +42,48 @@ using namespace Except;
 using namespace Panoramyx;
 using namespace Universe;
 
-AbstractParallelSolver::AbstractParallelSolver(INetworkCommunication *comm, IBoundAllocationStrategy *allocationStrategy) : communicator(comm),
-                                                                                                                            solvers(),
-                                                                                                                            runningSolvers(0),
-                                                                                                                            allocationStrategy(allocationStrategy),
-                                                                                                                            currentBounds(),
-                                                                                                                            minimization(true),
-                                                                                                                            lowerBound(0),
-                                                                                                                            upperBound(0),
-                                                                                                                            interrupted(false),
-                                                                                                                            solved(0),
-                                                                                                                            result(Universe::UniverseSolverResult::UNKNOWN),
-                                                                                                                            winner(-1),
-                                                                                                                            end(0) {
-    currentBounds.push_back(0);
+AbstractParallelSolver::AbstractParallelSolver(
+        INetworkCommunication *comm, IBoundAllocationStrategy *allocationStrategy) :
+        communicator(comm),
+        allocationStrategy(allocationStrategy),
+        solvers(),
+        currentRunningSolvers(),
+        runningSolvers(0),
+        minimization(true),
+        lowerBound(0),
+        upperBound(0),
+        currentBounds(),
+        winner(-1),
+        result(Universe::UniverseSolverResult::UNKNOWN),
+        bestSolution(),
+        solutionMutex(),
+        solved(0),
+        interrupted(false),
+        end(0) {
+    currentBounds.emplace_back(0);
 }
 
 void AbstractParallelSolver::addSolver(RemoteSolver *solver) {
     unsigned index = solvers.size();
-    solvers.push_back(solver);
-    currentBounds.push_back(LLONG_MAX);
-    currentRunningSolvers.push_back(false);
-    solver->setComm(communicator);
-    solver->setIndex(index);
+
+    solvers.emplace_back(solver);
+    currentRunningSolvers.emplace_back(false);
+    currentBounds.emplace_back(LLONG_MAX);
     runningSolvers++;
+
+    solver->setCommunicator(communicator);
+    solver->setIndex(index);
 }
 
 void AbstractParallelSolver::loadInstance(const string &filename) {
-    for (auto &solver : solvers) {
+    for (auto &solver: solvers) {
         solver->loadInstance(filename);
     }
 }
 
 void AbstractParallelSolver::reset() {
-    // FIXME: make sure that the semaphores, etc. are also reset.
-    for (auto &solver : solvers) {
+    // FIXME: Make sure that the semaphores, etc. are also reset.
+    for (auto &solver: solvers) {
         solver->reset();
     }
 }
@@ -87,33 +93,68 @@ int AbstractParallelSolver::nVariables() {
 }
 
 const map<string, IUniverseVariable *> &AbstractParallelSolver::getVariablesMapping() {
-    throw UnsupportedOperationException("Parallel solver has too many mappings!");
+    throw UnsupportedOperationException("parallel solver has too many mappings!");
+}
+
+const vector<string> &AbstractParallelSolver::getAuxiliaryVariables() {
+    throw UnsupportedOperationException("parallel solver has too many auxiliary variables!");
 }
 
 int AbstractParallelSolver::nConstraints() {
     return solvers[0]->nConstraints();
 }
 
+const vector<IUniverseConstraint *> &AbstractParallelSolver::getConstraints() {
+    throw UnsupportedOperationException("parallel solver has too many constraints!");
+}
+
+void AbstractParallelSolver::decisionVariables(const vector<string> &variables) {
+    for (auto &solver: solvers) {
+        solver->decisionVariables(variables);
+    }
+}
+
+void AbstractParallelSolver::valueHeuristicStatic(const vector<string> &variables,
+                                                  const vector<BigInteger> &orderedValues) {
+    for (auto &solver: solvers) {
+        solver->valueHeuristicStatic(variables, orderedValues);
+    }
+}
+
+bool AbstractParallelSolver::isOptimization() {
+    return solvers[0]->isOptimization();
+}
+
 void AbstractParallelSolver::setTimeout(long seconds) {
-    for (auto &solver : solvers) {
+    for (auto &solver: solvers) {
         solver->setTimeout(seconds);
     }
 }
 
 void AbstractParallelSolver::setTimeoutMs(long mseconds) {
-    for (auto &solver : solvers) {
+    for (auto &solver: solvers) {
         solver->setTimeoutMs(mseconds);
     }
 }
 
 void AbstractParallelSolver::setVerbosity(int level) {
-    for (auto &solver : solvers) {
+    for (auto &solver: solvers) {
         solver->setVerbosity(level);
     }
 }
 
+void AbstractParallelSolver::addSearchListener(IUniverseSearchListener *listener) {
+    for (auto &solver: solvers) {
+        solver->addSearchListener(listener);
+    }
+}
+
 void AbstractParallelSolver::setLogFile(const string &filename) {
-    // TODO Make sure that the solvers to not write their logs in the same file.
+    // TODO: Make sure that the solvers do not write their logs in the same file.
+}
+
+void AbstractParallelSolver::setLogStream(ostream &stream) {
+    // TODO: Make sure that the solvers do not write their logs in the same stream.
 }
 
 UniverseSolverResult AbstractParallelSolver::solve() {
@@ -126,26 +167,16 @@ UniverseSolverResult AbstractParallelSolver::solve(const string &filename) {
 }
 
 UniverseSolverResult AbstractParallelSolver::solve(const vector<UniverseAssumption<BigInteger>> &assumpts) {
+    // Reading the messages in a dedicated thread.
     readMessages();
+
+    // Preparing the solving process.
     for (unsigned i = 0; i < solvers.size(); i++) {
         ready(i);
     }
+
+    // Actually solving the problem.
     return internalSolve(assumpts);
-}
-
-UniverseSolverResult AbstractParallelSolver::internalSolve(const vector<UniverseAssumption<BigInteger>> &assumpts) {
-    beforeSearch();
-
-    if (assumpts.empty()) {
-        startSearch();
-    } else {
-        startSearch(assumpts);
-    }
-
-    solved.acquire();
-    endSearch();
-    end.acquire();
-    return result;
 }
 
 void AbstractParallelSolver::interrupt() {
@@ -155,23 +186,89 @@ void AbstractParallelSolver::interrupt() {
     interrupted = true;
 }
 
+UniverseSolverResult AbstractParallelSolver::getResult() {
+    return result;
+}
+
 vector<BigInteger> AbstractParallelSolver::solution() {
-    if (result == UniverseSolverResult::SATISFIABLE || result == UniverseSolverResult::OPTIMUM_FOUND) {
+    if ((result == UniverseSolverResult::SATISFIABLE) || (result == UniverseSolverResult::OPTIMUM_FOUND)) {
+        // FIXME: Shouldn't we use the cached solution?
         return solvers[winner]->solution();
     }
+
     throw IllegalStateException("problem has no solution yet");
 }
 
 map<string, BigInteger> AbstractParallelSolver::mapSolution() {
-    if (result == UniverseSolverResult::SATISFIABLE || result == UniverseSolverResult::OPTIMUM_FOUND) {
-        return bestSolution;
+    if ((result == UniverseSolverResult::SATISFIABLE) || (result == UniverseSolverResult::OPTIMUM_FOUND)) {
+        solutionMutex.lock();
+        auto local = bestSolution;
+        solutionMutex.unlock();
+        return local;
     }
     throw IllegalStateException("problem has no solution yet");
 }
 
+map<string, BigInteger> AbstractParallelSolver::mapSolution(bool excludeAux) {
+    if ((result == UniverseSolverResult::SATISFIABLE) || (result == UniverseSolverResult::OPTIMUM_FOUND)) {
+        solutionMutex.lock();
+        auto local = bestSolution;
+        solutionMutex.unlock();
+        return local;
+    }
+    throw IllegalStateException("problem has no solution yet");
+}
+
+bool AbstractParallelSolver::checkSolution() {
+    return solvers[winner]->checkSolution();
+}
+
+bool AbstractParallelSolver::checkSolution(const map<string, BigInteger> &assignment) {
+    return solvers[0]->checkSolution(assignment);
+}
+
+IOptimizationSolver *AbstractParallelSolver::toOptimizationSolver() {
+    return this;
+}
+
+bool AbstractParallelSolver::isMinimization() {
+    return minimization;
+}
+
+void AbstractParallelSolver::setBounds(const BigInteger &lb, const BigInteger &ub) {
+    this->lowerBound = lb;
+    this->upperBound = ub;
+    updateBounds();
+}
+
+void AbstractParallelSolver::setLowerBound(const BigInteger &lb) {
+    this->lowerBound = lb;
+    updateBounds();
+}
+
+BigInteger AbstractParallelSolver::getLowerBound() {
+    return lowerBound;
+}
+
+void AbstractParallelSolver::setUpperBound(const BigInteger &ub) {
+    this->upperBound = ub;
+    updateBounds();
+}
+
+BigInteger AbstractParallelSolver::getUpperBound() {
+    return upperBound;
+}
+
+BigInteger AbstractParallelSolver::getCurrentBound() {
+    if (minimization) {
+        return upperBound;
+    }
+    return lowerBound;
+}
+
 void AbstractParallelSolver::readMessages() {
     thread receiver([this]() {
-        while (runningSolvers>0) {
+        while (runningSolvers > 0) {
             auto message = communicator->receive(PANO_TAG_SOLVE, PANO_ANY_SOURCE, PANO_DEFAULT_MESSAGE_SIZE);
             readMessage(message);
             free(message);
@@ -181,13 +278,23 @@ void AbstractParallelSolver::readMessages() {
 }
 
 void AbstractParallelSolver::readMessage(const Message *message) {
-    DLOG_F(INFO, "abstract readMessage %s", message->name);
+    DLOG_F(INFO, "main solver received a message '%s'", message->name);
+
     if (NAME_OF(message, IS(PANO_MESSAGE_SATISFIABLE))) {
         winner = message->read<unsigned>();
-        currentRunningSolvers[winner]= false;
+        currentRunningSolvers[winner] = false;
         result = UniverseSolverResult::SATISFIABLE;
         onSatisfiableFound(winner);
         solved.release();
+
+    } else if (NAME_OF(message, IS(PANO_MESSAGE_NEW_BOUND_FOUND))) {
+        auto src = message->read<unsigned>();
+        string param(message->parameters + sizeof(unsigned), strlen(message->parameters + sizeof(unsigned)) + 1);
+        BigInteger newBound = Universe::bigIntegerValueOf(param);
+        result = UniverseSolverResult::SATISFIABLE;
+        DLOG_F(INFO, "solver #%d sent its current bound: %s", src, Universe::toString(newBound).c_str());
+        currentRunningSolvers[src] = false;
+        onNewBoundFound(newBound, src);
 
     } else if (NAME_OF(message, IS(PANO_MESSAGE_UNSATISFIABLE))) {
         auto src = message->read<unsigned>();
@@ -199,15 +306,6 @@ void AbstractParallelSolver::readMessage(const Message *message) {
             interrupted = true;
             end.release();
         }
-
-    } else if (NAME_OF(message, IS(PANO_MESSAGE_NEW_BOUND_FOUND))) {
-        auto src = message->read<unsigned>();
-        string param(message->parameters + sizeof(unsigned), strlen(message->parameters + sizeof(unsigned)) + 1);
-        BigInteger newBound = bigIntegerValueOf(param);
-        result = Universe::UniverseSolverResult::SATISFIABLE;
-        LOG_F(INFO,"solver %d send current bound: %lld",src,newBound);
-        currentRunningSolvers[src]= false;
-        onNewBoundFound(newBound, src);
     }
 }
 
@@ -221,113 +319,44 @@ void AbstractParallelSolver::beforeSearch() {
 
 void AbstractParallelSolver::onSatisfiableFound(unsigned solverIndex) {
     solutionMutex.lock();
-    bestSolution=solvers[solverIndex]->mapSolution();
+    bestSolution = solvers[solverIndex]->mapSolution();
     solutionMutex.unlock();
 }
 
 void AbstractParallelSolver::onNewBoundFound(const Universe::BigInteger &bound, unsigned int i) {
-    throw UnsupportedOperationException("Optimization problems not supported");
+    throw UnsupportedOperationException("optimization problems are not supported yet by this solver");
 }
 
 void AbstractParallelSolver::onUnsatisfiableFound(unsigned solverIndex) {
     // Nothing to do by default.
 }
 
+void AbstractParallelSolver::updateBounds() {
+    throw UnsupportedOperationException("optimization problems are not supported yet by this solver");
+}
+
 void AbstractParallelSolver::endSearch() {
-    for (auto &solver : solvers) {
+    for (auto &solver: solvers) {
         solver->endSearch();
     }
 }
 
-UniverseSolverResult AbstractParallelSolver::getResult() {
+UniverseSolverResult AbstractParallelSolver::internalSolve(const vector<UniverseAssumption<BigInteger>> &assumpts) {
+    // Preparing the solvers.
+    beforeSearch();
+
+    // Solving the problem (with or without assumptions).
+    if (assumpts.empty()) {
+        startSearch();
+    } else {
+        startSearch(assumpts);
+    }
+
+    // Waiting for the solvers to answer.
+    solved.acquire();
+    endSearch();
+    end.acquire();
+
+    // Returning the result.
     return result;
-}
-
-BigInteger AbstractParallelSolver::getCurrentBound() {
-    if(minimization){
-        return upperBound;
-    }else{
-        return lowerBound;
-    }
-}
-
-BigInteger AbstractParallelSolver::getLowerBound() {
-    return lowerBound;
-}
-
-void AbstractParallelSolver::setLowerBound(const BigInteger &lb) {
-
-}
-
-BigInteger AbstractParallelSolver::getUpperBound() {
-    return upperBound;
-}
-
-void AbstractParallelSolver::setUpperBound(const BigInteger &ub) {
-
-}
-
-void AbstractParallelSolver::setBounds(const BigInteger &lb, const BigInteger &ub) {
-
-}
-
-bool AbstractParallelSolver::isMinimization() {
-    return minimization;
-}
-
-bool AbstractParallelSolver::isOptimization() {
-    return solvers[0]->isOptimization();
-}
-
-void AbstractParallelSolver::decisionVariables(const vector<std::string> &variables) {
-    for(auto& solver:solvers){
-        solver->decisionVariables(variables);
-    }
-}
-
-void AbstractParallelSolver::addSearchListener(Universe::IUniverseSearchListener *listener) {
-    for(auto& solver:solvers){
-        solver->addSearchListener(listener);
-    }
-}
-
-void AbstractParallelSolver::setLogStream(ostream &stream) {
-    //TODO
-}
-
-map<std::string, Universe::BigInteger> AbstractParallelSolver::mapSolution(bool excludeAux) {
-    if (result == UniverseSolverResult::SATISFIABLE || result == UniverseSolverResult::OPTIMUM_FOUND) {
-        solutionMutex.lock();
-        auto local = bestSolution;
-        solutionMutex.unlock();
-        return local;
-    }
-    throw IllegalStateException("problem has no solution yet");
-}
-
-IOptimizationSolver *AbstractParallelSolver::toOptimizationSolver() {
-    return this;
-}
-
-const vector<std::string> &AbstractParallelSolver::getAuxiliaryVariables() {
-    throw UnsupportedOperationException("Parallel solver has too many auxiliary variables!");
-}
-
-void AbstractParallelSolver::valueHeuristicStatic(const vector<std::string> &variables,
-                                                  const vector<Universe::BigInteger> &orderedValues) {
-    for(auto& solver:solvers){
-        solver->valueHeuristicStatic(variables,orderedValues);
-    }
-}
-
-bool AbstractParallelSolver::checkSolution() {
-    return solvers[winner]->checkSolution();
-}
-
-bool AbstractParallelSolver::checkSolution(const map<std::string, Universe::BigInteger> &assignment) {
-    return solvers[0]->checkSolution(assignment);
-}
-
-const vector<IUniverseConstraint *> &AbstractParallelSolver::getConstraints() {
-    throw UnsupportedOperationException("Parallel solver has too many constraints!");
 }
