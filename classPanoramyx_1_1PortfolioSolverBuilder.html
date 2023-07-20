@@ -52,7 +52,6 @@
           <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>PortfolioSolverBuilder <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="PortfolioSolverBuilder_8hpp.html">&lt;PortfolioSolverBuilder.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -65,27 +64,68 @@
             </li>
           </ul>
         </div>
+<p>The <a href="classPanoramyx_1_1PortfolioSolverBuilder.html" class="m-doc">PortfolioSolverBuilder</a> allows to build portfolio solvers.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
               class <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">AbstractSolverBuilder</a>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a9f614e62a99c5bce5c5cf1031448ccbb">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9f614e62a99c5bce5c5cf1031448ccbb" class="m-doc-self">withAllocationStrategy</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1IBoundAllocationStrategy.html" class="m-doc">IBoundAllocationStrategy</a>* allocationStrategy) -&gt; <a href="classPanoramyx_1_1PortfolioSolverBuilder.html" class="m-doc">PortfolioSolverBuilder</a>*</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ab257c1681fb587585566c129a86d74a4" class="m-doc">withAllocationStrategy</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1IBoundAllocationStrategy.html" class="m-doc">Panoramyx::<wbr />IBoundAllocationStrategy</a>* allocationStrategy) -&gt; <a href="classPanoramyx_1_1PortfolioSolverBuilder.html" class="m-doc">Panoramyx::<wbr />PortfolioSolverBuilder</a>*</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a5f0d24d45cc2ee6e1eb2f6b40817f940">
-              <span class="m-doc-wrap-bumper">auto <a href="#a5f0d24d45cc2ee6e1eb2f6b40817f940" class="m-doc-self">build</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">AbstractParallelSolver</a>* <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a06f170c810604a0d3c01bf5e33fe60c0" class="m-doc">build</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">Panoramyx::<wbr />AbstractParallelSolver</a>* <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ab257c1681fb587585566c129a86d74a4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1PortfolioSolverBuilder.html" class="m-doc">Panoramyx::<wbr />PortfolioSolverBuilder</a>* Panoramyx::<wbr />PortfolioSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab257c1681fb587585566c129a86d74a4" class="m-doc-self">withAllocationStrategy</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1IBoundAllocationStrategy.html" class="m-doc">Panoramyx::<wbr />IBoundAllocationStrategy</a>* allocationStrategy)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">allocationStrategy</td>
+                  <td>The bound allocation strategy to use.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>This builder.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Sets the bound allocation strategy to use to distribute objective bounds among the solvers.</p>
+          </div></section>
+          <section class="m-doc-details" id="a06f170c810604a0d3c01bf5e33fe60c0"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">Panoramyx::<wbr />AbstractParallelSolver</a>* Panoramyx::<wbr />PortfolioSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a06f170c810604a0d3c01bf5e33fe60c0" class="m-doc-self">build</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The built solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Builds the solver.</p>
+          </div></section>
         </section>
       </div>
     </div>

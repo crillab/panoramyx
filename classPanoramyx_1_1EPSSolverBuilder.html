@@ -50,9 +50,8 @@
       <div class="m-col-l-10 m-push-l-1">
         <h1>
           <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>EPSSolverBuilder <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="EpsSolverBuilder_8hpp.html">&lt;EpsSolverBuilder.hpp&gt;</a></div>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="EPSSolverBuilder_8hpp.html">&lt;EPSSolverBuilder.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -65,27 +64,68 @@
             </li>
           </ul>
         </div>
+<p>The <a href="classPanoramyx_1_1EPSSolverBuilder.html" class="m-doc">EPSSolverBuilder</a> allows to build EPS solvers.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
               class <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">AbstractSolverBuilder</a>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="abad1ab0d2c8077f1cb341446bf7bfcfa">
-              <span class="m-doc-wrap-bumper">auto <a href="#abad1ab0d2c8077f1cb341446bf7bfcfa" class="m-doc-self">withCubeGenerator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1ICubeGenerator.html" class="m-doc">ICubeGenerator</a>* cubeGenerator) -&gt; <a href="classPanoramyx_1_1EPSSolverBuilder.html" class="m-doc">EPSSolverBuilder</a>*</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ab1c068656ea8fdb406da5f5b065b7c69" class="m-doc">withCubeGenerator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1ICubeGenerator.html" class="m-doc">Panoramyx::<wbr />ICubeGenerator</a>* cubeGenerator) -&gt; <a href="classPanoramyx_1_1EPSSolverBuilder.html" class="m-doc">Panoramyx::<wbr />EPSSolverBuilder</a>*</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="aa0430b6009baa4d92cdd631966e65883">
-              <span class="m-doc-wrap-bumper">auto <a href="#aa0430b6009baa4d92cdd631966e65883" class="m-doc-self">build</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">AbstractParallelSolver</a>* <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a751e36fcb77bdc47009c33ff7f8b838e" class="m-doc">build</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">Panoramyx::<wbr />AbstractParallelSolver</a>* <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ab1c068656ea8fdb406da5f5b065b7c69"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1EPSSolverBuilder.html" class="m-doc">Panoramyx::<wbr />EPSSolverBuilder</a>* Panoramyx::<wbr />EPSSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab1c068656ea8fdb406da5f5b065b7c69" class="m-doc-self">withCubeGenerator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1ICubeGenerator.html" class="m-doc">Panoramyx::<wbr />ICubeGenerator</a>* cubeGenerator)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">cubeGenerator</td>
+                  <td>The cube generator to use.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>This builder.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Sets the cube generator to use to generate the cubes distributed among the solvers.</p>
+          </div></section>
+          <section class="m-doc-details" id="a751e36fcb77bdc47009c33ff7f8b838e"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">Panoramyx::<wbr />AbstractParallelSolver</a>* Panoramyx::<wbr />EPSSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a751e36fcb77bdc47009c33ff7f8b838e" class="m-doc-self">build</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The built solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Builds the solver.</p>
+          </div></section>
         </section>
       </div>
     </div>

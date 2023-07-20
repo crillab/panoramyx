@@ -52,7 +52,6 @@
           <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>AbstractSolverBuilder <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="AbstractSolverBuilder_8hpp.html">&lt;AbstractSolverBuilder.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -60,6 +59,7 @@
               Reference
               <ul>
                 <li><a href="#derived-classes">Derived classes</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
                 <li><a href="#pro-methods">Protected functions</a></li>
                 <li><a href="#pro-attribs">Protected variables</a></li>
@@ -67,65 +67,248 @@
             </li>
           </ul>
         </div>
+<p>The <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">AbstractSolverBuilder</a> is the parent class of all the solvers builders.</p>
         <section id="derived-classes">
           <h2><a href="#derived-classes">Derived classes</a></h2>
           <dl class="m-doc">
             <dt>
               class <a href="classPanoramyx_1_1EPSSolverBuilder.html" class="m-doc">EPSSolverBuilder</a>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
             <dt>
               class <a href="classPanoramyx_1_1PortfolioSolverBuilder.html" class="m-doc">PortfolioSolverBuilder</a>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a53a82de77d86ee6b95d0c536dd87ba4b" class="m-doc">~AbstractSolverBuilder</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
           </dl>
         </section>
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a84c9712587d2f88bc4e7bfe0d2dd5a91">
-              <span class="m-doc-wrap-bumper">auto <a href="#a84c9712587d2f88bc4e7bfe0d2dd5a91" class="m-doc-self">withJars</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; jars) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">AbstractSolverBuilder</a>*</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a9dfcaea11291286a654e0bda5689ce3c" class="m-doc">withJavaOption</a>(</span><span class="m-doc-wrap">const std::string&amp; javaOption) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>*</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a3e2a52f9a242af89f0e59c37b2fdde35">
-              <span class="m-doc-wrap-bumper">auto <a href="#a3e2a52f9a242af89f0e59c37b2fdde35" class="m-doc-self">withJavaOption</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; javaOptions) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">AbstractSolverBuilder</a>*</span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a253e08459453e9d77be2ce2c9c886b87" class="m-doc">withJavaOptions</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; javaOptions) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>*</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a241176b4cc250b81747c73eb52940bd8">
-              <span class="m-doc-wrap-bumper">auto <a href="#a241176b4cc250b81747c73eb52940bd8" class="m-doc-self">withNetworkCommunicator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* networkCommunication) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">AbstractSolverBuilder</a>*</span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a369dc8ebad5ece530d6c7ab6af73d315" class="m-doc">withJar</a>(</span><span class="m-doc-wrap">const std::string&amp; jar) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>*</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a59d0e58c94e9217f82f711281acd5b6b">
-              <span class="m-doc-wrap-bumper">auto <a href="#a59d0e58c94e9217f82f711281acd5b6b" class="m-doc-self">build</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">AbstractParallelSolver</a>* <span class="m-label m-flat m-warning">pure virtual</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a021223fc9aa1c12e0dafa89e483cc142" class="m-doc">withJars</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; jars) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>*</span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a536a674d1c7fe176890fe1b673df9664" class="m-doc">withNetworkCommunicator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">Panoramyx::<wbr />INetworkCommunication</a>* networkCommunication) -&gt; <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>*</span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a59d0e58c94e9217f82f711281acd5b6b" class="m-doc">build</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">AbstractParallelSolver</a>* <span class="m-label m-flat m-warning">pure virtual</span></span>
+            </dt>
+            <dd></dd>
           </dl>
         </section>
         <section id="pro-methods">
           <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
-            <dt id="a541ba82bb60d64ae1b721e821944e7f4">
-              <span class="m-doc-wrap-bumper">void <a href="#a541ba82bb60d64ae1b721e821944e7f4" class="m-doc-self">buildJVM</a>(</span><span class="m-doc-wrap">)</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a541ba82bb60d64ae1b721e821944e7f4" class="m-doc">buildJVM</a>(</span><span class="m-doc-wrap">)</span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pro-attribs">
           <h2><a href="#pro-attribs">Protected variables</a></h2>
           <dl class="m-doc">
-            <dt id="a0b1d2c6a0ecb1c25adbc11e56496e60e">
-              <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* <a href="#a0b1d2c6a0ecb1c25adbc11e56496e60e" class="m-doc-self">networkCommunication</a>
+            <dt>
+              <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">Panoramyx::<wbr />INetworkCommunication</a>* <a href="#ac9a8115806526f641b1cc640ccab0ccb" class="m-doc">networkCommunication</a>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a2336d284a4a561c2bbded1f98339d83a">
-              std::vector&lt;std::string&gt; <a href="#a2336d284a4a561c2bbded1f98339d83a" class="m-doc-self">jars</a>
+            <dd></dd>
+            <dt>
+              std::vector&lt;std::string&gt; <a href="#ab7f0d839634db46cde2ee38a38a64ef6" class="m-doc">javaOptions</a>
             </dt>
-            <dd><span></span></dd>
-            <dt id="ab7f0d839634db46cde2ee38a38a64ef6">
-              std::vector&lt;std::string&gt; <a href="#ab7f0d839634db46cde2ee38a38a64ef6" class="m-doc-self">javaOptions</a>
+            <dd></dd>
+            <dt>
+              std::vector&lt;std::string&gt; <a href="#a2336d284a4a561c2bbded1f98339d83a" class="m-doc">jars</a>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a53a82de77d86ee6b95d0c536dd87ba4b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a53a82de77d86ee6b95d0c536dd87ba4b" class="m-doc-self">~AbstractSolverBuilder</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span> <span class="m-label m-info">defaulted</span></span></span>
+            </h3>
+<p>Destroys this <a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">AbstractSolverBuilder</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="a9dfcaea11291286a654e0bda5689ce3c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>* Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9dfcaea11291286a654e0bda5689ce3c" class="m-doc-self">withJavaOption</a>(</span><span class="m-doc-wrap">const std::string&amp; javaOption)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">javaOption</td>
+                  <td>The Java option to add.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>This solver builder.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Adds an option for the JVM to run (if some solvers are written in Java).</p>
+          </div></section>
+          <section class="m-doc-details" id="a253e08459453e9d77be2ce2c9c886b87"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>* Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a253e08459453e9d77be2ce2c9c886b87" class="m-doc-self">withJavaOptions</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; javaOptions)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">javaOptions</td>
+                  <td>The Java options to add.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>This solver builder.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Adds options for the JVM to run (if some solvers are written in Java).</p>
+          </div></section>
+          <section class="m-doc-details" id="a369dc8ebad5ece530d6c7ab6af73d315"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>* Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a369dc8ebad5ece530d6c7ab6af73d315" class="m-doc-self">withJar</a>(</span><span class="m-doc-wrap">const std::string&amp; jar)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">jar</td>
+                  <td>The path to the JAR file to add.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>This solver builder.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Adds the path of a JAR file defining Java solvers.</p>
+          </div></section>
+          <section class="m-doc-details" id="a021223fc9aa1c12e0dafa89e483cc142"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>* Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a021223fc9aa1c12e0dafa89e483cc142" class="m-doc-self">withJars</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; jars)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">jars</td>
+                  <td>The paths to the JAR files to add.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>This solver builder.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Adds the paths of JAR files defining Java solvers.</p>
+          </div></section>
+          <section class="m-doc-details" id="a536a674d1c7fe176890fe1b673df9664"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractSolverBuilder.html" class="m-doc">Panoramyx::<wbr />AbstractSolverBuilder</a>* Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a536a674d1c7fe176890fe1b673df9664" class="m-doc-self">withNetworkCommunicator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">Panoramyx::<wbr />INetworkCommunication</a>* networkCommunication)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">networkCommunication</td>
+                  <td>The network communication to use.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>This solver builder.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Sets the network communication to use to communicate between the solvers.</p>
+          </div></section>
+          <section class="m-doc-details" id="a59d0e58c94e9217f82f711281acd5b6b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1AbstractParallelSolver.html" class="m-doc">AbstractParallelSolver</a>* Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a59d0e58c94e9217f82f711281acd5b6b" class="m-doc-self">build</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">pure virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The built solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Builds the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a541ba82bb60d64ae1b721e821944e7f4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractSolverBuilder::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a541ba82bb60d64ae1b721e821944e7f4" class="m-doc-self">buildJVM</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+<p>Builds the JVM to run Java solvers (if any).</p>
+          </div></section>
+        </section>
+        <section>
+          <h2>Variable documentation</h2>
+          <section class="m-doc-details" id="ac9a8115806526f641b1cc640ccab0ccb"><div>
+            <h3>
+              <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">Panoramyx::<wbr />INetworkCommunication</a>* Panoramyx::<wbr />AbstractSolverBuilder::<wbr /><a href="#ac9a8115806526f641b1cc640ccab0ccb" class="m-doc-self">networkCommunication</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The network communication used to communicate between the solvers.</p>
+          </div></section>
+          <section class="m-doc-details" id="ab7f0d839634db46cde2ee38a38a64ef6"><div>
+            <h3>
+              std::vector&lt;std::string&gt; Panoramyx::<wbr />AbstractSolverBuilder::<wbr /><a href="#ab7f0d839634db46cde2ee38a38a64ef6" class="m-doc-self">javaOptions</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The options for the JVM to run (if some solvers are written in Java).</p>
+          </div></section>
+          <section class="m-doc-details" id="a2336d284a4a561c2bbded1f98339d83a"><div>
+            <h3>
+              std::vector&lt;std::string&gt; Panoramyx::<wbr />AbstractSolverBuilder::<wbr /><a href="#a2336d284a4a561c2bbded1f98339d83a" class="m-doc-self">jars</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The path to the JAR files defining Java solvers (if any).</p>
+          </div></section>
         </section>
       </div>
     </div>

@@ -65,7 +65,7 @@
             </li>
           </ul>
         </div>
-<p>The <a href="classPanoramyx_1_1PortfolioSolver.html" class="m-doc">PortfolioSolver</a> defines a parallel solver that runs different solvers on the same instance.</p>
+<p>The <a href="classPanoramyx_1_1PortfolioSolver.html" class="m-doc">PortfolioSolver</a> defines a parallel solver that runs different solvers on the same input instance.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
@@ -105,7 +105,7 @@
             </dt>
             <dd></dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#ae9f8de488982e796a694f4ab29294e6d" class="m-doc">solve</a>(</span><span class="m-doc-wrap">unsigned i) <span class="m-label m-flat m-warning">virtual</span></span>
+              <span class="m-doc-wrap-bumper">void <a href="#a86094003cd11f19f21a3c4fc01fc49a1" class="m-doc">solve</a>(</span><span class="m-doc-wrap">unsigned index) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd></dd>
             <dt>
@@ -122,10 +122,14 @@
               <span class="m-doc-wrap-bumper">void <a href="#a71cfa075237f9ffb9584c7fb439898c9" class="m-doc">onUnsatisfiableFound</a>(</span><span class="m-doc-wrap">unsigned solverIndex) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
-            <dt id="a96de00fe352e377d4357e4725e7d3bd7">
-              <span class="m-doc-wrap-bumper">void <a href="#a96de00fe352e377d4357e4725e7d3bd7" class="m-doc-self">updateBounds</a>(</span><span class="m-doc-wrap">)</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ac26c62cad01eb8df9465263ee619d86a" class="m-doc">updateBounds</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a90da5fd2d71a33741651061f3c6d0bc4" class="m-doc">assignBounds</a>(</span><span class="m-doc-wrap">unsigned index) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
           </dl>
         </section>
         <section>
@@ -187,9 +191,9 @@
             </table>
 <p>Actually starts the search performed by the different solvers.</p>
           </div></section>
-          <section class="m-doc-details" id="ae9f8de488982e796a694f4ab29294e6d"><div>
+          <section class="m-doc-details" id="a86094003cd11f19f21a3c4fc01fc49a1"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />PortfolioSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae9f8de488982e796a694f4ab29294e6d" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">unsigned i) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />PortfolioSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a86094003cd11f19f21a3c4fc01fc49a1" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">unsigned index) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
             </h3>
             <table class="m-table m-fullwidth m-flat">
               <thead>
@@ -197,7 +201,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">i</td>
+                  <td style="width: 1%">index</td>
                   <td>The index of the solver to launch.</td>
                 </tr>
               </tbody>
@@ -264,6 +268,29 @@
               </tbody>
             </table>
 <p>Updates the search when a solver proved the unsatisfiability of its problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="ac26c62cad01eb8df9465263ee619d86a"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />PortfolioSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac26c62cad01eb8df9465263ee619d86a" class="m-doc-self">updateBounds</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+<p>Updates the bounds allocated to the different solvers when new information is obtained.</p>
+          </div></section>
+          <section class="m-doc-details" id="a90da5fd2d71a33741651061f3c6d0bc4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />PortfolioSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a90da5fd2d71a33741651061f3c6d0bc4" class="m-doc-self">assignBounds</a>(</span><span class="m-doc-wrap">unsigned index) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">index</td>
+                  <td>The index of the solver to which bounds are to be assigned.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Assigns bounds to the i-th solver.</p>
           </div></section>
         </section>
       </div>
