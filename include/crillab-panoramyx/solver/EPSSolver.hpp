@@ -70,13 +70,17 @@ namespace Panoramyx {
          */
         EPSSolver(Panoramyx::INetworkCommunication *comm, Panoramyx::ICubeGenerator *generator);
 
-        void loadInstance(const std::string &filename) override;
-
-
         /**
          * Destroys this EPSSolver.
          */
         ~EPSSolver() override = default;
+
+        /**
+         * Loads the instance to solve.
+         *
+         * @param filename The name of the file to load the instance from.
+         */
+        void loadInstance(const std::string &filename) override;
 
     protected:
 

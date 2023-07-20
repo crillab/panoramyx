@@ -20,7 +20,7 @@
 
 /**
  * @file PortfolioSolver.hpp
- * @brief Defines a parallel solver that runs different solvers on the same instance.
+ * @brief Defines a parallel solver that runs different solvers on the same input instance.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -38,10 +38,9 @@ namespace Panoramyx {
 
     /**
      * The PortfolioSolver defines a parallel solver that runs different
-     * solvers on the same instance.
+     * solvers on the same input instance.
      */
     class PortfolioSolver : public Panoramyx::AbstractParallelSolver {
-
 
     public:
 
@@ -51,8 +50,8 @@ namespace Panoramyx {
          * @param comm The interface used to communicate with the different solvers.
          * @param allocationStrategy The allocation strategy used to allocate bounds to the different solvers.
          */
-        explicit PortfolioSolver(
-                Panoramyx::INetworkCommunication *comm, Panoramyx::IBoundAllocationStrategy *allocationStrategy = nullptr);
+        explicit PortfolioSolver(Panoramyx::INetworkCommunication *comm,
+                                 Panoramyx::IBoundAllocationStrategy *allocationStrategy = nullptr);
 
         /**
          * Destroys this PortfolioSolver.
@@ -81,9 +80,9 @@ namespace Panoramyx {
         /**
          * Launches the solving process of the i-th solver.
          *
-         * @param i The index of the solver to launch.
+         * @param index The index of the solver to launch.
          */
-        virtual void solve(unsigned i);
+        virtual void solve(unsigned index);
 
         /**
          * Launches the solving process of the i-th solver.
@@ -107,8 +106,18 @@ namespace Panoramyx {
          */
         void onUnsatisfiableFound(unsigned solverIndex) override;
 
+        /**
+         * Updates the bounds allocated to the different solvers when new information is obtained.
+         */
+        virtual void updateBounds();
 
-        void updateBounds();
+        /**
+         * Assigns bounds to the i-th solver.
+         *
+         * @param index The index of the solver to which bounds are to be assigned.
+         */
+        virtual void assignBounds(unsigned index);
+
     };
 
 }

@@ -33,8 +33,7 @@
 
 #include <loguru/loguru.hpp>
 
-#include "crillab-panoramyx/network/Message.hpp"
-#include "crillab-panoramyx/solver/EPSSolver.hpp"
+#include <crillab-panoramyx/solver/EPSSolver.hpp>
 
 using namespace std;
 
@@ -49,16 +48,21 @@ EPSSolver::EPSSolver(INetworkCommunication *comm, ICubeGenerator *generator) :
     // Nothing to do: everything is already initialized.
 }
 
+void EPSSolver::loadInstance(const string &filename) {
+    AbstractParallelSolver::loadInstance(filename);
+    this->generator->loadInstance(filename);
+}
+
 void EPSSolver::ready(unsigned solverIndex) {
     availableSolvers.add(solvers[solverIndex]);
 }
 
 void EPSSolver::startSearch() {
-    std::thread t([this]() {
+    std::thread solvingThread([this]() {
         int nbCubes = 0;
 
         // Generating the cubes, and assigning them to the different solvers.
-        for (auto cube : *this->generator->generateCubes()) {
+        for (auto cube: *this->generator->generateCubes()) {
             if (cube.empty()) {
                 // There is no more consistent cubes.
                 break;
@@ -68,12 +72,12 @@ void EPSSolver::startSearch() {
             // FIXME: We must indeed release the semaphore when clearing, because we must stop waiting for a new one...
             try {
                 nbCubes++;
-                DLOG_F(INFO, "generate cubes %d", nbCubes);
-                auto s = availableSolvers.get();
-                currentRunningSolvers[((RemoteSolver*)s)->getIndex()]=true;
-                s->solve(cube);
+                DLOG_F(INFO, "assigning cubes #%d", nbCubes);
+                auto *solver = availableSolvers.get();
+                currentRunningSolvers[((RemoteSolver *) solver)->getIndex()] = true;
+                solver->solve(cube);
 
-            } catch (Except::NoSuchElementException &e) {
+            } catch (NoSuchElementException &e) {
                 return;
             }
         }
@@ -83,7 +87,7 @@ void EPSSolver::startSearch() {
         waitForAllCubes(nbCubes);
     });
 
-    t.detach();
+    solvingThread.detach();
 }
 
 void EPSSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &assumpts) {
@@ -104,6 +108,7 @@ void EPSSolver::onUnsatisfiableFound(unsigned solverIndex) {
 }
 
 void EPSSolver::waitForAllCubes(int nbCubes) {
+    // FIXME: Shouldn't we make sure to acquire cubes as many times as nbCubes?
     for (int i = 0; i < nbCubes; i++) {
         cubes.acquire();
         if (result == Universe::UniverseSolverResult::SATISFIABLE) {
@@ -116,9 +121,3 @@ void EPSSolver::waitForAllCubes(int nbCubes) {
     result = Universe::UniverseSolverResult::UNSATISFIABLE;
     solved.release();
 }
-
-void EPSSolver::loadInstance(const string &filename) {
-    AbstractParallelSolver::loadInstance(filename);
-    this->generator->loadInstance(filename);
-}
-
