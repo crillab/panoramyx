@@ -35,6 +35,8 @@
 #include <cstring>
 #include <string>
 
+#include <crillab-universe/core/UniverseType.hpp>
+
 #include "Message.hpp"
 
 namespace Panoramyx {

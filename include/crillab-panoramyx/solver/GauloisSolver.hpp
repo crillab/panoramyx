@@ -183,6 +183,6 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
 using GallicSolver = GauloisSolver;
 
-}  // namespace Panoramyx
+}
 
-#endif  // PANORAMYX_GAULOISSOLVER_HPP
+#endif
