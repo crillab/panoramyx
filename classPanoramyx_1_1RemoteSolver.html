@@ -52,7 +52,6 @@
           <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>RemoteSolver <span class="m-thin">class</span>
           <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="RemoteSolver_8hpp.html">&lt;RemoteSolver.hpp&gt;</a></div>
         </h1>
-        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
@@ -65,173 +64,778 @@
             </li>
           </ul>
         </div>
+<p>The <a href="classPanoramyx_1_1RemoteSolver.html" class="m-doc">RemoteSolver</a> provides a solver implementation encapsulating the communication with a remote solver.</p>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="aea3d03947fc9ef5e0953923ed66fcda7">
-              <span class="m-doc-wrap-bumper"><a href="#aea3d03947fc9ef5e0953923ed66fcda7" class="m-doc-self">RemoteSolver</a>(</span><span class="m-doc-wrap">int rank) <span class="m-label m-flat m-info">explicit</span> </span>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#aea3d03947fc9ef5e0953923ed66fcda7" class="m-doc">RemoteSolver</a>(</span><span class="m-doc-wrap">int rank) <span class="m-label m-flat m-info">explicit</span> </span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a3e19d5faa22bc91ac048b4e60f049a9d">
-              <span class="m-doc-wrap-bumper"><a href="#a3e19d5faa22bc91ac048b4e60f049a9d" class="m-doc-self">~RemoteSolver</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a3e19d5faa22bc91ac048b4e60f049a9d" class="m-doc">~RemoteSolver</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a5dc7c06518c052f79ff499f8a97512c9">
-              <span class="m-doc-wrap-bumper">void <a href="#a5dc7c06518c052f79ff499f8a97512c9" class="m-doc-self">setIndex</a>(</span><span class="m-doc-wrap">unsigned i)</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a5dc7c06518c052f79ff499f8a97512c9" class="m-doc">setIndex</a>(</span><span class="m-doc-wrap">unsigned i)</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a0f481e5cd1680c41b699c4336daef82b">
-              <span class="m-doc-wrap-bumper">auto <a href="#a0f481e5cd1680c41b699c4336daef82b" class="m-doc-self">isOptimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a807068cbb25c0d6f10d7a60724d12005" class="m-doc">getIndex</a>(</span><span class="m-doc-wrap">) const -&gt; unsigned int</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="afd075489365949ffa7931fd86b1fea42">
-              <span class="m-doc-wrap-bumper">void <a href="#afd075489365949ffa7931fd86b1fea42" class="m-doc-self">interrupt</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a4276b38e960581a1892cf35539b349fe" class="m-doc">setCommunicator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* communicator)</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="ae35e6abef1f353a6da02f6ec0fb12448">
-              <span class="m-doc-wrap-bumper">void <a href="#ae35e6abef1f353a6da02f6ec0fb12448" class="m-doc-self">setVerbosity</a>(</span><span class="m-doc-wrap">int level) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ae1b9b6843dc9a21954463b9ab4395232" class="m-doc">reset</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a63d075706bedc538e755951ee4643707">
-              <span class="m-doc-wrap-bumper">void <a href="#a63d075706bedc538e755951ee4643707" class="m-doc-self">setTimeout</a>(</span><span class="m-doc-wrap">long seconds) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5f8de4dd2b0e8891e0c70baef1704092" class="m-doc">nVariables</a>(</span><span class="m-doc-wrap">) -&gt; int <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a2d1893c1739e81befed352db6a31e23c">
-              <span class="m-doc-wrap-bumper">void <a href="#a2d1893c1739e81befed352db6a31e23c" class="m-doc-self">setTimeoutMs</a>(</span><span class="m-doc-wrap">long mseconds) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a36d952ce347f93e754c3b248aba2eb9a" class="m-doc">getVariablesMapping</a>(</span><span class="m-doc-wrap">) -&gt; const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="ae1b9b6843dc9a21954463b9ab4395232">
-              <span class="m-doc-wrap-bumper">void <a href="#ae1b9b6843dc9a21954463b9ab4395232" class="m-doc-self">reset</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a1060cfcdcf578be107e122208cc15b79" class="m-doc">getAuxiliaryVariables</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;std::string&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a4cf7f960e04744e45ea114f01af78ba5">
-              <span class="m-doc-wrap-bumper">auto <a href="#a4cf7f960e04744e45ea114f01af78ba5" class="m-doc-self">solution</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#adea35a1a2923d12931d2dbfc70a1ec81" class="m-doc">nConstraints</a>(</span><span class="m-doc-wrap">) -&gt; int <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a5f8de4dd2b0e8891e0c70baef1704092">
-              <span class="m-doc-wrap-bumper">auto <a href="#a5f8de4dd2b0e8891e0c70baef1704092" class="m-doc-self">nVariables</a>(</span><span class="m-doc-wrap">) -&gt; int <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a381e5934e47a2fc613df7b5282d97a4d" class="m-doc">getConstraints</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;Universe::IUniverseConstraint*&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="adea35a1a2923d12931d2dbfc70a1ec81">
-              <span class="m-doc-wrap-bumper">auto <a href="#adea35a1a2923d12931d2dbfc70a1ec81" class="m-doc-self">nConstraints</a>(</span><span class="m-doc-wrap">) -&gt; int <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a7e7552190990a67b4106c854eea1cc82" class="m-doc">decisionVariables</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="aedd54daa7f47b3c9ec9a251bc83dfe43">
-              <span class="m-doc-wrap-bumper">void <a href="#aedd54daa7f47b3c9ec9a251bc83dfe43" class="m-doc-self">setLogFile</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ae940891702e8053badfb77c149ef4b10">
-              <span class="m-doc-wrap-bumper">void <a href="#ae940891702e8053badfb77c149ef4b10" class="m-doc-self">setComm</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* c)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a97d72acc8e48945de9fbacfdb4c83911">
-              <span class="m-doc-wrap-bumper">void <a href="#a97d72acc8e48945de9fbacfdb4c83911" class="m-doc-self">endSearch</a>(</span><span class="m-doc-wrap">)</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a25e21ac4e6d7e0d13dd3bf4539a85db6">
-              <span class="m-doc-wrap-bumper">void <a href="#a25e21ac4e6d7e0d13dd3bf4539a85db6" class="m-doc-self">loadInstance</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a7e7552190990a67b4106c854eea1cc82">
-              <span class="m-doc-wrap-bumper">void <a href="#a7e7552190990a67b4106c854eea1cc82" class="m-doc-self">decisionVariables</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ab6148c6e6a410e554ffab4eca6f45486">
-              <span class="m-doc-wrap-bumper">void <a href="#ab6148c6e6a410e554ffab4eca6f45486" class="m-doc-self">addSearchListener</a>(</span><span class="m-doc-wrap">Universe::IUniverseSearchListener* listener) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ac58606da90c01109f532f0ada7147dbc">
-              <span class="m-doc-wrap-bumper">void <a href="#ac58606da90c01109f532f0ada7147dbc" class="m-doc-self">setLogStream</a>(</span><span class="m-doc-wrap">std::ostream&amp; stream) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a478c3b6d73a4039a5bb685be858397b2">
-              <span class="m-doc-wrap-bumper">auto <a href="#a478c3b6d73a4039a5bb685be858397b2" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">) -&gt; Universe::UniverseSolverResult <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a19b2b8d0d9fcfd13a08931e287966785">
-              <span class="m-doc-wrap-bumper">auto <a href="#a19b2b8d0d9fcfd13a08931e287966785" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) -&gt; Universe::UniverseSolverResult <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a83b17890a404f152f76daa519be94b5d">
-              <span class="m-doc-wrap-bumper">auto <a href="#a83b17890a404f152f76daa519be94b5d" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&amp; assumpts) -&gt; Universe::UniverseSolverResult <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a5b8fbada19516fce7bce074bd353f9d0">
-              <span class="m-doc-wrap-bumper">auto <a href="#a5b8fbada19516fce7bce074bd353f9d0" class="m-doc-self">mapSolution</a>(</span><span class="m-doc-wrap">bool excludeAux) -&gt; std::map&lt;std::string, Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a9f1cbc80caf9f13807fdc42e04eba26c">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9f1cbc80caf9f13807fdc42e04eba26c" class="m-doc-self">toOptimizationSolver</a>(</span><span class="m-doc-wrap">) -&gt; IOptimizationSolver* <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a36d952ce347f93e754c3b248aba2eb9a">
-              <span class="m-doc-wrap-bumper">auto <a href="#a36d952ce347f93e754c3b248aba2eb9a" class="m-doc-self">getVariablesMapping</a>(</span><span class="m-doc-wrap">) -&gt; const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="af13a350984bda72a08420af3ffb848e6">
-              <span class="m-doc-wrap-bumper">auto <a href="#af13a350984bda72a08420af3ffb848e6" class="m-doc-self">mapSolution</a>(</span><span class="m-doc-wrap">) -&gt; std::map&lt;std::string, Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ac49bb93c5b3a78d5d28b93e2a18c9541">
-              <span class="m-doc-wrap-bumper">void <a href="#ac49bb93c5b3a78d5d28b93e2a18c9541" class="m-doc-self">setLowerBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="af937e3235c231b0f44d38291865b9a67">
-              <span class="m-doc-wrap-bumper">void <a href="#af937e3235c231b0f44d38291865b9a67" class="m-doc-self">setUpperBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; ub) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a788aa8e76a0582644e1884a06badb16d">
-              <span class="m-doc-wrap-bumper">void <a href="#a788aa8e76a0582644e1884a06badb16d" class="m-doc-self">setBounds</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb,
-              const Universe::BigInteger&amp; ub) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ab319f83186fc0750187c99e0e42843e0">
-              <span class="m-doc-wrap-bumper">auto <a href="#ab319f83186fc0750187c99e0e42843e0" class="m-doc-self">getCurrentBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a10fe82a2907745004a202ba4f22be166">
-              <span class="m-doc-wrap-bumper">auto <a href="#a10fe82a2907745004a202ba4f22be166" class="m-doc-self">isMinimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a54bd2cc6721a516db435a44f8cb44a53">
-              <span class="m-doc-wrap-bumper">auto <a href="#a54bd2cc6721a516db435a44f8cb44a53" class="m-doc-self">getLowerBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="abe79335762cd5faf96c89c941856aa63">
-              <span class="m-doc-wrap-bumper">auto <a href="#abe79335762cd5faf96c89c941856aa63" class="m-doc-self">getUpperBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a807068cbb25c0d6f10d7a60724d12005">
-              <span class="m-doc-wrap-bumper">auto <a href="#a807068cbb25c0d6f10d7a60724d12005" class="m-doc-self">getIndex</a>(</span><span class="m-doc-wrap">) const -&gt; unsigned int</span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a1060cfcdcf578be107e122208cc15b79">
-              <span class="m-doc-wrap-bumper">auto <a href="#a1060cfcdcf578be107e122208cc15b79" class="m-doc-self">getAuxiliaryVariables</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;std::string&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="afd3f8e97849ebb9f4b181229b8f71665">
-              <span class="m-doc-wrap-bumper">void <a href="#afd3f8e97849ebb9f4b181229b8f71665" class="m-doc-self">valueHeuristicStatic</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables,
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#afd3f8e97849ebb9f4b181229b8f71665" class="m-doc">valueHeuristicStatic</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables,
               const std::vector&lt;Universe::BigInteger&gt;&amp; orderedValues) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a8401a0b49af6f69bf47a3f50bf1e5ec8">
-              <span class="m-doc-wrap-bumper">auto <a href="#a8401a0b49af6f69bf47a3f50bf1e5ec8" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0f481e5cd1680c41b699c4336daef82b" class="m-doc">isOptimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a0598bd95b2ef6812109c9b8d0079f537">
-              <span class="m-doc-wrap-bumper">auto <a href="#a0598bd95b2ef6812109c9b8d0079f537" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::BigInteger&gt;&amp; assignment) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a63d075706bedc538e755951ee4643707" class="m-doc">setTimeout</a>(</span><span class="m-doc-wrap">long seconds) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a381e5934e47a2fc613df7b5282d97a4d">
-              <span class="m-doc-wrap-bumper">auto <a href="#a381e5934e47a2fc613df7b5282d97a4d" class="m-doc-self">getConstraints</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;Universe::IUniverseConstraint*&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a2d1893c1739e81befed352db6a31e23c" class="m-doc">setTimeoutMs</a>(</span><span class="m-doc-wrap">long mseconds) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ae35e6abef1f353a6da02f6ec0fb12448" class="m-doc">setVerbosity</a>(</span><span class="m-doc-wrap">int level) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ab6148c6e6a410e554ffab4eca6f45486" class="m-doc">addSearchListener</a>(</span><span class="m-doc-wrap">Universe::IUniverseSearchListener* listener) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#aedd54daa7f47b3c9ec9a251bc83dfe43" class="m-doc">setLogFile</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ac58606da90c01109f532f0ada7147dbc" class="m-doc">setLogStream</a>(</span><span class="m-doc-wrap">std::ostream&amp; stream) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a25e21ac4e6d7e0d13dd3bf4539a85db6" class="m-doc">loadInstance</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a478c3b6d73a4039a5bb685be858397b2" class="m-doc">solve</a>(</span><span class="m-doc-wrap">) -&gt; Universe::UniverseSolverResult <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a19b2b8d0d9fcfd13a08931e287966785" class="m-doc">solve</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) -&gt; Universe::UniverseSolverResult <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ae517589431729b1e9fa30b3faf7b6d6b" class="m-doc">solve</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&amp; assumptions) -&gt; Universe::UniverseSolverResult <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#afd075489365949ffa7931fd86b1fea42" class="m-doc">interrupt</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a97d72acc8e48945de9fbacfdb4c83911" class="m-doc">endSearch</a>(</span><span class="m-doc-wrap">)</span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a4d89a75ba4820cddb8a602fa36e1deff" class="m-doc">getResult</a>(</span><span class="m-doc-wrap">) -&gt; Universe::UniverseSolverResult</span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a4cf7f960e04744e45ea114f01af78ba5" class="m-doc">solution</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#af13a350984bda72a08420af3ffb848e6" class="m-doc">mapSolution</a>(</span><span class="m-doc-wrap">) -&gt; std::map&lt;std::string, Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5b8fbada19516fce7bce074bd353f9d0" class="m-doc">mapSolution</a>(</span><span class="m-doc-wrap">bool excludeAux) -&gt; std::map&lt;std::string, Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a8401a0b49af6f69bf47a3f50bf1e5ec8" class="m-doc">checkSolution</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0598bd95b2ef6812109c9b8d0079f537" class="m-doc">checkSolution</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::BigInteger&gt;&amp; assignment) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#add1937921bfc8b083a94e618015f402c" class="m-doc">toOptimizationSolver</a>(</span><span class="m-doc-wrap">) -&gt; Universe::IOptimizationSolver* <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a10fe82a2907745004a202ba4f22be166" class="m-doc">isMinimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a788aa8e76a0582644e1884a06badb16d" class="m-doc">setBounds</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb,
+              const Universe::BigInteger&amp; ub) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ac49bb93c5b3a78d5d28b93e2a18c9541" class="m-doc">setLowerBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a54bd2cc6721a516db435a44f8cb44a53" class="m-doc">getLowerBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#af937e3235c231b0f44d38291865b9a67" class="m-doc">setUpperBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; ub) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#abe79335762cd5faf96c89c941856aa63" class="m-doc">getUpperBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ab319f83186fc0750187c99e0e42843e0" class="m-doc">getCurrentBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="aea3d03947fc9ef5e0953923ed66fcda7"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aea3d03947fc9ef5e0953923ed66fcda7" class="m-doc-self">RemoteSolver</a>(</span><span class="m-doc-wrap">int rank) <span class="m-label m-info">explicit</span> </span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">rank</td>
+                  <td>The rank of this solver among all remote solvers (as assigned by the network communication strategy).</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Creates a new <a href="classPanoramyx_1_1RemoteSolver.html" class="m-doc">RemoteSolver</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="a3e19d5faa22bc91ac048b4e60f049a9d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3e19d5faa22bc91ac048b4e60f049a9d" class="m-doc-self">~RemoteSolver</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span> <span class="m-label m-info">defaulted</span></span></span>
+            </h3>
+<p>Destroys this <a href="classPanoramyx_1_1RemoteSolver.html" class="m-doc">RemoteSolver</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="a5dc7c06518c052f79ff499f8a97512c9"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5dc7c06518c052f79ff499f8a97512c9" class="m-doc-self">setIndex</a>(</span><span class="m-doc-wrap">unsigned i)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">i</td>
+                  <td>The index to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the index of this solver, as assigned by the main solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a807068cbb25c0d6f10d7a60724d12005"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">unsigned int Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a807068cbb25c0d6f10d7a60724d12005" class="m-doc-self">getIndex</a>(</span><span class="m-doc-wrap">) const</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The index of the solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the index of this solver, as assigned by the main solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a4276b38e960581a1892cf35539b349fe"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4276b38e960581a1892cf35539b349fe" class="m-doc-self">setCommunicator</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* communicator)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">communicator</td>
+                  <td>The communicator to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the network communication used to communicate with the (real) remote solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="ae1b9b6843dc9a21954463b9ab4395232"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae1b9b6843dc9a21954463b9ab4395232" class="m-doc-self">reset</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+<p>Resets this solver in its original state.</p>
+          </div></section>
+          <section class="m-doc-details" id="a5f8de4dd2b0e8891e0c70baef1704092"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">int Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5f8de4dd2b0e8891e0c70baef1704092" class="m-doc-self">nVariables</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The number of variables.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the number of variables defined in this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a36d952ce347f93e754c3b248aba2eb9a"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a36d952ce347f93e754c3b248aba2eb9a" class="m-doc-self">getVariablesMapping</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The mapping of the variables.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the mapping of the variables in this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a1060cfcdcf578be107e122208cc15b79"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">const std::vector&lt;std::string&gt;&amp; Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1060cfcdcf578be107e122208cc15b79" class="m-doc-self">getAuxiliaryVariables</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The list of the auxiliary variables, given by their name.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the vector of the auxiliary variables used by the solver. These variables are those that the solver defines to help it represent the problem (for instance, to reify constraints).</p>
+          </div></section>
+          <section class="m-doc-details" id="adea35a1a2923d12931d2dbfc70a1ec81"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">int Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#adea35a1a2923d12931d2dbfc70a1ec81" class="m-doc-self">nConstraints</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The number of constraints.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the number of constraints defined in this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a381e5934e47a2fc613df7b5282d97a4d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">const std::vector&lt;Universe::IUniverseConstraint*&gt;&amp; Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a381e5934e47a2fc613df7b5282d97a4d" class="m-doc-self">getConstraints</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The list of the constraints.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the list of the constraints in this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a7e7552190990a67b4106c854eea1cc82"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a7e7552190990a67b4106c854eea1cc82" class="m-doc-self">decisionVariables</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">variables</td>
+                  <td>The variables on which to make decisions.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Advises this solver to focus on some variables to make decisions.</p>
+          </div></section>
+          <section class="m-doc-details" id="afd3f8e97849ebb9f4b181229b8f71665"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#afd3f8e97849ebb9f4b181229b8f71665" class="m-doc-self">valueHeuristicStatic</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables,
+              const std::vector&lt;Universe::BigInteger&gt;&amp; orderedValues) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">variables</td>
+                  <td>The variables for which a static order is set.</td>
+                </tr>
+                <tr>
+                  <td>orderedValues</td>
+                  <td>The values to try for the specified variables, in the desired order.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Forces a static order on the values to try for some variables.</p>
+          </div></section>
+          <section class="m-doc-details" id="a0f481e5cd1680c41b699c4336daef82b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0f481e5cd1680c41b699c4336daef82b" class="m-doc-self">isOptimization</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Whether the problem is an optimization problem.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks whether the associated problem is an optimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="a63d075706bedc538e755951ee4643707"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a63d075706bedc538e755951ee4643707" class="m-doc-self">setTimeout</a>(</span><span class="m-doc-wrap">long seconds) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">seconds</td>
+                  <td>The time limit to set (in seconds).</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the time limit before interrupting the search.</p>
+          </div></section>
+          <section class="m-doc-details" id="a2d1893c1739e81befed352db6a31e23c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a2d1893c1739e81befed352db6a31e23c" class="m-doc-self">setTimeoutMs</a>(</span><span class="m-doc-wrap">long mseconds) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+<p>Sets the time limit before interrupting the search.</p>
+          </div></section>
+          <section class="m-doc-details" id="ae35e6abef1f353a6da02f6ec0fb12448"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae35e6abef1f353a6da02f6ec0fb12448" class="m-doc-self">setVerbosity</a>(</span><span class="m-doc-wrap">int level) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">level</td>
+                  <td>The verbosity level to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the verbosity level of the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="ab6148c6e6a410e554ffab4eca6f45486"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab6148c6e6a410e554ffab4eca6f45486" class="m-doc-self">addSearchListener</a>(</span><span class="m-doc-wrap">Universe::IUniverseSearchListener* listener) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">listener</td>
+                  <td>The listener to add.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Adds a listener to this solver, which listens to the events occurring in the solver during the search.</p>
+          </div></section>
+          <section class="m-doc-details" id="aedd54daa7f47b3c9ec9a251bc83dfe43"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aedd54daa7f47b3c9ec9a251bc83dfe43" class="m-doc-self">setLogFile</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">filename</td>
+                  <td>The name of the log file.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the log file to be used by the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="ac58606da90c01109f532f0ada7147dbc"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac58606da90c01109f532f0ada7147dbc" class="m-doc-self">setLogStream</a>(</span><span class="m-doc-wrap">std::ostream&amp; stream) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">stream</td>
+                  <td>The logging output stream.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the output stream to be used by the solver for logging.</p>
+          </div></section>
+          <section class="m-doc-details" id="a25e21ac4e6d7e0d13dd3bf4539a85db6"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a25e21ac4e6d7e0d13dd3bf4539a85db6" class="m-doc-self">loadInstance</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+<p>Loads a problem instance from a file.</p>
+          </div></section>
+          <section class="m-doc-details" id="a478c3b6d73a4039a5bb685be858397b2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::UniverseSolverResult Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a478c3b6d73a4039a5bb685be858397b2" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The outcome of the search conducted by the solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Solves the problem associated to this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a19b2b8d0d9fcfd13a08931e287966785"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::UniverseSolverResult Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a19b2b8d0d9fcfd13a08931e287966785" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">filename</td>
+                  <td>The name of the file containing the problem to solve.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>The outcome of the search conducted by the solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Solves the problem stored in the given file. The solver is expected to parse the problem itself.</p>
+          </div></section>
+          <section class="m-doc-details" id="ae517589431729b1e9fa30b3faf7b6d6b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::UniverseSolverResult Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae517589431729b1e9fa30b3faf7b6d6b" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&amp; assumptions) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">assumptions</td>
+                  <td>The assumptions to consider when solving.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>The outcome of the search conducted by the solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Solves the problem associated to this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="afd075489365949ffa7931fd86b1fea42"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#afd075489365949ffa7931fd86b1fea42" class="m-doc-self">interrupt</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+<p>Interrupts (asynchronously) the search currently performed by this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a97d72acc8e48945de9fbacfdb4c83911"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a97d72acc8e48945de9fbacfdb4c83911" class="m-doc-self">endSearch</a>(</span><span class="m-doc-wrap">)</span></span>
+            </h3>
+<p>Terminates the search performed by the remote solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a4d89a75ba4820cddb8a602fa36e1deff"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::UniverseSolverResult Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4d89a75ba4820cddb8a602fa36e1deff" class="m-doc-self">getResult</a>(</span><span class="m-doc-wrap">)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The result obtained by this solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current result obtained by this solver so far.</p>
+          </div></section>
+          <section class="m-doc-details" id="a4cf7f960e04744e45ea114f01af78ba5"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::vector&lt;Universe::BigInteger&gt; Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4cf7f960e04744e45ea114f01af78ba5" class="m-doc-self">solution</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The solution found by this solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the solution found by this solver (if any).</p>
+          </div></section>
+          <section class="m-doc-details" id="af13a350984bda72a08420af3ffb848e6"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::map&lt;std::string, Universe::BigInteger&gt; Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af13a350984bda72a08420af3ffb848e6" class="m-doc-self">mapSolution</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The solution found by this solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the mapping between the name of a variable and the assignment found for this variable by this solver (if any).</p>
+          </div></section>
+          <section class="m-doc-details" id="a5b8fbada19516fce7bce074bd353f9d0"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::map&lt;std::string, Universe::BigInteger&gt; Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5b8fbada19516fce7bce074bd353f9d0" class="m-doc-self">mapSolution</a>(</span><span class="m-doc-wrap">bool excludeAux) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">excludeAux</td>
+                  <td>Whether auxiliary variables should be excluded from the solution.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>The solution found by this solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the mapping between the names of the variables and the assignment found by this solver (if any).</p>
+          </div></section>
+          <section class="m-doc-details" id="a8401a0b49af6f69bf47a3f50bf1e5ec8"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a8401a0b49af6f69bf47a3f50bf1e5ec8" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Whether the last solution is correct.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks the last solution that has been computed by the solver. Said differently, this method ensures that the last solution satisfies all the constraints of the problem solved by the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a0598bd95b2ef6812109c9b8d0079f537"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0598bd95b2ef6812109c9b8d0079f537" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::BigInteger&gt;&amp; assignment) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">assignment</td>
+                  <td>The assignment to check as a solution.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Whether the given assignment is a solution of the problem.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks whether the given assignment is a solution of the problem. Said differently, this method ensures that the given assignment satisfies all the constraints of the problem solved by the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="add1937921bfc8b083a94e618015f402c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::IOptimizationSolver* Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#add1937921bfc8b083a94e618015f402c" class="m-doc-self">toOptimizationSolver</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The casted optimization solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Casts this solver into an IOptimizationSolver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a10fe82a2907745004a202ba4f22be166"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a10fe82a2907745004a202ba4f22be166" class="m-doc-self">isMinimization</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Whether the underlying problem is a minimization problem.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks whether the optimization problem is a minimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="a788aa8e76a0582644e1884a06badb16d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a788aa8e76a0582644e1884a06badb16d" class="m-doc-self">setBounds</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb,
+              const Universe::BigInteger&amp; ub) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">lb</td>
+                  <td>The lower bound to set.</td>
+                </tr>
+                <tr>
+                  <td>ub</td>
+                  <td>The upper bound to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the bounds for the optimization problem to solve.</p>
+          </div></section>
+          <section class="m-doc-details" id="ac49bb93c5b3a78d5d28b93e2a18c9541"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac49bb93c5b3a78d5d28b93e2a18c9541" class="m-doc-self">setLowerBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">lb</td>
+                  <td>The lower bound to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the lower bound for the optimization problem to solve.</p>
+          </div></section>
+          <section class="m-doc-details" id="a54bd2cc6721a516db435a44f8cb44a53"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::BigInteger Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a54bd2cc6721a516db435a44f8cb44a53" class="m-doc-self">getLowerBound</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The current lower bound.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current (best) lower bound of the underlying optimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="af937e3235c231b0f44d38291865b9a67"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af937e3235c231b0f44d38291865b9a67" class="m-doc-self">setUpperBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; ub) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">ub</td>
+                  <td>The upper bound to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the upper bound for the optimization problem to solve.</p>
+          </div></section>
+          <section class="m-doc-details" id="abe79335762cd5faf96c89c941856aa63"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::BigInteger Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#abe79335762cd5faf96c89c941856aa63" class="m-doc-self">getUpperBound</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The current upper bound.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current (best) upper bound of the underlying optimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="ab319f83186fc0750187c99e0e42843e0"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::BigInteger Panoramyx::<wbr />RemoteSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab319f83186fc0750187c99e0e42843e0" class="m-doc-self">getCurrentBound</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The current bound.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current (best) bound that have been found by this solver. It is the current lower or upper bound, depending on whether the problem is a minimization or maximization problem.</p>
+          </div></section>
         </section>
       </div>
     </div>

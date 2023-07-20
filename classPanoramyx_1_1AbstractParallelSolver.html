@@ -103,10 +103,6 @@
             </dt>
             <dd></dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#a1f8e3a602a63d466193bcd72a187268e" class="m-doc">loadInstance</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">virtual</span></span>
-            </dt>
-            <dd></dd>
-            <dt>
               <span class="m-doc-wrap-bumper">void <a href="#a63ab08d7fb17e1bd1b9425e124e970b6" class="m-doc">reset</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
@@ -118,12 +114,29 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a3fcb16eadc36f66d07166771c0433625" class="m-doc">getVariablesMapping</a>(</span><span class="m-doc-wrap">) -&gt; const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
-            <dt id="abe8f204a2805e567c3563a6f84c8e4cc">
-              <span class="m-doc-wrap-bumper">auto <a href="#abe8f204a2805e567c3563a6f84c8e4cc" class="m-doc-self">getConstraints</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;Universe::IUniverseConstraint*&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a85b69ade205fd1f73a077e157c9eec85" class="m-doc">getAuxiliaryVariables</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;std::string&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
+            <dd></dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a2daa57e1ef63a7c59a99d6208c301d75" class="m-doc">nConstraints</a>(</span><span class="m-doc-wrap">) -&gt; int <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#abe8f204a2805e567c3563a6f84c8e4cc" class="m-doc">getConstraints</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;Universe::IUniverseConstraint*&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a916b9dda03f6ba28de066067d7370f13" class="m-doc">decisionVariables</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ae3e7db90a2e3a2a9f653fb1e5a250e1f" class="m-doc">valueHeuristicStatic</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables,
+              const std::vector&lt;Universe::BigInteger&gt;&amp; orderedValues) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a08769ae0ea2c5a06d04afdd973d6e1a8" class="m-doc">isOptimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
             <dt>
@@ -139,7 +152,19 @@
             </dt>
             <dd></dd>
             <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#af22128c5f2dc9a9a470827874c9f4e3b" class="m-doc">addSearchListener</a>(</span><span class="m-doc-wrap">Universe::IUniverseSearchListener* listener) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper">void <a href="#a82407c7553115115d35cbd0be671910c" class="m-doc">setLogFile</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#acc796068843d419575a2874657787d01" class="m-doc">setLogStream</a>(</span><span class="m-doc-wrap">std::ostream&amp; stream) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a96ef6c2f35539f15a6d521f8a8b29e84" class="m-doc">loadInstance</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
             <dt>
@@ -159,6 +184,10 @@
             </dt>
             <dd></dd>
             <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ac36101b4e220e2c56121bd96509f826a" class="m-doc">getResult</a>(</span><span class="m-doc-wrap">) -&gt; Universe::UniverseSolverResult</span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a366086eed2292a8f3791426ba2e86088" class="m-doc">solution</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
@@ -166,80 +195,51 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a07a99368dfed85edf584bd1b3aa0ed65" class="m-doc">mapSolution</a>(</span><span class="m-doc-wrap">) -&gt; std::map&lt;std::string, Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
-            <dt id="ac36101b4e220e2c56121bd96509f826a">
-              <span class="m-doc-wrap-bumper">auto <a href="#ac36101b4e220e2c56121bd96509f826a" class="m-doc-self">getResult</a>(</span><span class="m-doc-wrap">) -&gt; Universe::UniverseSolverResult</span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0219b877f701f622e7fa94ea569552c0" class="m-doc">mapSolution</a>(</span><span class="m-doc-wrap">bool excludeAux) -&gt; std::map&lt;std::string, Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a241091f898c4e00e9379dff5271561f3">
-              <span class="m-doc-wrap-bumper">auto <a href="#a241091f898c4e00e9379dff5271561f3" class="m-doc-self">getCurrentBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a78e8c3a6cbbf150af01901d8bf354882" class="m-doc">checkSolution</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a9ecd7fd05d1b743f8b7cedfcbd5dc972">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9ecd7fd05d1b743f8b7cedfcbd5dc972" class="m-doc-self">getLowerBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#aa78d7e9a20c1f78f5307c62db7ef831d" class="m-doc">checkSolution</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::BigInteger&gt;&amp; assignment) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a7cfda9a25c1723d41def29444e2df46f">
-              <span class="m-doc-wrap-bumper">void <a href="#a7cfda9a25c1723d41def29444e2df46f" class="m-doc-self">setLowerBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a9b859576b2c8b50eeddad38a8b713bc9" class="m-doc">toOptimizationSolver</a>(</span><span class="m-doc-wrap">) -&gt; Universe::IOptimizationSolver* <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a82fb7cf1acef6df5b80b1c95d2a686ab">
-              <span class="m-doc-wrap-bumper">auto <a href="#a82fb7cf1acef6df5b80b1c95d2a686ab" class="m-doc-self">getUpperBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a92b4c6f315518f62c5e7116ebb2965e6" class="m-doc">isMinimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a331d5e6adafe2842c37de40050643094">
-              <span class="m-doc-wrap-bumper">void <a href="#a331d5e6adafe2842c37de40050643094" class="m-doc-self">setUpperBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; ub) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a62a5e04fd03b5a75a76767026b18678f">
-              <span class="m-doc-wrap-bumper">void <a href="#a62a5e04fd03b5a75a76767026b18678f" class="m-doc-self">setBounds</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb,
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a62a5e04fd03b5a75a76767026b18678f" class="m-doc">setBounds</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb,
               const Universe::BigInteger&amp; ub) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a92b4c6f315518f62c5e7116ebb2965e6">
-              <span class="m-doc-wrap-bumper">auto <a href="#a92b4c6f315518f62c5e7116ebb2965e6" class="m-doc-self">isMinimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a7cfda9a25c1723d41def29444e2df46f" class="m-doc">setLowerBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a08769ae0ea2c5a06d04afdd973d6e1a8">
-              <span class="m-doc-wrap-bumper">auto <a href="#a08769ae0ea2c5a06d04afdd973d6e1a8" class="m-doc-self">isOptimization</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a9ecd7fd05d1b743f8b7cedfcbd5dc972" class="m-doc">getLowerBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a916b9dda03f6ba28de066067d7370f13">
-              <span class="m-doc-wrap-bumper">void <a href="#a916b9dda03f6ba28de066067d7370f13" class="m-doc-self">decisionVariables</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a331d5e6adafe2842c37de40050643094" class="m-doc">setUpperBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; ub) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="af22128c5f2dc9a9a470827874c9f4e3b">
-              <span class="m-doc-wrap-bumper">void <a href="#af22128c5f2dc9a9a470827874c9f4e3b" class="m-doc-self">addSearchListener</a>(</span><span class="m-doc-wrap">Universe::IUniverseSearchListener* listener) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a82fb7cf1acef6df5b80b1c95d2a686ab" class="m-doc">getUpperBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="acc796068843d419575a2874657787d01">
-              <span class="m-doc-wrap-bumper">void <a href="#acc796068843d419575a2874657787d01" class="m-doc-self">setLogStream</a>(</span><span class="m-doc-wrap">std::ostream&amp; stream) <span class="m-label m-flat m-warning">override</span></span>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a241091f898c4e00e9379dff5271561f3" class="m-doc">getCurrentBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a0219b877f701f622e7fa94ea569552c0">
-              <span class="m-doc-wrap-bumper">auto <a href="#a0219b877f701f622e7fa94ea569552c0" class="m-doc-self">mapSolution</a>(</span><span class="m-doc-wrap">bool excludeAux) -&gt; std::map&lt;std::string, Universe::BigInteger&gt; <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a9b859576b2c8b50eeddad38a8b713bc9">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9b859576b2c8b50eeddad38a8b713bc9" class="m-doc-self">toOptimizationSolver</a>(</span><span class="m-doc-wrap">) -&gt; Universe::IOptimizationSolver* <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a85b69ade205fd1f73a077e157c9eec85">
-              <span class="m-doc-wrap-bumper">auto <a href="#a85b69ade205fd1f73a077e157c9eec85" class="m-doc-self">getAuxiliaryVariables</a>(</span><span class="m-doc-wrap">) -&gt; const std::vector&lt;std::string&gt;&amp; <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="ae3e7db90a2e3a2a9f653fb1e5a250e1f">
-              <span class="m-doc-wrap-bumper">void <a href="#ae3e7db90a2e3a2a9f653fb1e5a250e1f" class="m-doc-self">valueHeuristicStatic</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables,
-              const std::vector&lt;Universe::BigInteger&gt;&amp; orderedValues) <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a78e8c3a6cbbf150af01901d8bf354882">
-              <span class="m-doc-wrap-bumper">auto <a href="#a78e8c3a6cbbf150af01901d8bf354882" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="aa78d7e9a20c1f78f5307c62db7ef831d">
-              <span class="m-doc-wrap-bumper">auto <a href="#aa78d7e9a20c1f78f5307c62db7ef831d" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::BigInteger&gt;&amp; assignment) -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
-            </dt>
-            <dd><span></span></dd>
+            <dd></dd>
           </dl>
         </section>
         <section id="pro-methods">
@@ -283,6 +283,10 @@
             </dt>
             <dd></dd>
             <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a3601a97d8656411f7ab174dc01af515b" class="m-doc">updateBounds</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper">void <a href="#abd753b709a993fe06e8413be1aef9afa" class="m-doc">endSearch</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd></dd>
@@ -291,20 +295,8 @@
         <section id="pro-attribs">
           <h2><a href="#pro-attribs">Protected variables</a></h2>
           <dl class="m-doc">
-            <dt id="a7400fc4633c658df276b85d295891a86">
-              std::map&lt;std::string, Universe::BigInteger&gt; <a href="#a7400fc4633c658df276b85d295891a86" class="m-doc-self">bestSolution</a>
-            </dt>
-            <dd><span></span></dd>
             <dt>
               <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* <a href="#a361145f5f725a56413de3b1d6c4da706" class="m-doc">communicator</a>
-            </dt>
-            <dd></dd>
-            <dt>
-              std::vector&lt;<a href="classPanoramyx_1_1RemoteSolver.html" class="m-doc">Panoramyx::<wbr />RemoteSolver</a>*&gt; <a href="#af80631563b18a7b3ec821187ac011521" class="m-doc">solvers</a>
-            </dt>
-            <dd></dd>
-            <dt>
-              int <a href="#a8e47c6daaba34bd56c2462087079a108" class="m-doc">runningSolvers</a>
             </dt>
             <dd></dd>
             <dt>
@@ -312,7 +304,15 @@
             </dt>
             <dd></dd>
             <dt>
-              std::vector&lt;Universe::BigInteger&gt; <a href="#aa89a4789230b69ea102ab022034cbabc" class="m-doc">currentBounds</a>
+              std::vector&lt;<a href="classPanoramyx_1_1RemoteSolver.html" class="m-doc">Panoramyx::<wbr />RemoteSolver</a>*&gt; <a href="#af80631563b18a7b3ec821187ac011521" class="m-doc">solvers</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              std::vector&lt;bool&gt; <a href="#a22f71a13058ee79b7efd923c38f2dba9" class="m-doc">currentRunningSolvers</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              int <a href="#a8e47c6daaba34bd56c2462087079a108" class="m-doc">runningSolvers</a>
             </dt>
             <dd></dd>
             <dt>
@@ -328,15 +328,7 @@
             </dt>
             <dd></dd>
             <dt>
-              bool <a href="#a549502d664978de7b573987a2c55b5e9" class="m-doc">interrupted</a>
-            </dt>
-            <dd></dd>
-            <dt>
-              std::binary_semaphore <a href="#a0fafef93dac7860abc5d78f6cf49ddd2" class="m-doc">solved</a>
-            </dt>
-            <dd></dd>
-            <dt>
-              Universe::UniverseSolverResult <a href="#a864692235cafe03bc848a3b1162e3c54" class="m-doc">result</a>
+              std::vector&lt;Universe::BigInteger&gt; <a href="#aa89a4789230b69ea102ab022034cbabc" class="m-doc">currentBounds</a>
             </dt>
             <dd></dd>
             <dt>
@@ -344,17 +336,29 @@
             </dt>
             <dd></dd>
             <dt>
+              Universe::UniverseSolverResult <a href="#a864692235cafe03bc848a3b1162e3c54" class="m-doc">result</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              std::map&lt;std::string, Universe::BigInteger&gt; <a href="#a7400fc4633c658df276b85d295891a86" class="m-doc">bestSolution</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              std::mutex <a href="#afc0b2e69b33f1d35e3b05b6c97c69d1d" class="m-doc">solutionMutex</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              std::binary_semaphore <a href="#a0fafef93dac7860abc5d78f6cf49ddd2" class="m-doc">solved</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              bool <a href="#a549502d664978de7b573987a2c55b5e9" class="m-doc">interrupted</a>
+            </dt>
+            <dd></dd>
+            <dt>
               std::binary_semaphore <a href="#a0fbe2374a9223a94317419df82db060f" class="m-doc">end</a>
             </dt>
             <dd></dd>
-            <dt id="a22f71a13058ee79b7efd923c38f2dba9">
-              std::vector&lt;bool&gt; <a href="#a22f71a13058ee79b7efd923c38f2dba9" class="m-doc-self">currentRunningSolvers</a>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="afc0b2e69b33f1d35e3b05b6c97c69d1d">
-              std::mutex <a href="#afc0b2e69b33f1d35e3b05b6c97c69d1d" class="m-doc-self">solutionMutex</a>
-            </dt>
-            <dd><span></span></dd>
           </dl>
         </section>
         <section>
@@ -404,12 +408,6 @@
             </table>
 <p>Adds a solver to the set of solvers to run in parallel.</p>
           </div></section>
-          <section class="m-doc-details" id="a1f8e3a602a63d466193bcd72a187268e"><div>
-            <h3>
-              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1f8e3a602a63d466193bcd72a187268e" class="m-doc-self">loadInstance</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-warning">virtual</span></span></span>
-            </h3>
-<p>Loads a problem instance from a file.</p>
-          </div></section>
           <section class="m-doc-details" id="a63ab08d7fb17e1bd1b9425e124e970b6"><div>
             <h3>
               <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a63ab08d7fb17e1bd1b9425e124e970b6" class="m-doc-self">reset</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
@@ -444,6 +442,20 @@
             </table>
 <p>Gives the mapping of the variables in this solver.</p>
           </div></section>
+          <section class="m-doc-details" id="a85b69ade205fd1f73a077e157c9eec85"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">const std::vector&lt;std::string&gt;&amp; Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a85b69ade205fd1f73a077e157c9eec85" class="m-doc-self">getAuxiliaryVariables</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The list of the auxiliary variables, given by their name.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the vector of the auxiliary variables used by the solver. These variables are those that the solver defines to help it represent the problem (for instance, to reify constraints).</p>
+          </div></section>
           <section class="m-doc-details" id="a2daa57e1ef63a7c59a99d6208c301d75"><div>
             <h3>
               <span class="m-doc-wrap-bumper">int Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a2daa57e1ef63a7c59a99d6208c301d75" class="m-doc-self">nConstraints</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
@@ -457,6 +469,73 @@
               </tfoot>
             </table>
 <p>Gives the number of constraints defined in this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="abe8f204a2805e567c3563a6f84c8e4cc"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">const std::vector&lt;Universe::IUniverseConstraint*&gt;&amp; Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#abe8f204a2805e567c3563a6f84c8e4cc" class="m-doc-self">getConstraints</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The list of the constraints.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the list of the constraints in this solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a916b9dda03f6ba28de066067d7370f13"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a916b9dda03f6ba28de066067d7370f13" class="m-doc-self">decisionVariables</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">variables</td>
+                  <td>The variables on which to make decisions.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Advises this solver to focus on some variables to make decisions.</p>
+          </div></section>
+          <section class="m-doc-details" id="ae3e7db90a2e3a2a9f653fb1e5a250e1f"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae3e7db90a2e3a2a9f653fb1e5a250e1f" class="m-doc-self">valueHeuristicStatic</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; variables,
+              const std::vector&lt;Universe::BigInteger&gt;&amp; orderedValues) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">variables</td>
+                  <td>The variables for which a static order is set.</td>
+                </tr>
+                <tr>
+                  <td>orderedValues</td>
+                  <td>The values to try for the specified variables, in the desired order.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Forces a static order on the values to try for some variables.</p>
+          </div></section>
+          <section class="m-doc-details" id="a08769ae0ea2c5a06d04afdd973d6e1a8"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a08769ae0ea2c5a06d04afdd973d6e1a8" class="m-doc-self">isOptimization</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Whether the problem is an optimization problem.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks whether the associated problem is an optimization problem.</p>
           </div></section>
           <section class="m-doc-details" id="a04d322f0f054a6b7e2e26f826fafe70d"><div>
             <h3>
@@ -498,6 +577,23 @@
             </table>
 <p>Sets the verbosity level of the solver.</p>
           </div></section>
+          <section class="m-doc-details" id="af22128c5f2dc9a9a470827874c9f4e3b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af22128c5f2dc9a9a470827874c9f4e3b" class="m-doc-self">addSearchListener</a>(</span><span class="m-doc-wrap">Universe::IUniverseSearchListener* listener) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">listener</td>
+                  <td>The listener to add.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Adds a listener to this solver, which listens to the events occurring in the solver during the search.</p>
+          </div></section>
           <section class="m-doc-details" id="a82407c7553115115d35cbd0be671910c"><div>
             <h3>
               <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a82407c7553115115d35cbd0be671910c" class="m-doc-self">setLogFile</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-warning">override</span></span></span>
@@ -514,6 +610,29 @@
               </tbody>
             </table>
 <p>Sets the log file to be used by the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="acc796068843d419575a2874657787d01"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#acc796068843d419575a2874657787d01" class="m-doc-self">setLogStream</a>(</span><span class="m-doc-wrap">std::ostream&amp; stream) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">stream</td>
+                  <td>The logging output stream.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the output stream to be used by the solver for logging.</p>
+          </div></section>
+          <section class="m-doc-details" id="a96ef6c2f35539f15a6d521f8a8b29e84"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a96ef6c2f35539f15a6d521f8a8b29e84" class="m-doc-self">loadInstance</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+<p>Loads a problem instance from a file.</p>
           </div></section>
           <section class="m-doc-details" id="a3df42d708a35ae7a6859fa2a2ca54eb7"><div>
             <h3>
@@ -581,6 +700,20 @@
             </h3>
 <p>Interrupts (asynchronously) the search currently performed by this solver.</p>
           </div></section>
+          <section class="m-doc-details" id="ac36101b4e220e2c56121bd96509f826a"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::UniverseSolverResult Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac36101b4e220e2c56121bd96509f826a" class="m-doc-self">getResult</a>(</span><span class="m-doc-wrap">)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The result obtained by this solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current result obtained by this solver so far.</p>
+          </div></section>
           <section class="m-doc-details" id="a366086eed2292a8f3791426ba2e86088"><div>
             <h3>
               <span class="m-doc-wrap-bumper">std::vector&lt;Universe::BigInteger&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a366086eed2292a8f3791426ba2e86088" class="m-doc-self">solution</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
@@ -608,6 +741,192 @@
               </tfoot>
             </table>
 <p>Gives the mapping between the name of a variable and the assignment found for this variable by this solver (if any).</p>
+          </div></section>
+          <section class="m-doc-details" id="a0219b877f701f622e7fa94ea569552c0"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::map&lt;std::string, Universe::BigInteger&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0219b877f701f622e7fa94ea569552c0" class="m-doc-self">mapSolution</a>(</span><span class="m-doc-wrap">bool excludeAux) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">excludeAux</td>
+                  <td>Whether auxiliary variables should be excluded from the solution.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>The solution found by this solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the mapping between the names of the variables and the assignment found by this solver (if any).</p>
+          </div></section>
+          <section class="m-doc-details" id="a78e8c3a6cbbf150af01901d8bf354882"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a78e8c3a6cbbf150af01901d8bf354882" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Whether the last solution is correct.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks the last solution that has been computed by the solver. Said differently, this method ensures that the last solution satisfies all the constraints of the problem solved by the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="aa78d7e9a20c1f78f5307c62db7ef831d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aa78d7e9a20c1f78f5307c62db7ef831d" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::BigInteger&gt;&amp; assignment) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">assignment</td>
+                  <td>The assignment to check as a solution.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Whether the given assignment is a solution of the problem.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks whether the given assignment is a solution of the problem. Said differently, this method ensures that the given assignment satisfies all the constraints of the problem solved by the solver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a9b859576b2c8b50eeddad38a8b713bc9"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::IOptimizationSolver* Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9b859576b2c8b50eeddad38a8b713bc9" class="m-doc-self">toOptimizationSolver</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The casted optimization solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Casts this solver into an IOptimizationSolver.</p>
+          </div></section>
+          <section class="m-doc-details" id="a92b4c6f315518f62c5e7116ebb2965e6"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a92b4c6f315518f62c5e7116ebb2965e6" class="m-doc-self">isMinimization</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Whether the underlying problem is a minimization problem.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Checks whether the optimization problem is a minimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="a62a5e04fd03b5a75a76767026b18678f"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a62a5e04fd03b5a75a76767026b18678f" class="m-doc-self">setBounds</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb,
+              const Universe::BigInteger&amp; ub) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">lb</td>
+                  <td>The lower bound to set.</td>
+                </tr>
+                <tr>
+                  <td>ub</td>
+                  <td>The upper bound to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the bounds for the optimization problem to solve.</p>
+          </div></section>
+          <section class="m-doc-details" id="a7cfda9a25c1723d41def29444e2df46f"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a7cfda9a25c1723d41def29444e2df46f" class="m-doc-self">setLowerBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; lb) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">lb</td>
+                  <td>The lower bound to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the lower bound for the optimization problem to solve.</p>
+          </div></section>
+          <section class="m-doc-details" id="a9ecd7fd05d1b743f8b7cedfcbd5dc972"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::BigInteger Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9ecd7fd05d1b743f8b7cedfcbd5dc972" class="m-doc-self">getLowerBound</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The current lower bound.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current (best) lower bound of the underlying optimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="a331d5e6adafe2842c37de40050643094"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a331d5e6adafe2842c37de40050643094" class="m-doc-self">setUpperBound</a>(</span><span class="m-doc-wrap">const Universe::BigInteger&amp; ub) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">ub</td>
+                  <td>The upper bound to set.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Sets the upper bound for the optimization problem to solve.</p>
+          </div></section>
+          <section class="m-doc-details" id="a82fb7cf1acef6df5b80b1c95d2a686ab"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::BigInteger Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a82fb7cf1acef6df5b80b1c95d2a686ab" class="m-doc-self">getUpperBound</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The current upper bound.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current (best) upper bound of the underlying optimization problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="a241091f898c4e00e9379dff5271561f3"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::BigInteger Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a241091f898c4e00e9379dff5271561f3" class="m-doc-self">getCurrentBound</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The current bound.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the current (best) bound that have been found by this solver. It is the current lower or upper bound, depending on whether the problem is a minimization or maximization problem.</p>
           </div></section>
           <section class="m-doc-details" id="a6e038d7b59205995508191e1d1d863bd"><div>
             <h3>
@@ -734,6 +1053,12 @@
             </table>
 <p>Updates the search when a solver proved the unsatisfiability of its problem.</p>
           </div></section>
+          <section class="m-doc-details" id="a3601a97d8656411f7ab174dc01af515b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3601a97d8656411f7ab174dc01af515b" class="m-doc-self">updateBounds</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+<p>Updates the bounds allocated to the different solvers when new information is obtained.</p>
+          </div></section>
           <section class="m-doc-details" id="abd753b709a993fe06e8413be1aef9afa"><div>
             <h3>
               <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#abd753b709a993fe06e8413be1aef9afa" class="m-doc-self">endSearch</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
@@ -749,29 +1074,29 @@
             </h3>
 <p>The interface used to communicate with the different solvers.</p>
           </div></section>
-          <section class="m-doc-details" id="af80631563b18a7b3ec821187ac011521"><div>
-            <h3>
-              std::vector&lt;<a href="classPanoramyx_1_1RemoteSolver.html" class="m-doc">Panoramyx::<wbr />RemoteSolver</a>*&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#af80631563b18a7b3ec821187ac011521" class="m-doc-self">solvers</a> <span class="m-label m-warning">protected</span>
-            </h3>
-<p>The solvers that run in parallel.</p>
-          </div></section>
-          <section class="m-doc-details" id="a8e47c6daaba34bd56c2462087079a108"><div>
-            <h3>
-              int Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a8e47c6daaba34bd56c2462087079a108" class="m-doc-self">runningSolvers</a> <span class="m-label m-warning">protected</span>
-            </h3>
-<p>The number of solvers that are currently running.</p>
-          </div></section>
           <section class="m-doc-details" id="aa02d2edeeeee366084978f355a6cbd35"><div>
             <h3>
               <a href="classPanoramyx_1_1IBoundAllocationStrategy.html" class="m-doc">Panoramyx::<wbr />IBoundAllocationStrategy</a>* Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#aa02d2edeeeee366084978f355a6cbd35" class="m-doc-self">allocationStrategy</a> <span class="m-label m-warning">protected</span>
             </h3>
 <p>The allocation strategy used to allocate bounds to the different solvers.</p>
           </div></section>
-          <section class="m-doc-details" id="aa89a4789230b69ea102ab022034cbabc"><div>
+          <section class="m-doc-details" id="af80631563b18a7b3ec821187ac011521"><div>
             <h3>
-              std::vector&lt;Universe::BigInteger&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#aa89a4789230b69ea102ab022034cbabc" class="m-doc-self">currentBounds</a> <span class="m-label m-warning">protected</span>
+              std::vector&lt;<a href="classPanoramyx_1_1RemoteSolver.html" class="m-doc">Panoramyx::<wbr />RemoteSolver</a>*&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#af80631563b18a7b3ec821187ac011521" class="m-doc-self">solvers</a> <span class="m-label m-warning">protected</span>
             </h3>
-<p>The bounds that are currently assigned to the different solvers.</p>
+<p>The solvers that run in parallel.</p>
+          </div></section>
+          <section class="m-doc-details" id="a22f71a13058ee79b7efd923c38f2dba9"><div>
+            <h3>
+              std::vector&lt;bool&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a22f71a13058ee79b7efd923c38f2dba9" class="m-doc-self">currentRunningSolvers</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The vector telling which solvers are currently running.</p>
+          </div></section>
+          <section class="m-doc-details" id="a8e47c6daaba34bd56c2462087079a108"><div>
+            <h3>
+              int Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a8e47c6daaba34bd56c2462087079a108" class="m-doc-self">runningSolvers</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The number of solvers that are currently running.</p>
           </div></section>
           <section class="m-doc-details" id="a0467489aad9bd554aab2021e30c59ae0"><div>
             <h3>
@@ -791,17 +1116,17 @@
             </h3>
 <p>The current upper bound of the optimization problem.</p>
           </div></section>
-          <section class="m-doc-details" id="a549502d664978de7b573987a2c55b5e9"><div>
+          <section class="m-doc-details" id="aa89a4789230b69ea102ab022034cbabc"><div>
             <h3>
-              bool Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a549502d664978de7b573987a2c55b5e9" class="m-doc-self">interrupted</a> <span class="m-label m-warning">protected</span>
+              std::vector&lt;Universe::BigInteger&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#aa89a4789230b69ea102ab022034cbabc" class="m-doc-self">currentBounds</a> <span class="m-label m-warning">protected</span>
             </h3>
-<p>Whether the solver has been interrupted.</p>
+<p>The bounds that are currently assigned to the different solvers.</p>
           </div></section>
-          <section class="m-doc-details" id="a0fafef93dac7860abc5d78f6cf49ddd2"><div>
+          <section class="m-doc-details" id="a8245f44c43a4aee47d4fa57c48c32064"><div>
             <h3>
-              std::binary_semaphore Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a0fafef93dac7860abc5d78f6cf49ddd2" class="m-doc-self">solved</a> <span class="m-label m-warning">protected</span>
+              unsigned Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a8245f44c43a4aee47d4fa57c48c32064" class="m-doc-self">winner</a> <span class="m-label m-warning">protected</span>
             </h3>
-<p>The semaphore allowing to wait for a final answer from the solvers.</p>
+<p>The index of the solver that found the answer.</p>
           </div></section>
           <section class="m-doc-details" id="a864692235cafe03bc848a3b1162e3c54"><div>
             <h3>
@@ -809,11 +1134,29 @@
             </h3>
 <p>The result of the solving process.</p>
           </div></section>
-          <section class="m-doc-details" id="a8245f44c43a4aee47d4fa57c48c32064"><div>
+          <section class="m-doc-details" id="a7400fc4633c658df276b85d295891a86"><div>
             <h3>
-              unsigned Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a8245f44c43a4aee47d4fa57c48c32064" class="m-doc-self">winner</a> <span class="m-label m-warning">protected</span>
+              std::map&lt;std::string, Universe::BigInteger&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a7400fc4633c658df276b85d295891a86" class="m-doc-self">bestSolution</a> <span class="m-label m-warning">protected</span>
             </h3>
-<p>The index of the solver that found the answer.</p>
+<p>The assignment corresponding to the current (best) solution.</p>
+          </div></section>
+          <section class="m-doc-details" id="afc0b2e69b33f1d35e3b05b6c97c69d1d"><div>
+            <h3>
+              std::mutex Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#afc0b2e69b33f1d35e3b05b6c97c69d1d" class="m-doc-self">solutionMutex</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The mutex avoiding to read and write the best solution at the same time.</p>
+          </div></section>
+          <section class="m-doc-details" id="a0fafef93dac7860abc5d78f6cf49ddd2"><div>
+            <h3>
+              std::binary_semaphore Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a0fafef93dac7860abc5d78f6cf49ddd2" class="m-doc-self">solved</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The semaphore allowing to wait for a final answer from the solvers.</p>
+          </div></section>
+          <section class="m-doc-details" id="a549502d664978de7b573987a2c55b5e9"><div>
+            <h3>
+              bool Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a549502d664978de7b573987a2c55b5e9" class="m-doc-self">interrupted</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>Whether the solver has been interrupted.</p>
           </div></section>
           <section class="m-doc-details" id="a0fbe2374a9223a94317419df82db060f"><div>
             <h3>
