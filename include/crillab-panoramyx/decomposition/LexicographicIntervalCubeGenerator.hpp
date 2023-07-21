@@ -19,8 +19,8 @@
  */
 
 /**
- * @file LexicographicCubeGenerator.hpp
- * @brief Generates cubes following a lexicographic order.
+ * @file LexicographicIntervalCubeGenerator.hpp
+ * @brief Generates cubes of intervals following a lexicographic order.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -29,27 +29,35 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
-#ifndef PANORAMYX_LEXICOGRAPHICCUBEGENERATOR_HPP
-#define PANORAMYX_LEXICOGRAPHICCUBEGENERATOR_HPP
+#ifndef PANORAMYX_LEXICOGRAPHICINTERVALCUBEGENERATOR_HPP
+#define PANORAMYX_LEXICOGRAPHICINTERVALCUBEGENERATOR_HPP
 
 #include "AbstractCubeGenerator.hpp"
 
 namespace Panoramyx {
 
     /**
-     * The LexicographicCubeGenerator generates cubes following a lexicographic order
-     * on the variables and the values of their domains.
+     * The LexicographicIntervalCubeGenerator generates cubes following a lexicographic order
+     * on the variables and the values of their domains, decomposed into intervals.
      */
-    class LexicographicCubeGenerator : public Panoramyx::AbstractCubeGenerator {
+    class LexicographicIntervalCubeGenerator : public Panoramyx::AbstractCubeGenerator {
+
+    private:
+
+        /**
+         * The number of intervals in which to decompose the domain of variables.
+         */
+        int nbIntervals;
 
     public:
 
         /**
-         * Creates a new LexicographicCubeGenerator.
+         * Creates a new LexicographicIntervalCubeGenerator.
          *
          * @param nbCubesMax The maximum number of cubes to generate.
+         * @param nbIntervals The number of intervals in which to decompose the domain of variables.
          */
-        explicit LexicographicCubeGenerator(int nbCubesMax);
+        explicit LexicographicIntervalCubeGenerator(int nbCubesMax, int nbIntervals);
 
         /**
          * Generates the cubes representing the assumptions to distribute among the

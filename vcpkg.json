@@ -6,6 +6,7 @@
     "loguru",
     "argparse",
     "crillab-autis",
+    "crillab-universe",
     "mpi"
   ]
 }

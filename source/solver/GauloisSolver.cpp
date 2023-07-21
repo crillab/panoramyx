@@ -348,6 +348,19 @@ Universe::UniverseSolverResult
 GauloisSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteger>> asumpts, Message *m) {
     int src = m->src;
     std::thread t([this, src, asumpts]() {
+        std::vector<Universe::UniverseAssumption<Universe::BigInteger>> realAssumpts;
+        std::map<std::string, Universe::IUniverseVariable*> mapping = solver->getVariablesMapping();
+        for (int i = 0; i < asumpts.size(); i++) {
+            auto &a = asumpts[i];
+            if (a.isEqual()) {
+                realAssumpts.emplace_back(a);
+            }  else {
+                auto &b = asumpts[i + 1];
+                mapping[a.getVariableId()]->getDomain()->keepValues(a.getValue(), b.getValue());
+                i++;
+            }
+        }
+
         DLOG_F(INFO, "Run solve(assumpts,m) in a new thread.");
         loadMutex.lock();
         DLOG_F(INFO, "après loadmutex.lock()");

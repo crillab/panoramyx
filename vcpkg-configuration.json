@@ -4,11 +4,12 @@
     {
       "kind": "git",
       "repository": "https://github.com/crillab/vcpkg-registry",
-      "baseline": "1ce97e4c2435daeb41b680d7d6aa51ff7cf56b9c",
+      "baseline": "aad22dfa14a7a0ced8cd55982c7903ab94d90b83",
       "packages": [
         "crillab-*",
         "xcsp3*",
         "loguru",
+        "kahypar",
         "argparse"
       ]
     }

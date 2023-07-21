@@ -14,6 +14,7 @@
 #include "crillab-panoramyx/core/FinalConsistencyChecker.hpp"
 #include "crillab-panoramyx/core/PartialConsistencyChecker.hpp"
 #include "crillab-panoramyx/decomposition/LexicographicCubeGenerator.hpp"
+#include "crillab-panoramyx/decomposition/LexicographicIntervalCubeGenerator.hpp"
 #include "crillab-panoramyx/network/INetworkCommunication.hpp"
 #include "crillab-panoramyx/network/MPINetworkCommunication.hpp"
 #include "crillab-panoramyx/optim/decomposition/LinearRangeIterator.hpp"
@@ -121,6 +122,7 @@ argparse::ArgumentParser createEPSParser() {
                 throw runtime_error("Unknown cube generator " + value);
             });
     eps.add_argument("-f", "--factor-cube-generator").default_value(30).scan<'i',int>();
+    eps.add_argument("--nb-intervals").default_value(5).scan<'i',int>();
     eps.add_argument("--consistency-checker-strategy").default_value(std::string{"Null"})
             .action([](const std::string &value) {
                 static const std::vector<std::string> choices = {"Null", "Partial", "Final"};
@@ -214,6 +216,11 @@ ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &program, INetworkCo
     if (program.get<string>("cube-generator") == "Lexicographic") {
         auto cg = new LexicographicCubeGenerator(
                 networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"));
+        parseConsistencyChecker(program, cg);
+        return cg;
+    }else if (program.get<string>("cube-generator") == "Interval") {
+        auto cg = new LexicographicIntervalCubeGenerator(
+                networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"), program.get<int>("nb-intervals"));
         parseConsistencyChecker(program, cg);
         return cg;
     }else if (program.get<string>("cube-generator") == "CPIR") {
