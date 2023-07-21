@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Panoramyx::LexicographicCubeGenerator class | crillab-panoramyx</title>
+  <title>Panoramyx::StreamLexicographicIntervalCube class | crillab-panoramyx</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -49,8 +49,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>LexicographicCubeGenerator <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="LexicographicCubeGenerator_8hpp.html">&lt;LexicographicCubeGenerator.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>StreamLexicographicIntervalCube <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="StreamLexicographicIntervalCube_8hpp.html">&lt;StreamLexicographicIntervalCube.hpp&gt;</a></div>
         </h1>
         <div class="m-block m-default">
           <h3>Contents</h3>
@@ -65,12 +65,13 @@
             </li>
           </ul>
         </div>
-<p>The <a href="classPanoramyx_1_1LexicographicCubeGenerator.html" class="m-doc">LexicographicCubeGenerator</a> generates cubes following a lexicographic order on the variables and the values of their domains.</p>
+<p>The <a href="classPanoramyx_1_1StreamLexicographicCube.html" class="m-doc">StreamLexicographicCube</a> provides a stream of lexicographic interval cubes, that are generated on the fly as the stream is being iterated over.</p>
         <section id="base-classes">
           <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classPanoramyx_1_1AbstractCubeGenerator.html" class="m-doc">AbstractCubeGenerator</a>
+              <div class="m-doc-template">template&lt;typename E&gt;</div>
+              class <a href="classPanoramyx_1_1Stream.html" class="m-doc">Stream&lt;std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&gt;</a>
             </dt>
             <dd></dd>
           </dl>
@@ -79,7 +80,13 @@
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper"><a href="#a77174935f5b1cee1e341221e4ff7dd5c" class="m-doc">LexicographicCubeGenerator</a>(</span><span class="m-doc-wrap">int nbCubesMax) <span class="m-label m-flat m-info">explicit</span> </span>
+              <span class="m-doc-wrap-bumper"><a href="#a7d31f8e7370215bdcb010c1dd9bb3a4b" class="m-doc">StreamLexicographicIntervalCube</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; mapping,
+              size_t nbCubeMax,
+              int nbIntervals) <span class="m-label m-flat m-info">explicit</span> </span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a1027f3b80e31cd49b8ff203504ecdd1f" class="m-doc">~StreamLexicographicIntervalCube</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
           </dl>
@@ -88,16 +95,22 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#aef8cf61a5cc670ab8df93260a1be3483" class="m-doc">generateCubes</a>(</span><span class="m-doc-wrap">) -&gt; <a href="classPanoramyx_1_1Stream.html" class="m-doc">Panoramyx::<wbr />Stream</a>&lt;std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&gt;* <span class="m-label m-flat m-warning">override</span></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a65f13860081998668c135369a723da25" class="m-doc">hasNext</a>(</span><span class="m-doc-wrap">) const -&gt; bool <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a73168acf0efc23e2a329c0f4ac025ca5" class="m-doc">next</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt; <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="a77174935f5b1cee1e341221e4ff7dd5c"><div>
+          <section class="m-doc-details" id="a7d31f8e7370215bdcb010c1dd9bb3a4b"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />LexicographicCubeGenerator::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a77174935f5b1cee1e341221e4ff7dd5c" class="m-doc-self">LexicographicCubeGenerator</a>(</span><span class="m-doc-wrap">int nbCubesMax) <span class="m-label m-info">explicit</span> </span></span>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />StreamLexicographicIntervalCube::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a7d31f8e7370215bdcb010c1dd9bb3a4b" class="m-doc-self">StreamLexicographicIntervalCube</a>(</span><span class="m-doc-wrap">const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; mapping,
+              size_t nbCubeMax,
+              int nbIntervals) <span class="m-label m-info">explicit</span> </span></span>
             </h3>
             <table class="m-table m-fullwidth m-flat">
               <thead>
@@ -105,26 +118,54 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">nbCubesMax</td>
+                  <td style="width: 1%">mapping</td>
+                  <td>The mapping of the variables of the problem to solve.</td>
+                </tr>
+                <tr>
+                  <td>nbCubeMax</td>
                   <td>The maximum number of cubes to generate.</td>
+                </tr>
+                <tr>
+                  <td>nbIntervals</td>
+                  <td>The number of intervals in which to decompose the domain of variables.</td>
                 </tr>
               </tbody>
             </table>
-<p>Creates a new <a href="classPanoramyx_1_1LexicographicCubeGenerator.html" class="m-doc">LexicographicCubeGenerator</a>.</p>
+<p>Creates a new <a href="classPanoramyx_1_1StreamLexicographicCube.html" class="m-doc">StreamLexicographicCube</a>.</p>
           </div></section>
-          <section class="m-doc-details" id="aef8cf61a5cc670ab8df93260a1be3483"><div>
+          <section class="m-doc-details" id="a1027f3b80e31cd49b8ff203504ecdd1f"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a href="classPanoramyx_1_1Stream.html" class="m-doc">Panoramyx::<wbr />Stream</a>&lt;std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&gt;* Panoramyx::<wbr />LexicographicCubeGenerator::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aef8cf61a5cc670ab8df93260a1be3483" class="m-doc-self">generateCubes</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />StreamLexicographicIntervalCube::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1027f3b80e31cd49b8ff203504ecdd1f" class="m-doc-self">~StreamLexicographicIntervalCube</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span> <span class="m-label m-info">defaulted</span></span></span>
+            </h3>
+<p>Destroys this <a href="classPanoramyx_1_1StreamLexicographicCube.html" class="m-doc">StreamLexicographicCube</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="a65f13860081998668c135369a723da25"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool Panoramyx::<wbr />StreamLexicographicIntervalCube::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a65f13860081998668c135369a723da25" class="m-doc-self">hasNext</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-warning">override</span></span></span>
             </h3>
             <table class="m-table m-fullwidth m-flat">
               <tfoot>
                 <tr>
                   <th style="width: 1%">Returns</th>
-                  <td>The stream of the generated cubes.</td>
+                  <td>Whether there is another cube in this stream.</td>
                 </tr>
               </tfoot>
             </table>
-<p>Generates the cubes representing the assumptions to distribute among the solvers that are run in parallel.</p>
+<p>Checks whether there is another cube in this stream.</p>
+          </div></section>
+          <section class="m-doc-details" id="a73168acf0efc23e2a329c0f4ac025ca5"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt; Panoramyx::<wbr />StreamLexicographicIntervalCube::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a73168acf0efc23e2a329c0f4ac025ca5" class="m-doc-self">next</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The next cube.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the next cube in this stream. The behavior of this method is undefined if <a href="classPanoramyx_1_1StreamLexicographicIntervalCube.html#a65f13860081998668c135369a723da25" class="m-doc">hasNext()</a> returned false.</p>
           </div></section>
         </section>
       </div>
