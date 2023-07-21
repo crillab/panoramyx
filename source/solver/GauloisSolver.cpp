@@ -29,6 +29,7 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
+#include <cassert>
 #include <fstream>
 #include <thread>
 

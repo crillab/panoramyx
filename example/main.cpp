@@ -115,7 +115,7 @@ argparse::ArgumentParser createEPSParser() {
     eps.add_argument("-g", "--cube-generator")
             .default_value<string>(std::string{"Lexicographic"})
             .action([](const std::string &value) {
-                static const std::vector<std::string> choices = {"Lexicographic","CPIR"};
+                static const std::vector<std::string> choices = {"Lexicographic", "Interval","CPIR"};
                 if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
                     return value;
                 }
