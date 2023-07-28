@@ -2,6 +2,7 @@
   "name": "crillab-panoramyx",
   "version-semver": "0.1.0",
   "dependencies": [
+    "kahypar",
     "libxml2",
     "loguru",
     "argparse",
