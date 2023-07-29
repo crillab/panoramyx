@@ -86,6 +86,13 @@
             </dt>
             <dd></dd>
             <dt>
+              <span class="m-doc-wrap-bumper"><a href="#acda4ee7b30b49327116a4bd1d297e3f3" class="m-doc">StreamLexicographicCube</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; branchingVariables,
+              const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; mapping,
+              <a href="classPanoramyx_1_1IConsistencyChecker.html" class="m-doc">Panoramyx::<wbr />IConsistencyChecker</a>* checker,
+              size_t nbCubeMax) <span class="m-label m-flat m-info">explicit</span> </span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper"><a href="#a8c1e2af3a77a1050acfc226e2cdc9a4b" class="m-doc">~StreamLexicographicCube</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
@@ -119,6 +126,38 @@
               <tbody>
                 <tr>
                   <td style="width: 1%">mapping</td>
+                  <td>The mapping of the variables of the problem to solve.</td>
+                </tr>
+                <tr>
+                  <td>checker</td>
+                  <td>The consistency checker used to check the consistency of the cubes.</td>
+                </tr>
+                <tr>
+                  <td>nbCubeMax</td>
+                  <td>The maximum number of cubes to generate.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Creates a new <a href="classPanoramyx_1_1StreamLexicographicCube.html" class="m-doc">StreamLexicographicCube</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="acda4ee7b30b49327116a4bd1d297e3f3"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />StreamLexicographicCube::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#acda4ee7b30b49327116a4bd1d297e3f3" class="m-doc-self">StreamLexicographicCube</a>(</span><span class="m-doc-wrap">const std::vector&lt;std::string&gt;&amp; branchingVariables,
+              const std::map&lt;std::string, Universe::IUniverseVariable*&gt;&amp; mapping,
+              <a href="classPanoramyx_1_1IConsistencyChecker.html" class="m-doc">Panoramyx::<wbr />IConsistencyChecker</a>* checker,
+              size_t nbCubeMax) <span class="m-label m-info">explicit</span> </span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">branchingVariables</td>
+                  <td>The subset of variables to consider when generating cubes.</td>
+                </tr>
+                <tr>
+                  <td>mapping</td>
                   <td>The mapping of the variables of the problem to solve.</td>
                 </tr>
                 <tr>
