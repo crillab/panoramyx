@@ -46,7 +46,7 @@ add_library(
     ${SOURCES} ${HEADERS}
 )
 add_library(crillab-panoramyx::crillab-panoramyx ALIAS crillab-panoramyx_crillab-panoramyx)
-target_link_libraries(crillab-panoramyx_crillab-panoramyx crillab-autis::crillab-autis loguru ${MPI_CXX_LIBRARIES})
+target_link_libraries(crillab-panoramyx_crillab-panoramyx crillab-autis::crillab-autis loguru ${MPI_CXX_LIBRARIES} kahypar::kahypar)
 if(WIN32)
 target_compile_options(crillab-panoramyx_crillab-panoramyx PRIVATE /MT)
 endif()

@@ -4,7 +4,7 @@
     {
       "kind": "git",
       "repository": "https://github.com/crillab/vcpkg-registry",
-      "baseline": "0ed8822db80a9d5ad5ee1b87a06749539ede15b9",
+      "baseline": "d48cc4c4b6c9f7de6ceb4d2866f1b089201291be",
       "packages": [
         "crillab-*",
         "xcsp3*",
