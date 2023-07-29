@@ -53,6 +53,11 @@ namespace Panoramyx {
     private:
 
         /**
+         * The subset of variables to consider when generating cubes.
+         */
+        std::vector<std::string> branchingVariables;
+
+        /**
          * The mapping of the variables of the problem to solve.
          */
         const std::map<std::string, Universe::IUniverseVariable *> &mapping;
@@ -97,6 +102,19 @@ namespace Panoramyx {
          * @param nbCubeMax The maximum number of cubes to generate.
          */
         explicit StreamLexicographicCube(const std::map<std::string, Universe::IUniverseVariable *> &mapping,
+                                         Panoramyx::IConsistencyChecker *checker,
+                                         size_t nbCubeMax);
+
+        /**
+         * Creates a new StreamLexicographicCube.
+         *
+         * @param branchingVariables The subset of variables to consider when generating cubes.
+         * @param mapping The mapping of the variables of the problem to solve.
+         * @param checker The consistency checker used to check the consistency of the cubes.
+         * @param nbCubeMax The maximum number of cubes to generate.
+         */
+        explicit StreamLexicographicCube(const std::vector<std::string> &branchingVariables,
+                                         const std::map<std::string, Universe::IUniverseVariable *> &mapping,
                                          Panoramyx::IConsistencyChecker *checker,
                                          size_t nbCubeMax);
 

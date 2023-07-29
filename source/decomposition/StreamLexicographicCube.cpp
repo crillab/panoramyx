@@ -39,6 +39,24 @@ using namespace Panoramyx;
 StreamLexicographicCube::StreamLexicographicCube(const map<string, IUniverseVariable *> &mapping,
                                                  IConsistencyChecker *checker,
                                                  size_t nbCubeMax) :
+        branchingVariables(),
+        mapping(mapping),
+        consistencyChecker(checker),
+        nbCubeMax(nbCubeMax),
+        current(),
+        variables(),
+        indexesCurrentValues(),
+        variablesFinished() {
+    for (auto &variable : mapping) {
+        branchingVariables.push_back(variable.first);
+    }
+}
+
+StreamLexicographicCube::StreamLexicographicCube(const vector<string> &branchingVariables,
+                                                 const map<string, IUniverseVariable *> &mapping,
+                                                 IConsistencyChecker *checker,
+                                                 size_t nbCubeMax) :
+        branchingVariables(branchingVariables),
         mapping(mapping),
         consistencyChecker(checker),
         nbCubeMax(nbCubeMax),
@@ -70,9 +88,10 @@ vector<UniverseAssumption<BigInteger>> StreamLexicographicCube::next() {
 void StreamLexicographicCube::generateFirst() {
     size_t estimatedCubeCount = 1;
 
-    for (auto &variable : mapping) {
+    for (auto &identifier : branchingVariables) {
         // Initializing internal data-structures.
-        variables.push_back(variable.second);
+        auto *variable = mapping.at(identifier);
+        variables.push_back(variable);
         indexesCurrentValues.emplace_back(0);
         variablesFinished.emplace_back(false);
 
@@ -80,7 +99,7 @@ void StreamLexicographicCube::generateFirst() {
         assume(variables.size() - 1, 0);
 
         // Updating the estimated count of cubes based on the size of the domain of the current variable.
-        estimatedCubeCount *= variable.second->getDomain()->size();
+        estimatedCubeCount *= variable->getDomain()->size();
         if (estimatedCubeCount >= nbCubeMax) {
             break;
         }

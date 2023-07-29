@@ -35,6 +35,8 @@
 #include "crillab-panoramyx/optim/decomposition/LogarithmicRangeIterator.hpp"
 #include "crillab-panoramyx/optim/decomposition/AggressiveRangeBasedAllocationStrategy.hpp"
 #include "crillab-panoramyx/decomposition/CartesianProductIterativeRefinementCubeGenerator.hpp"
+#include "crillab-panoramyx/decomposition/HypergraphDecompositionCubeGenerator.hpp"
+#include "crillab-panoramyx/decomposition/KahyparDecompositionSolver.hpp"
 
 
 using namespace Panoramyx;
@@ -115,7 +117,7 @@ argparse::ArgumentParser createEPSParser() {
     eps.add_argument("-g", "--cube-generator")
             .default_value<string>(std::string{"Lexicographic"})
             .action([](const std::string &value) {
-                static const std::vector<std::string> choices = {"Lexicographic", "Interval","CPIR"};
+                static const std::vector<std::string> choices = {"Lexicographic", "Interval","CPIR", "Hypergraph"};
                 if (std::find(choices.begin(), choices.end(), value) != choices.end()) {
                     return value;
                 }
@@ -123,6 +125,8 @@ argparse::ArgumentParser createEPSParser() {
             });
     eps.add_argument("-f", "--factor-cube-generator").default_value(30).scan<'i',int>();
     eps.add_argument("--nb-intervals").default_value(5).scan<'i',int>();
+    eps.add_argument("--nb-partitions").default_value(2).scan<'i',int>();
+    eps.add_argument("--imbalance").default_value(0.01).scan<'g',double>();
     eps.add_argument("--consistency-checker-strategy").default_value(std::string{"Null"})
             .action([](const std::string &value) {
                 static const std::vector<std::string> choices = {"Null", "Partial", "Final"};
@@ -132,6 +136,7 @@ argparse::ArgumentParser createEPSParser() {
                 throw runtime_error("Unknown consistency checker " + value);
             });
     eps.add_argument("--consistency-checker-solver");
+    eps.add_argument("--kahypar-configuration-file");
     return eps;
 }
 
@@ -226,6 +231,15 @@ ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &program, INetworkCo
     }else if (program.get<string>("cube-generator") == "CPIR") {
         auto cg = new CartesianProductIterativeRefinementCubeGenerator(
                 networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"));
+        parseConsistencyChecker(program, cg);
+        return cg;
+    }else if (program.get<string>("cube-generator") == "Hypergraph") {
+        auto cg = new HypergraphDecompositionCubeGenerator(
+                networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"),
+                        new KahyparDecompositionSolver(
+                                program.get<double>("imbalance"),
+                                        program.get<int>("factor-cube-generator"),
+                                                program.get<string>("kahypar-configuration-file")));
         parseConsistencyChecker(program, cg);
         return cg;
     }
