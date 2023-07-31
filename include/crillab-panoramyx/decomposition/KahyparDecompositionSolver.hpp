@@ -109,6 +109,15 @@ namespace Panoramyx {
                 const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumptions) override;
 
         /**
+         * Gives the partition computed by this solver.
+         * The partition is represented as a vector of vector of constraint identifiers, where the i-th vector
+         * contains the constraint identifiers of the i-th partition.
+         *
+         * @return The computed partition.
+         */
+        std::vector<std::vector<int>> getPartition() override;
+
+        /**
          * Gives the cutset of the problem to solve.
          *
          * @return The variables belonging to the cutset.

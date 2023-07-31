@@ -113,6 +113,7 @@ void EPSSolver::waitForAllCubes(int nbCubes) {
         cubes.acquire();
         if (result == Universe::UniverseSolverResult::SATISFIABLE) {
             // One of the cube has a solution, so the search is finished.
+            // FIXME: solved will not be released here, is that OK?
             return;
         }
     }

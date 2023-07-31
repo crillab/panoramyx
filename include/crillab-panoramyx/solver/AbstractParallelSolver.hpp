@@ -440,6 +440,13 @@ namespace Panoramyx {
         virtual void beforeSearch();
 
         /**
+         * Applies some initialization to a particular solver before actually starting the search.
+         *
+         * @param solverIndex The index of the solver to initialize.
+         */
+        virtual void beforeSearch(unsigned solverIndex);
+
+        /**
          * Actually starts the search performed by the different solvers.
          */
         virtual void startSearch() = 0;
@@ -471,6 +478,13 @@ namespace Panoramyx {
          * @param solverIndex The index of the solver that returned UNSATISFIABLE.
          */
         virtual void onUnsatisfiableFound(unsigned int solverIndex);
+
+        /**
+         * Updates the search when a solver did not find any solution.
+         *
+         * @param solverIndex The index of the solver that returned UNKNOWN.
+         */
+        virtual void onUnknown(unsigned int solverIndex);
 
         /**
          * Updates the bounds allocated to the different solvers when new information is obtained.

@@ -300,6 +300,10 @@ void AbstractParallelSolver::readMessage(const Message *message) {
         auto src = message->read<unsigned>();
         onUnsatisfiableFound(src);
 
+    } else if (NAME_OF(message, IS(PANO_MESSAGE_UNKNOWN))) {
+        auto src = message->read<unsigned>();
+        onUnknown(src);
+
     } else if (NAME_OF(message, IS(PANO_MESSAGE_END_SEARCH))) {
         runningSolvers--;
         if (runningSolvers <= 0) {
@@ -317,7 +321,11 @@ void AbstractParallelSolver::beforeSearch() {
     // Nothing to do by default.
 }
 
-void AbstractParallelSolver::onSatisfiableFound(unsigned solverIndex) {
+void AbstractParallelSolver::beforeSearch(unsigned int solverIndex) {
+    // Nothing to do by default.
+}
+
+void AbstractParallelSolver::onSatisfiableFound(unsigned int solverIndex) {
     solutionMutex.lock();
     bestSolution = solvers[solverIndex]->mapSolution();
     solutionMutex.unlock();
@@ -328,6 +336,10 @@ void AbstractParallelSolver::onNewBoundFound(const Universe::BigInteger &bound, 
 }
 
 void AbstractParallelSolver::onUnsatisfiableFound(unsigned solverIndex) {
+    // Nothing to do by default.
+}
+
+void AbstractParallelSolver::onUnknown(unsigned int solverIndex) {
     // Nothing to do by default.
 }
 
@@ -344,6 +356,9 @@ void AbstractParallelSolver::endSearch() {
 UniverseSolverResult AbstractParallelSolver::internalSolve(const vector<UniverseAssumption<BigInteger>> &assumpts) {
     // Preparing the solvers.
     beforeSearch();
+    for (int i = 0; i < solvers.size(); i++) {
+        beforeSearch(i);
+    }
 
     // Solving the problem (with or without assumptions).
     if (assumpts.empty()) {

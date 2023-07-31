@@ -52,22 +52,28 @@ KahyparDecompositionSolver::~KahyparDecompositionSolver() {
 }
 
 UniverseSolverResult KahyparDecompositionSolver::solve() {
-    auto *hypergraph = getHypergraph();
-    delete[] partition;
-    int  objective = 0;
-    int *tmpPartition = new int[hypergraph->getNumberOfVertices()];
-    partition = new int[hypergraph->getNumberOfVertices()];
-    kahypar_partition(hypergraph->getNumberOfVertices(), hypergraph->getNumberOfHyperedges(), imbalance, nbBlocks,
-                      hypergraph->getVertexWeights(), hypergraph->getHyperedgeWeights(),
-                      reinterpret_cast<const size_t*>(hypergraph->getHyperedgeIndices()),
-                      reinterpret_cast<const kahypar_hyperedge_id_t*>(hypergraph->getHyperedgeVertices()), &objective,
-                      context, tmpPartition);
+    if (partition == nullptr) {
+        auto *hypergraph = getHypergraph();
+        int objective = 0;
+        int *tmpPartition = new int[hypergraph->getNumberOfVertices()];
+        partition = new int[hypergraph->getNumberOfVertices()];
 
-    kahypar_improve_partition(hypergraph->getNumberOfVertices(), hypergraph->getNumberOfHyperedges(), imbalance, nbBlocks,
-                              hypergraph->getVertexWeights(), hypergraph->getHyperedgeWeights(),
-                              reinterpret_cast<const size_t*>(hypergraph->getHyperedgeIndices()),
-                              reinterpret_cast<const kahypar_hyperedge_id_t*>(hypergraph->getHyperedgeVertices()), tmpPartition,
-                              5, &objective, context, partition);
+        kahypar_partition(hypergraph->getNumberOfVertices(), hypergraph->getNumberOfHyperedges(), imbalance, nbBlocks,
+                          hypergraph->getVertexWeights(), hypergraph->getHyperedgeWeights(),
+                          reinterpret_cast<const size_t *>(hypergraph->getHyperedgeIndices()),
+                          reinterpret_cast<const kahypar_hyperedge_id_t *>(hypergraph->getHyperedgeVertices()),
+                          &objective,
+                          context, tmpPartition);
+
+        kahypar_improve_partition(hypergraph->getNumberOfVertices(), hypergraph->getNumberOfHyperedges(), imbalance,
+                                  nbBlocks,
+                                  hypergraph->getVertexWeights(), hypergraph->getHyperedgeWeights(),
+                                  reinterpret_cast<const size_t *>(hypergraph->getHyperedgeIndices()),
+                                  reinterpret_cast<const kahypar_hyperedge_id_t *>(hypergraph->getHyperedgeVertices()),
+                                  tmpPartition,
+                                  5, &objective, context, partition);
+    }
+
     return UniverseSolverResult::SATISFIABLE;
 }
 
@@ -80,8 +86,17 @@ UniverseSolverResult KahyparDecompositionSolver::solve(const vector<UniverseAssu
     throw UnsupportedOperationException("not implemented yet");
 }
 
+vector<vector<int>> KahyparDecompositionSolver::getPartition() {
+    vector<vector<int>> partitionAsVector(nbBlocks);
+    for (int constraintId = 0; constraintId < getHypergraph()->getNumberOfVertices(); constraintId++) {
+        partitionAsVector[partition[constraintId]].emplace_back(constraintId);
+    }
+    return partitionAsVector;
+}
+
 vector<string> KahyparDecompositionSolver::cutset() {
     vector<string> varInCutset;
+
     // Looking for hyperedges in the cutset.
     auto *hypergraph = getHypergraph();
     for(int i = 0; i < hypergraph->getNumberOfHyperedges(); i++) {
@@ -99,5 +114,6 @@ vector<string> KahyparDecompositionSolver::cutset() {
             }
         }
     }
+
     return varInCutset;
 }

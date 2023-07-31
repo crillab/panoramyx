@@ -50,6 +50,15 @@ namespace Panoramyx {
         virtual ~IHypergraphDecompositionSolver() = default;
 
         /**
+         * Gives the partition computed by this solver.
+         * The partition is represented as a vector of vector of constraint identifiers, where the i-th vector
+         * contains the constraint identifiers of the i-th partition.
+         *
+         * @return The computed partition.
+         */
+        virtual std::vector<std::vector<int>> getPartition() = 0;
+
+        /**
          * Gives the cutset of the problem to solve.
          *
          * @return The variables belonging to the cutset.
