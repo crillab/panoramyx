@@ -76,6 +76,10 @@
             </dt>
             <dd></dd>
             <dt>
+              class <a href="classPanoramyx_1_1PartitionSolver.html" class="m-doc">PartitionSolver</a>
+            </dt>
+            <dd></dd>
+            <dt>
               class <a href="classPanoramyx_1_1PortfolioSolver.html" class="m-doc">PortfolioSolver</a>
             </dt>
             <dd></dd>
@@ -262,6 +266,10 @@
             </dt>
             <dd></dd>
             <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ac31321b4a1cd9a6e3ba8818b75a6b835" class="m-doc">beforeSearch</a>(</span><span class="m-doc-wrap">unsigned solverIndex) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper">void <a href="#ae6753eb67200bb3efdabe7e6c709b34f" class="m-doc">startSearch</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd></dd>
@@ -280,6 +288,10 @@
             <dd></dd>
             <dt>
               <span class="m-doc-wrap-bumper">void <a href="#ae624805ddf4907a72308877e7f936533" class="m-doc">onUnsatisfiableFound</a>(</span><span class="m-doc-wrap">unsigned int solverIndex) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ad561cb464576d84e78705cb0b9fc3b5b" class="m-doc">onUnknown</a>(</span><span class="m-doc-wrap">unsigned int solverIndex) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd></dd>
             <dt>
@@ -974,6 +986,23 @@
             </h3>
 <p>Applies some initialization before actually starting the search.</p>
           </div></section>
+          <section class="m-doc-details" id="ac31321b4a1cd9a6e3ba8818b75a6b835"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac31321b4a1cd9a6e3ba8818b75a6b835" class="m-doc-self">beforeSearch</a>(</span><span class="m-doc-wrap">unsigned solverIndex) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">solverIndex</td>
+                  <td>The index of the solver to initialize.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Applies some initialization to a particular solver before actually starting the search.</p>
+          </div></section>
           <section class="m-doc-details" id="ae6753eb67200bb3efdabe7e6c709b34f"><div>
             <h3>
               <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae6753eb67200bb3efdabe7e6c709b34f" class="m-doc-self">startSearch</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">pure virtual</span> <span class="m-label m-warning">protected</span></span></span>
@@ -1052,6 +1081,23 @@
               </tbody>
             </table>
 <p>Updates the search when a solver proved the unsatisfiability of its problem.</p>
+          </div></section>
+          <section class="m-doc-details" id="ad561cb464576d84e78705cb0b9fc3b5b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />AbstractParallelSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad561cb464576d84e78705cb0b9fc3b5b" class="m-doc-self">onUnknown</a>(</span><span class="m-doc-wrap">unsigned int solverIndex) <span class="m-label m-warning">virtual</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">solverIndex</td>
+                  <td>The index of the solver that returned UNKNOWN.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>Updates the search when a solver did not find any solution.</p>
           </div></section>
           <section class="m-doc-details" id="a3601a97d8656411f7ab174dc01af515b"><div>
             <h3>

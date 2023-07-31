@@ -88,6 +88,10 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a3c45a7fa30624524ea155b069707eda5" class="m-doc">getPartition</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;std::vector&lt;int&gt;&gt; <span class="m-label m-flat m-warning">pure virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#ac2e7ea9016d3841f30b60ffc2b202cdb" class="m-doc">cutset</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;std::string&gt; <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd></dd>
@@ -100,6 +104,20 @@
               <span class="m-doc-wrap-bumper"> Panoramyx::<wbr />IHypergraphDecompositionSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a2c91965e21bbada0da288e2b4890ca96" class="m-doc-self">~IHypergraphDecompositionSolver</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span> <span class="m-label m-info">defaulted</span></span></span>
             </h3>
 <p>Destroys this <a href="classPanoramyx_1_1IHypergraphDecompositionSolver.html" class="m-doc">IHypergraphDecompositionSolver</a>.</p>
+          </div></section>
+          <section class="m-doc-details" id="a3c45a7fa30624524ea155b069707eda5"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::vector&lt;std::vector&lt;int&gt;&gt; Panoramyx::<wbr />IHypergraphDecompositionSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3c45a7fa30624524ea155b069707eda5" class="m-doc-self">getPartition</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">pure virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The computed partition.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the partition computed by this solver. The partition is represented as a vector of vector of constraint identifiers, where the i-th vector contains the constraint identifiers of the i-th partition.</p>
           </div></section>
           <section class="m-doc-details" id="ac2e7ea9016d3841f30b60ffc2b202cdb"><div>
             <h3>
