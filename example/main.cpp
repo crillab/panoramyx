@@ -30,6 +30,7 @@
 #include "crillab-panoramyx/network/NetworkCommunicationFactory.hpp"
 #include "crillab-panoramyx/solver/AbstractSolverBuilder.hpp"
 #include "crillab-panoramyx/solver/EPSSolverBuilder.hpp"
+#include "crillab-panoramyx/solver/RemoteSolver.hpp"
 #include "crillab-panoramyx/core/NullConsistencyChecker.hpp"
 #include "crillab-panoramyx/solver/PortfolioSolverBuilder.hpp"
 #include "crillab-panoramyx/optim/decomposition/LogarithmicRangeIterator.hpp"

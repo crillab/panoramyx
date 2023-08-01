@@ -74,7 +74,7 @@ void EPSSolver::startSearch() {
                 nbCubes++;
                 DLOG_F(INFO, "assigning cubes #%d", nbCubes);
                 auto *solver = availableSolvers.get();
-                currentRunningSolvers[((RemoteSolver *) solver)->getIndex()] = true;
+                currentRunningSolvers[((PanoramyxSolver *) solver)->getIndex()] = true;
                 solver->solve(cube);
 
             } catch (NoSuchElementException &e) {

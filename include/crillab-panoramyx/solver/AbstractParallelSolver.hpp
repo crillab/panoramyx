@@ -38,7 +38,7 @@
 
 #include <crillab-universe/core/IUniverseSolver.hpp>
 
-#include "RemoteSolver.hpp"
+#include "PanoramyxSolver.hpp"
 #include "../network/Message.hpp"
 #include "../optim/decomposition/IBoundAllocationStrategy.hpp"
 #include "../utils/BlockingDeque.hpp"
@@ -66,7 +66,7 @@ namespace Panoramyx {
         /**
          * The solvers that run in parallel.
          */
-        std::vector<Panoramyx::RemoteSolver *> solvers;
+        std::vector<Panoramyx::PanoramyxSolver *> solvers;
 
         /**
          * The vector telling which solvers are currently running.
@@ -154,7 +154,7 @@ namespace Panoramyx {
          *
          * @param solver The solver to add.
          */
-        void addSolver(Panoramyx::RemoteSolver *solver);
+        void addSolver(Panoramyx::PanoramyxSolver *solver);
 
         /**
          * Resets this solver in its original state.

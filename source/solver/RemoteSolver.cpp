@@ -34,9 +34,11 @@
 #include <crillab-except/except.hpp>
 
 #include <crillab-panoramyx/network/Message.hpp>
+#include <crillab-panoramyx/network/MessageBuilder.hpp>
 #include <crillab-panoramyx/solver/RemoteSolver.hpp>
 
 using namespace Panoramyx;
+using namespace Universe;
 
 RemoteSolver::RemoteSolver(int rank) :
         rank(rank) {
@@ -71,17 +73,17 @@ bool RemoteSolver::isOptimization() {
     return *optimization;
 }
 
-Universe::UniverseSolverResult RemoteSolver::solve() {
+UniverseSolverResult RemoteSolver::solve() {
     nVariables();
     nConstraints();
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_SOLVE).withTag(PANO_TAG_SOLVE).build();
     communicator->send(m, rank);
     free(m);
-    return Universe::UniverseSolverResult::UNKNOWN;
+    return UniverseSolverResult::UNKNOWN;
 }
 
-Universe::UniverseSolverResult RemoteSolver::solve(
+UniverseSolverResult RemoteSolver::solve(
         const std::string &filename) {
     //todo nVariables ? nConstraints ? in this case
     MessageBuilder mb;
@@ -91,11 +93,11 @@ Universe::UniverseSolverResult RemoteSolver::solve(
             .build();
     communicator->send(m, rank);
     free(m);
-    return Universe::UniverseSolverResult::UNKNOWN;
+    return UniverseSolverResult::UNKNOWN;
 }
 
-Universe::UniverseSolverResult RemoteSolver::solve(
-        const std::vector<Universe::UniverseAssumption<Universe::BigInteger>>
+UniverseSolverResult RemoteSolver::solve(
+        const std::vector<UniverseAssumption<BigInteger>>
         &assumpts) {
     nVariables();
     nConstraints();
@@ -104,16 +106,16 @@ Universe::UniverseSolverResult RemoteSolver::solve(
     for (auto &assumpt: assumpts) {
         mb.withParameter(assumpt.getVariableId());
         mb.withParameter(assumpt.isEqual());
-        mb.withParameter(Universe::toString(assumpt.getValue()));
+        mb.withParameter(toString(assumpt.getValue()));
 
         LOG_F(INFO, "add assumption: %s %s '%s'", assumpt.getVariableId().c_str(),
               assumpt.isEqual() ? "=" : "!=",
-              Universe::toString(assumpt.getValue()).c_str());
+              toString(assumpt.getValue()).c_str());
     }
     Message *m = mb.withTag(PANO_TAG_SOLVE).build();
     communicator->send(m, rank);
     free(m);
-    return Universe::UniverseSolverResult::UNKNOWN;
+    return UniverseSolverResult::UNKNOWN;
 }
 
 void RemoteSolver::interrupt() {
@@ -159,7 +161,7 @@ void RemoteSolver::reset() {
     free(m);
 }
 
-std::vector<Universe::BigInteger> RemoteSolver::solution() {
+std::vector<BigInteger> RemoteSolver::solution() {
     unsigned long size =
             nVariables() * (PANO_NUMBER_MAX_CHAR + 1) + sizeof(Message);
     mutex.lock();
@@ -171,12 +173,12 @@ std::vector<Universe::BigInteger> RemoteSolver::solution() {
     m = communicator->receive(PANO_TAG_RESPONSE, rank, size);
     mutex.unlock();
 
-    std::vector<Universe::BigInteger> bigbig;
+    std::vector<BigInteger> bigbig;
     char *ptr = m->parameters;
     for (int i = 0, n = 0; n < m->nbParameters; i++) {
         if (ptr[i] == '\0') {
             std::string param(ptr, i);
-            bigbig.push_back(Universe::bigIntegerValueOf(param));
+            bigbig.push_back(bigIntegerValueOf(param));
             ptr += i + 1;
             i = -1;
             n++;
@@ -233,6 +235,11 @@ void RemoteSolver::endSearch() {
     free(m);
 }
 
+UniverseSolverResult RemoteSolver::getResult() {
+    // TODO Really implement this method.
+    return UniverseSolverResult::UNKNOWN;
+}
+
 void RemoteSolver::loadInstance(const std::string &filename) {
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_LOAD_INSTANCE)
@@ -243,16 +250,16 @@ void RemoteSolver::loadInstance(const std::string &filename) {
     free(m);
 }
 
-[[nodiscard]] const std::map<std::string, Universe::IUniverseVariable *>
+[[nodiscard]] const std::map<std::string, IUniverseVariable *>
 &RemoteSolver::getVariablesMapping() {
     throw Except::UnsupportedOperationException("variables are too far far away.");
 }
 
-std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution() {
+std::map<std::string, BigInteger> RemoteSolver::mapSolution() {
     return this->mapSolution(false);
 }
 
-void RemoteSolver::setLowerBound(const Universe::BigInteger &lb) {
+void RemoteSolver::setLowerBound(const BigInteger &lb) {
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_LOWER_BOUND)
             .withParameter(lb)
@@ -263,7 +270,7 @@ void RemoteSolver::setLowerBound(const Universe::BigInteger &lb) {
     free(m);
 }
 
-void RemoteSolver::setUpperBound(const Universe::BigInteger &ub) {
+void RemoteSolver::setUpperBound(const BigInteger &ub) {
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_UPPER_BOUND)
             .withParameter(ub)
@@ -273,8 +280,8 @@ void RemoteSolver::setUpperBound(const Universe::BigInteger &ub) {
     free(m);
 }
 
-void RemoteSolver::setBounds(const Universe::BigInteger &lb,
-                             const Universe::BigInteger &ub) {
+void RemoteSolver::setBounds(const BigInteger &lb,
+                             const BigInteger &ub) {
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_LOWER_UPPER_BOUND)
             .withParameter(lb)
@@ -285,7 +292,7 @@ void RemoteSolver::setBounds(const Universe::BigInteger &lb,
     free(m);
 }
 
-Universe::BigInteger RemoteSolver::getCurrentBound() {
+BigInteger RemoteSolver::getCurrentBound() {
     mutex.lock();
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_GET_CURRENT_BOUND)
@@ -296,7 +303,7 @@ Universe::BigInteger RemoteSolver::getCurrentBound() {
 
     m = communicator->receive(PANO_TAG_RESPONSE, rank);
     std::string param(m->parameters, strlen(m->parameters) + 1);
-    Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
+    BigInteger newBound = bigIntegerValueOf(param);
     mutex.unlock();
     free(m);
     return newBound;
@@ -317,7 +324,7 @@ bool RemoteSolver::isMinimization() {
     return r;
 }
 
-Universe::BigInteger RemoteSolver::getLowerBound() {
+BigInteger RemoteSolver::getLowerBound() {
     mutex.lock();
     MessageBuilder mb;
     Message *m =
@@ -327,13 +334,13 @@ Universe::BigInteger RemoteSolver::getLowerBound() {
 
     m = communicator->receive(PANO_TAG_RESPONSE, rank);
     std::string param(m->parameters, strlen(m->parameters) + 1);
-    Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
+    BigInteger newBound = bigIntegerValueOf(param);
     mutex.unlock();
     free(m);
     return newBound;
 }
 
-Universe::BigInteger RemoteSolver::getUpperBound() {
+BigInteger RemoteSolver::getUpperBound() {
     mutex.lock();
     MessageBuilder mb;
     Message *m =
@@ -343,7 +350,7 @@ Universe::BigInteger RemoteSolver::getUpperBound() {
 
     m = communicator->receive(PANO_TAG_RESPONSE, rank);
     std::string param(m->parameters, strlen(m->parameters) + 1);
-    Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);
+    BigInteger newBound = bigIntegerValueOf(param);
     mutex.unlock();
     free(m);
     return newBound;
@@ -364,7 +371,7 @@ void RemoteSolver::decisionVariables(const std::vector<std::string> &variables) 
     free(m);
 }
 
-void RemoteSolver::addSearchListener(Universe::IUniverseSearchListener *listener) {
+void RemoteSolver::addSearchListener(IUniverseSearchListener *listener) {
     throw Except::UnsupportedOperationException("addSearchListener on RemoteSolver is not supported.");
 }
 
@@ -372,7 +379,7 @@ void RemoteSolver::setLogStream(std::ostream &stream) {
     throw Except::UnsupportedOperationException("setLogStream on RemoteSolver is not supported.");
 }
 
-std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool excludeAux) {
+std::map<std::string, BigInteger> RemoteSolver::mapSolution(bool excludeAux) {
     mutex.lock();
     MessageBuilder mb;
     Message *m = mb.named(PANO_MESSAGE_MAP_SOLUTION)
@@ -388,7 +395,7 @@ std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool exclu
     m = communicator->receive(PANO_TAG_RESPONSE, rank, size);
     DLOG_F(INFO, "après receive", m->src);
     mutex.unlock();
-    std::map<std::string, Universe::BigInteger> bigbig;
+    std::map<std::string, BigInteger> bigbig;
     char *ptrName = m->parameters;
     char *ptrValue = nullptr;
     char *ptr = m->parameters;
@@ -399,7 +406,7 @@ std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool exclu
             } else {
                 std::string name(ptrName, ptrValue - ptrName - 1);
                 std::string value(ptrValue, ptr + i - ptrValue);
-                bigbig[name] = Universe::bigIntegerValueOf(value);
+                bigbig[name] = bigIntegerValueOf(value);
                 ptrValue = nullptr;
                 ptrName = ptr + i + 1;
             }
@@ -410,7 +417,7 @@ std::map<std::string, Universe::BigInteger> RemoteSolver::mapSolution(bool exclu
     return bigbig;
 }
 
-Universe::IOptimizationSolver *RemoteSolver::toOptimizationSolver() {
+IOptimizationSolver *RemoteSolver::toOptimizationSolver() {
     return this;
 }
 
@@ -441,7 +448,7 @@ const std::vector<std::string> &RemoteSolver::getAuxiliaryVariables() {
 }
 
 void RemoteSolver::valueHeuristicStatic(const std::vector<std::string> &variables,
-                                        const std::vector<Universe::BigInteger> &orderedValues) {
+                                        const std::vector<BigInteger> &orderedValues) {
     MessageBuilder mb;
     mb.named(PANO_MESSAGE_VALUE_HEURISTIC_STATIC);
     mb.withParameter((int) variables.size());
@@ -450,7 +457,7 @@ void RemoteSolver::valueHeuristicStatic(const std::vector<std::string> &variable
     }
     mb.withParameter((int) orderedValues.size());
     for (auto &v: orderedValues) {
-        mb.withParameter(Universe::toString(v));
+        mb.withParameter(toString(v));
     }
     Message *m = mb.withTag(PANO_TAG_SOLVE).build();
     communicator->send(m, rank);
@@ -472,7 +479,7 @@ bool RemoteSolver::checkSolution() {
     return b;
 }
 
-bool RemoteSolver::checkSolution(const std::map<std::string, Universe::BigInteger> &assignment) {
+bool RemoteSolver::checkSolution(const std::map<std::string, BigInteger> &assignment) {
     mutex.lock();
     MessageBuilder mb;
     mb.named(PANO_MESSAGE_CHECK_SOLUTION_ASSIGNMENT);
@@ -490,6 +497,6 @@ bool RemoteSolver::checkSolution(const std::map<std::string, Universe::BigIntege
     return b;
 }
 
-const std::vector<Universe::IUniverseConstraint *> &RemoteSolver::getConstraints() {
+const std::vector<IUniverseConstraint *> &RemoteSolver::getConstraints() {
     throw Except::UnsupportedOperationException("Constraints are too far (far) away !");
 }

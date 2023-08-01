@@ -40,11 +40,7 @@
 
 #include <loguru/loguru.hpp>
 
-#include <crillab-universe/core/IUniverseSolver.hpp>
-#include <crillab-universe/optim/IOptimizationSolver.hpp>
-
-#include "../network/INetworkCommunication.hpp"
-#include "../network/MessageBuilder.hpp"
+#include "PanoramyxSolver.hpp"
 
 namespace Panoramyx {
 
@@ -52,7 +48,7 @@ namespace Panoramyx {
      * The RemoteSolver provides a solver implementation encapsulating the communication
      * with a remote solver.
      */
-    class RemoteSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
+    class RemoteSolver : public Panoramyx::PanoramyxSolver {
 
     private:
 
@@ -117,21 +113,21 @@ namespace Panoramyx {
          *
          * @param i The index to set.
          */
-        void setIndex(unsigned i);
+        void setIndex(unsigned i) override;
 
         /**
          * Gives the index of this solver, as assigned by the main solver.
          *
          * @return The index of the solver.
          */
-        unsigned int getIndex() const;
+        unsigned int getIndex() const override;
 
         /**
          * Sets the network communication used to communicate with the (real) remote solver.
          *
          * @param communicator The communicator to set.
          */
-        void setCommunicator(INetworkCommunication *communicator);
+        void setCommunicator(Panoramyx::INetworkCommunication *communicator) override;
 
         /**
          * Resets this solver in its original state.
@@ -282,14 +278,14 @@ namespace Panoramyx {
         /**
          * Terminates the search performed by the remote solver.
          */
-        void endSearch();
+        void endSearch() override;
 
         /**
          * Gives the current result obtained by this solver so far.
          *
          * @return The result obtained by this solver.
          */
-        Universe::UniverseSolverResult getResult();
+        Universe::UniverseSolverResult getResult() override;
 
         /**
          * Gives the solution found by this solver (if any).

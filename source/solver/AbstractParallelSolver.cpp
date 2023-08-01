@@ -31,6 +31,7 @@
 
 #include <thread>
 
+#include <loguru.hpp>
 #include <mpi.h>
 
 #include <crillab-panoramyx/solver/AbstractParallelSolver.hpp>
@@ -63,7 +64,7 @@ AbstractParallelSolver::AbstractParallelSolver(
     currentBounds.emplace_back(0);
 }
 
-void AbstractParallelSolver::addSolver(RemoteSolver *solver) {
+void AbstractParallelSolver::addSolver(PanoramyxSolver *solver) {
     unsigned index = solvers.size();
 
     solvers.emplace_back(solver);

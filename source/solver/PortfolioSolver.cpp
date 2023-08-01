@@ -31,6 +31,8 @@
 
 #include <iostream>
 
+#include <loguru.hpp>
+
 #include <crillab-panoramyx/solver/PortfolioSolver.hpp>
 
 using namespace std;
