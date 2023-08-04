@@ -229,6 +229,12 @@ void GauloisSolver::readMessage(Message *m) {
         this->checkSolutionAssignment(m);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_VALUE_HEURISTIC_STATIC))) {
         this->valueHeuristicStatic(m);
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_CONSTRAINT_SCORE))) {
+        this->getConstraintScore(m);
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_CONSTRAINT_SET_IGNORED))) {
+        this->setConstraintIgnored(m);
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_CONSTRAINT_IS_IGNORED))) {
+        this->isConstraintIgnored(m);
     }
 }
 
@@ -625,4 +631,30 @@ void GauloisSolver::valueHeuristicStatic(Message *pMessage) {
         ptrName += big.size() + 1;
     }
     this->valueHeuristicStatic(names, ordered);
+}
+
+void GauloisSolver::setConstraintIgnored(Panoramyx::Message *m) {
+    int index = m->read<int>();
+    bool ignored = m->read<bool>(sizeof(int));
+    getConstraints()[index]->setIgnored(ignored);
+}
+
+bool GauloisSolver::isConstraintIgnored(Panoramyx::Message *m) {
+    int index = m->read<int>();
+    bool ignored = getConstraints()[index]->isIgnored();
+    MessageBuilder mb;
+    Message *r = mb.named(PANO_MESSAGE_CONSTRAINT_IS_IGNORED).withTag(PANO_TAG_RESPONSE).withParameter(ignored).build();
+    comm->send(r, m->src);
+    free(r);
+    return ignored;
+}
+
+double GauloisSolver::getConstraintScore(Panoramyx::Message *m) {
+    int index = m->read<int>();
+    double score = getConstraints()[index]->getScore();
+    MessageBuilder mb;
+    Message *r = mb.named(PANO_MESSAGE_CONSTRAINT_IS_IGNORED).withTag(PANO_TAG_RESPONSE).withParameter(score).build();
+    comm->send(r, m->src);
+    free(r);
+    return score;
 }

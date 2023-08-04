@@ -88,6 +88,11 @@ namespace Panoramyx {
         int nbConstraints = -1;
 
         /**
+         * The vector of the constraints stored in the remote solver.
+         */
+        std::vector<Universe::IUniverseConstraint *> remoteConstraints;
+
+        /**
          * Whether the problem to solve is an optimization problem.
          * It is an optional because it is lazily cached.
          */

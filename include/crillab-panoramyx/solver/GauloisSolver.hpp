@@ -89,6 +89,10 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
     Universe::IOptimizationSolver *getOptimSolver();
 
+    bool isConstraintIgnored(Message *m);
+    void setConstraintIgnored(Message *m);
+    double getConstraintScore(Message *m);
+
    public:
     explicit GauloisSolver(Universe::IUniverseSolver *solver, INetworkCommunication *comm);
 

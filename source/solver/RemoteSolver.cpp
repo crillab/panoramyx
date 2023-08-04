@@ -36,6 +36,7 @@
 #include <crillab-panoramyx/network/Message.hpp>
 #include <crillab-panoramyx/network/MessageBuilder.hpp>
 #include <crillab-panoramyx/solver/RemoteSolver.hpp>
+#include "crillab-panoramyx/problem/RemoteConstraint.hpp"
 
 using namespace Panoramyx;
 using namespace Universe;
@@ -217,6 +218,10 @@ int RemoteSolver::nConstraints() {
         m = communicator->receive(PANO_TAG_RESPONSE, rank);
         mutex.unlock();
         nbConstraints = *((const int *) m->parameters);
+
+        for (int i = 0; i < nbConstraints; i++) {
+            remoteConstraints.push_back(new RemoteConstraint(communicator, mutex, rank, i));
+        }
         free(m);
     }
     return nbConstraints;
@@ -498,5 +503,5 @@ bool RemoteSolver::checkSolution(const std::map<std::string, BigInteger> &assign
 }
 
 const std::vector<IUniverseConstraint *> &RemoteSolver::getConstraints() {
-    throw Except::UnsupportedOperationException("Constraints are too far (far) away !");
+    throw remoteConstraints;
 }

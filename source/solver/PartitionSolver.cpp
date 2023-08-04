@@ -67,8 +67,32 @@ void PartitionSolver::beforeSearch() {
 }
 
 void PartitionSolver::beforeSearch(unsigned int solverIndex) {
-    // TODO Ignore constraints that are not in the partition! (they are not there...)
-    // TODO Restrict variables?
+    // Ignoring constraints that are not in the partition assigned to the solver.
+    auto *solver = solvers[solverIndex];
+    auto &constraints = solver->getConstraints();
+    auto &solverPartition = constraintsInPartitions[solverIndex];
+
+    if (solverPartition.empty()) {
+        // All constraints are ignored as the partition is empty.
+        for (auto * constraint : constraints) {
+            constraint->setIgnored(true);
+        }
+
+    } else {
+        for (int current = 0, i = 0; i < constraints.size(); i++) {
+            if ((current < solverPartition.size()) && (i == solverPartition[current])) {
+                // This constraint is in the partition, so it must be kept.
+                constraints[i]->setIgnored(false);
+                current++;
+
+            } else {
+                // The constraint is not in the partition, so it is ignored.
+                constraints[i]->setIgnored(true);
+            }
+        }
+    }
+
+    // TODO Should we restrict variables in the solver? Maybe with decisionVariables()?
 }
 
 void PartitionSolver::startSearch() {
