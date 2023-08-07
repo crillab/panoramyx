@@ -1,5 +1,7 @@
 #include <mpi.h>
-#ifndef WIN32
+#ifdef WIN32
+#include <process.h>
+#else
 #include <unistd.h>
 #endif
 #include <fstream>
@@ -30,6 +32,7 @@
 #include "crillab-panoramyx/network/NetworkCommunicationFactory.hpp"
 #include "crillab-panoramyx/solver/AbstractSolverBuilder.hpp"
 #include "crillab-panoramyx/solver/EPSSolverBuilder.hpp"
+#include "crillab-panoramyx/solver/PartitionSolver.hpp"
 #include "crillab-panoramyx/solver/RemoteSolver.hpp"
 #include "crillab-panoramyx/core/NullConsistencyChecker.hpp"
 #include "crillab-panoramyx/solver/PortfolioSolverBuilder.hpp"
@@ -126,7 +129,8 @@ argparse::ArgumentParser createEPSParser() {
             });
     eps.add_argument("-f", "--factor-cube-generator").default_value(30).scan<'i',int>();
     eps.add_argument("--nb-intervals").default_value(5).scan<'i',int>();
-    eps.add_argument("--nb-partitions").default_value(2).scan<'i',int>();
+    eps.add_argument("--decompose").default_value(false).implicit_value(true);
+    eps.add_argument("--nb-partitions").default_value(1).scan<'i',int>();
     eps.add_argument("--imbalance").default_value(0.01).scan<'g',double>();
     eps.add_argument("--consistency-checker-strategy").default_value(std::string{"Null"})
             .action([](const std::string &value) {
@@ -137,7 +141,7 @@ argparse::ArgumentParser createEPSParser() {
                 throw runtime_error("Unknown consistency checker " + value);
             });
     eps.add_argument("--consistency-checker-solver");
-    eps.add_argument("--kahypar-configuration-file");
+    eps.add_argument("--kahypar-configuration-file").default_value("");
     return eps;
 }
 
@@ -218,6 +222,17 @@ void parseConsistencyChecker(argparse::ArgumentParser &program, ICubeGenerator *
 }
 
 
+IHypergraphDecompositionSolver *createHypergraphDecompositionSolver(argparse::ArgumentParser &program) {
+    if (program.get<std::string>("kahypar-configuration-file").empty()) {
+        return nullptr;
+    }
+    return new KahyparDecompositionSolver(
+            program.get<double>("imbalance"),
+            program.get<int>("factor-cube-generator"),
+            program.get<string>("kahypar-configuration-file"));
+}
+
+
 ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &program, INetworkCommunication *networkCommunication) {
     if (program.get<string>("cube-generator") == "Lexicographic") {
         auto cg = new LexicographicCubeGenerator(
@@ -237,10 +252,7 @@ ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &program, INetworkCo
     }else if (program.get<string>("cube-generator") == "Hypergraph") {
         auto cg = new HypergraphDecompositionCubeGenerator(
                 networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"),
-                        new KahyparDecompositionSolver(
-                                program.get<double>("imbalance"),
-                                        program.get<int>("factor-cube-generator"),
-                                                program.get<string>("kahypar-configuration-file")));
+                createHypergraphDecompositionSolver(program));
         parseConsistencyChecker(program, cg);
         return cg;
     }
@@ -332,9 +344,18 @@ int main(int argc, char **argv) {
     addCommonArguments(program);
     program.parse_args(argc, argv);
     auto networkCommunication = parseNetworkCommunication(program, &argc, &argv);
+    int nb = networkCommunication->nbProcesses();
+    int nbPartitions = program.get<int>("nb-partitions");
+    bool decompose = program.get<bool>("decompose");
     buildJVM(program);
+
+    if (decompose && ((nb - 1) % (nbPartitions + 1) != 0)) {
+        throw runtime_error("incompatible number of solvers");
+    }
+    int nbChiefs = (nb - 1) / (nbPartitions + 1);
     networkCommunication->start([=,&program]() {
-        if (networkCommunication->getId() == 0) {
+        int id = networkCommunication->getId();
+        if (id == 0) {
             atexit(atExit);
             AbstractSolverBuilder *asb;
             if (program.is_subcommand_used("eps")) {
@@ -356,12 +377,30 @@ int main(int argc, char **argv) {
             }
             chief = asb->build();
 
-            for (int i = 1; i < networkCommunication->nbProcesses(); i++) {
+            int nbGaulois = !decompose ? (nb - 1) : nbChiefs;
+            for (int i = 1; i < nbGaulois; i++) {
                 chief->addSolver(new RemoteSolver(i));
             }
             chief->loadInstance(program.get<string>("instance"));
             auto r = chief->solve();
             std::cout << (int) r << std::endl;
+
+        } else if (decompose && (1 <= id) && (id <= nbChiefs) ) {
+            auto configs = parseSolverConfiguration(program);
+            auto logdir = program.get<string>("log-directory");
+            if (!std::filesystem::is_directory(logdir)) {
+                std::filesystem::create_directory(logdir);
+            }
+            PartitionSolver *solver = new PartitionSolver(networkCommunication, createHypergraphDecompositionSolver(program));
+            for (int i = 0; i < nbPartitions; i++) {
+                chief->addSolver(new RemoteSolver((id * nbPartitions) + i));
+            }
+            auto *gaulois = new GauloisSolver(solver, networkCommunication);
+            gaulois->setLogFile(logdir + separator() + "log_partition_" +
+                                std::to_string(id) + "_" + std::to_string(getpid()) +
+                                ".log");
+            gaulois->start();
+
         } else {
             auto configs = parseSolverConfiguration(program);
             auto logdir = program.get<string>("log-directory");
@@ -369,7 +408,7 @@ int main(int argc, char **argv) {
                 std::filesystem::create_directory(logdir);
             }
 
-            auto localConfig = configs[networkCommunication->getId() % configs.size()];
+            auto localConfig = configs[id % configs.size()];
             auto factoryString = localConfig.get<string>("factory");
             Universe::IUniverseSolver *solver = nullptr;
             if (isJava(factoryString)) {
@@ -382,60 +421,11 @@ int main(int argc, char **argv) {
             solver->setVerbosity(localConfig.get<int>("verbosity"));
             auto *gaulois = new GauloisSolver(solver, networkCommunication);
             gaulois->setLogFile(logdir + separator() + "log_gaulois_" +
-                                std::to_string(networkCommunication->getId()) + "_" + std::to_string(getpid()) +
+                                std::to_string(id) + "_" + std::to_string(getpid()) +
                                 ".log");
             gaulois->start();
-
         }
     });
     networkCommunication->finalize();
-
-
-
-// int toto;
-// MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &toto);
-// loguru::init(argc, argv);
-// INetworkCommunication* comm = MPINetworkCommunication::getInstance();
-// JavaVirtualMachineBuilder builder = JavaVirtualMachineBuilder();
-// builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/juniverse.jar");
-// builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/ACE.jar");
-// builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/aceurancetourix.jar");
-// builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/xcsp3-tools.jar");
-// builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/javax.json-1.1.2.jar");
-// builder.addToClasspath("/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/jars/javax.json-api-1.1.2.jar");
-// builder.addOption("-ea");
-// builder.setVersion(JNI_VERSION_10);
-// auto jvm = builder.buildJavaVirtualMachine();
-// JavaVirtualMachineRegistry::set(jvm);
-// if (comm->getId() == 0) {
-//     std::cout << "mon pid" << getpid() << std::endl;
-//     std::string instance = "/home/falque/Travail/Doctorat/CP/Workspace/panoramyx/CoinsGrid-28-12_c22.xml";
-//     Universe::UniverseJavaSolverFactory factory("fr/univartois/cril/aceurancetourix/PreprocAceSolverFactory");
-//     // auto ace = factory.createCspSolver();
-//     // ace->setVerbosity(-1);
-//     // std::ifstream input(instance);
-//     // Autis::Scanner scanner(input);
-//     // auto parser = make_unique<Autis::AutisXCSPParserAdapter>(scanner, dynamic_cast<Universe::IUniverseCspSolver*>(ace));
-//     // parser->parse();
-//     // auto cubeGenerator = new LexicographicCubeGenerator(100);
-//     // cubeGenerator->setSolver(ace);
-//     // cubeGenerator->setConsistencyChecker(new PartialConsistencyChecker(ace));
-//     Abraracourcix* chief = new PortfolioSolver(comm, new RangeBasedAllocationStrategy([](auto min, auto max, auto nb) { return new LinearRangeIterator(min, max, nb); }));
-//     for (int i = 1; i < comm->nbProcesses(); i++) {
-//         chief->addSolver(new RemoteSolver(i));
-//     }
-//     chief->loadInstance(instance);
-//     auto r = chief->solve();
-//     std::cout << (int)r << std::endl;
-// } else {
-//     std::cout << "mon pid" << getpid() << std::endl;
-//     Universe::UniverseJavaSolverFactory factory("fr/univartois/cril/aceurancetourix/AceSolverFactory");
-//     auto ace = factory.createCspSolver();
-//     ace->setVerbosity(1);
-//     GauloisSolver* gaulois = new GauloisSolver(ace, comm);
-//     gaulois->start();
-// }
-// getchar();
-// MPI_Finalize();
     return 0;
 }

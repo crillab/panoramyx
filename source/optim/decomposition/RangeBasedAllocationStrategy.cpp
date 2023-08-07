@@ -100,7 +100,7 @@ vector<BigInteger> RangeBasedAllocationStrategy::computeBoundAllocation(
     }
 
     // Filling the last bounds with the maximum (these bounds will be ignored).
-    while (newBounds.size() != currentBounds.size()) {
+    while (newBounds.size() < currentBounds.size()) {
         newBounds.push_back(newBounds.back());
         DLOG_F(INFO, "duplicating %lld to fill the bounds", (long long) newBounds.back());
     }
