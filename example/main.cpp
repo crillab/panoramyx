@@ -129,7 +129,6 @@ argparse::ArgumentParser createEPSParser() {
             });
     eps.add_argument("-f", "--factor-cube-generator").default_value(30).scan<'i',int>();
     eps.add_argument("--nb-intervals").default_value(5).scan<'i',int>();
-    eps.add_argument("--decompose").default_value(false).implicit_value(true);
     eps.add_argument("--imbalance").default_value(0.01).scan<'g',double>();
     eps.add_argument("--consistency-checker-strategy").default_value(std::string{"Null"})
             .action([](const std::string &value) {
@@ -150,6 +149,7 @@ void addCommonArguments(argparse::ArgumentParser &parser) {
     parser.add_argument("-j", "--jars").nargs(argparse::nargs_pattern::any).help("specify the list of jars.");
     parser.add_argument("--java-options").default_value<string>("").help("specify jvm options");
     parser.add_argument("--nb-partitions").default_value(1).scan<'i',int>();
+    parser.add_argument("--decompose").default_value(false).implicit_value(true);
     parser.add_argument("-c", "--network-communicator")
             .default_value(std::string{"MPI"})
             .action([](const std::string &value) {
