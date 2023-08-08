@@ -349,9 +349,6 @@ int main(int argc, char **argv) {
     bool decompose = program.get<bool>("decompose");
     buildJVM(program);
 
-    if (decompose && ((nb - 1) % (nbPartitions + 1) != 0)) {
-        throw runtime_error("incompatible number of solvers");
-    }
     int nbChiefs = (nb - 1) / (nbPartitions + 1);
     networkCommunication->start([=,&program]() {
         int id = networkCommunication->getId();
@@ -401,7 +398,7 @@ int main(int argc, char **argv) {
                                 ".log");
             gaulois->start();
 
-        } else {
+        } else if (!decompose || id < ((nbChiefs + 1) * nbPartitions)){
             auto configs = parseSolverConfiguration(program);
             auto logdir = program.get<string>("log-directory");
             if (!std::filesystem::is_directory(logdir)) {
