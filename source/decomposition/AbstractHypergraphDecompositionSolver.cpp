@@ -2184,10 +2184,10 @@ Hypergraph *AbstractHypergraphDecompositionSolver::getHypergraph() {
         int i = 0;
         for (int ctr : entry.second) {
             vertices[i] = ctr;
-            orderedVariables.push_back(entry.first);
             i++;
         }
-        builder->withHyperedge(UnweightedHyperedge::joining(nb, vertices));
+        orderedVariables.push_back(entry.first);
+        builder->withHyperedge(UnweightedHyperedge::joining((int) nb, vertices));
     }
     return builder->build();
 

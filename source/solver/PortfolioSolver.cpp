@@ -102,18 +102,18 @@ void PortfolioSolver::onNewBoundFound(const Universe::BigInteger &bound, unsigne
         upperBound = bound;
         winner = src;
         bestSolution = solvers[winner]->mapSolution();
-        DLOG_F(INFO, "new upper bound %s by solver #%d", Universe::toString(bound).c_str(), winner);
+        LOG_F(INFO, "new upper bound %s by solver #%d", Universe::toString(bound).c_str(), winner);
 
     } else if (!minimization && (lowerBound < bound)) {
         // The lower bound has been improved.
         lowerBound = bound;
         winner = src;
         bestSolution = solvers[winner]->mapSolution();
-        DLOG_F(INFO, "new lower bound %s by solver #%d", Universe::toString(bound).c_str(), winner);
+        LOG_F(INFO, "new lower bound %s by solver #%d", Universe::toString(bound).c_str(), winner);
 
     } else {
         // The bound does not improve the current objective range.
-        DLOG_F(INFO, "ignored bound %s (current range is %s .. %s)", Universe::toString(bound).c_str(),
+        LOG_F(INFO, "ignored bound %s (current range is %s .. %s)", Universe::toString(bound).c_str(),
                Universe::toString(lowerBound).c_str(), Universe::toString(upperBound).c_str());
     }
 
@@ -132,16 +132,16 @@ void PortfolioSolver::onUnsatisfiableFound(unsigned solverIndex) {
         if (!minimization && (bound < upperBound)) {
             // The upper bound has been improved.
             upperBound = bound - 1;
-            DLOG_F(INFO, "new upper bound %s by solver #%d", Universe::toString(upperBound).c_str(), solverIndex);
+            LOG_F(INFO, "new upper bound %s by solver #%d", Universe::toString(upperBound).c_str(), solverIndex);
 
         } else if (minimization && (lowerBound < bound)) {
             // The lower bound has been improved.
             lowerBound = bound + 1;
-            DLOG_F(INFO, "new lower bound %s by solver #%d", Universe::toString(lowerBound).c_str(), solverIndex);
+            LOG_F(INFO, "new lower bound %s by solver #%d", Universe::toString(lowerBound).c_str(), solverIndex);
 
         } else {
             // The bound does not improve the current objective range.
-            DLOG_F(INFO, "ignored bound %s (current range is %s .. %s)", Universe::toString(bound).c_str(),
+            LOG_F(INFO, "ignored bound %s (current range is %s .. %s)", Universe::toString(bound).c_str(),
                    Universe::toString(lowerBound).c_str(), Universe::toString(upperBound).c_str());
         }
 
@@ -174,12 +174,12 @@ void PortfolioSolver::updateBounds() {
         if (currentBounds[i] == currentBounds[i + 1]) {
             // When consecutive bounds are equal, there is no more bounds to assign.
             solver->interrupt();
-            DLOG_F(INFO, "solver #%ld is definitively interrupted", i);
+            LOG_F(INFO, "solver #%ld is definitively interrupted", i);
             continue;
         }
 
         // Actually assigning the bounds to the solver.
-        DLOG_F(INFO, "assigning bounds for solver #%lu: %s .. %s", i,
+        LOG_F(INFO, "assigning bounds for solver #%lu: %s .. %s", i,
                Universe::toString(currentBounds[i]).c_str(),
                Universe::toString(currentBounds[i + 1]).c_str());
 
@@ -195,7 +195,7 @@ void PortfolioSolver::updateBounds() {
         }
 
         // Checking whether the solver is running.
-        DLOG_F(INFO, "solver #%lu %s running", i, (currentRunningSolvers[i] ? "is": "is not"));
+        LOG_F(INFO, "solver #%lu %s running", i, (currentRunningSolvers[i] ? "is": "is not"));
         if (!currentRunningSolvers[i]) {
             // The solver must be restarted with its newly allocated bound.
             solver->reset();
@@ -206,7 +206,7 @@ void PortfolioSolver::updateBounds() {
 }
 
 void PortfolioSolver::assignBounds(unsigned index) {
-    DLOG_F(INFO, "assigning bounds for solver #%d: %s .. %s", index,
+    LOG_F(INFO, "assigning bounds for solver #%d: %s .. %s", index,
            Universe::toString(currentBounds[index]).c_str(),
            Universe::toString(currentBounds[index + 1]).c_str());
 

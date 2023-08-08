@@ -279,7 +279,7 @@ void AbstractParallelSolver::readMessages() {
 }
 
 void AbstractParallelSolver::readMessage(const Message *message) {
-    DLOG_F(INFO, "main solver received a message '%s'", message->name);
+    LOG_F(INFO, "main solver received a message '%s'", message->name);
 
     if (NAME_OF(message, IS(PANO_MESSAGE_SATISFIABLE))) {
         winner = message->read<unsigned>();
@@ -293,7 +293,7 @@ void AbstractParallelSolver::readMessage(const Message *message) {
         string param(message->parameters + sizeof(unsigned), strlen(message->parameters + sizeof(unsigned)) + 1);
         BigInteger newBound = Universe::bigIntegerValueOf(param);
         result = UniverseSolverResult::SATISFIABLE;
-        DLOG_F(INFO, "solver #%d sent its current bound: %s", src, Universe::toString(newBound).c_str());
+        LOG_F(INFO, "solver #%d sent its current bound: %s", src, Universe::toString(newBound).c_str());
         currentRunningSolvers[src] = false;
         onNewBoundFound(newBound, src);
 

@@ -50,7 +50,7 @@ const int *UnweightedHypergraph::getVertexWeights() const {
 }
 
 int UnweightedHypergraph::getNumberOfHyperedges() const {
-    return numberOfVertices;
+    return numberOfHyperedges;
 }
 
 const Hyperedge *UnweightedHypergraph::getHyperedge(int index) const {

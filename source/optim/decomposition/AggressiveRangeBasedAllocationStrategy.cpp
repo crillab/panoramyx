@@ -57,13 +57,13 @@ vector<BigInteger> AggressiveRangeBasedAllocationStrategy::computeBoundAllocatio
     vector<Universe::BigInteger> newBounds;
     for (auto bound : *rangeIterator(currentMin, currentMax, currentBounds.size() - 1)) {
         newBounds.push_back(bound);
-        DLOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
+        LOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
     }
 
     // Filling the last bounds with the maximum (these bounds will be ignored).
     while (newBounds.size() < currentBounds.size()) {
         newBounds.push_back(newBounds.back());
-        DLOG_F(INFO, "duplicating %lld to fill the bounds", (long long) newBounds.back());
+        LOG_F(INFO, "duplicating %lld to fill the bounds", (long long) newBounds.back());
     }
 
     return newBounds;

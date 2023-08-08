@@ -76,7 +76,7 @@ vector<BigInteger> RangeBasedAllocationStrategy::computeBoundAllocation(
         // There is not enough bounds: all bounds must be recomputed.
         for (auto bound : *rangeIterator(currentMin, currentMax, currentBounds.size() - 1)) {
             newBounds.push_back(bound);
-            DLOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
+            LOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
         }
         return newBounds;
     }
@@ -84,25 +84,25 @@ vector<BigInteger> RangeBasedAllocationStrategy::computeBoundAllocation(
     // Computing the bounds for solvers that are currently below the minimum.
     for (auto bound : *rangeIterator(currentMin, currentBounds[indexLower], indexLower)) {
         newBounds.push_back(bound);
-        DLOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
+        LOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
     }
 
     // Reusing the bounds of solvers that are within the current interval
     for (int i = indexLower + 1; i < indexUpper; i++) {
         newBounds.push_back(currentBounds[i]);
-        DLOG_F(INFO, "allocating the same bound %lld", (long long) currentBounds[i]);
+        LOG_F(INFO, "allocating the same bound %lld", (long long) currentBounds[i]);
     }
 
     // Computing the bounds for solvers that are currently above the maximum.
     for (auto bound : *rangeIterator(currentBounds[indexUpper], currentMax, currentBounds.size() - indexUpper - 1)) {
         newBounds.push_back(bound);
-        DLOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
+        LOG_F(INFO, "allocating completely new bound %lld", (long long) bound);
     }
 
     // Filling the last bounds with the maximum (these bounds will be ignored).
     while (newBounds.size() < currentBounds.size()) {
         newBounds.push_back(newBounds.back());
-        DLOG_F(INFO, "duplicating %lld to fill the bounds", (long long) newBounds.back());
+        LOG_F(INFO, "duplicating %lld to fill the bounds", (long long) newBounds.back());
     }
 
     return newBounds;

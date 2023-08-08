@@ -63,12 +63,12 @@ bool RemoteSolver::isOptimization() {
         Message *m = mb.withTag(PANO_TAG_RESPONSE).build();
         communicator->send(m, rank);
         free(m);
-        DLOG_F(INFO, "Wait answer");
+        LOG_F(INFO, "Wait answer");
         m = communicator->receive(PANO_TAG_RESPONSE, rank, PANO_DEFAULT_MESSAGE_SIZE);
-        DLOG_F(INFO, "after answer");
+        LOG_F(INFO, "after answer");
         mutex.unlock();
         optimization = m->read<bool>();
-        DLOG_F(INFO, "Remote Solver: readMessage - %d", optimization);
+        LOG_F(INFO, "Remote Solver: readMessage - %d", optimization);
         free(m);
     }
     return *optimization;
@@ -390,15 +390,15 @@ std::map<std::string, BigInteger> RemoteSolver::mapSolution(bool excludeAux) {
     Message *m = mb.named(PANO_MESSAGE_MAP_SOLUTION)
             .withTag(PANO_TAG_RESPONSE).withParameter(excludeAux)
             .build();
-    DLOG_F(INFO, "avant send");
+    LOG_F(INFO, "avant send");
     communicator->send(m, rank);
-    DLOG_F(INFO, "après send");
+    LOG_F(INFO, "après send");
     free(m);
     unsigned long size =
             100 * nVariables() * (PANO_VARIABLE_NAME_MAX_CHAR + PANO_NUMBER_MAX_CHAR + 2) + sizeof(Message);
-    DLOG_F(INFO, "avant receive");
+    LOG_F(INFO, "avant receive");
     m = communicator->receive(PANO_TAG_RESPONSE, rank, size);
-    DLOG_F(INFO, "après receive", m->src);
+    LOG_F(INFO, "après receive", m->src);
     mutex.unlock();
     std::map<std::string, BigInteger> bigbig;
     char *ptrName = m->parameters;

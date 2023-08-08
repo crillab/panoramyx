@@ -29,6 +29,7 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
+#include <loguru.hpp>
 #include <crillab-except/except.hpp>
 #include <crillab-panoramyx/decomposition/KahyparDecompositionSolver.hpp>
 
@@ -58,13 +59,17 @@ UniverseSolverResult KahyparDecompositionSolver::solve() {
         int *tmpPartition = new int[hypergraph->getNumberOfVertices()];
         partition = new int[hypergraph->getNumberOfVertices()];
 
+        LOG_F(INFO, "starting decomposition with KaHyPar");
         kahypar_partition(hypergraph->getNumberOfVertices(), hypergraph->getNumberOfHyperedges(), imbalance, nbBlocks,
                           hypergraph->getVertexWeights(), hypergraph->getHyperedgeWeights(),
                           reinterpret_cast<const size_t *>(hypergraph->getHyperedgeIndices()),
                           reinterpret_cast<const kahypar_hyperedge_id_t *>(hypergraph->getHyperedgeVertices()),
                           &objective,
                           context, tmpPartition);
+        LOG_F(INFO, "finished decomposition with KaHyPar");
 
+#if 0
+        LOG_F(INFO, "starting decomposition improvement with KaHyPar");
         kahypar_improve_partition(hypergraph->getNumberOfVertices(), hypergraph->getNumberOfHyperedges(), imbalance,
                                   nbBlocks,
                                   hypergraph->getVertexWeights(), hypergraph->getHyperedgeWeights(),
@@ -72,7 +77,9 @@ UniverseSolverResult KahyparDecompositionSolver::solve() {
                                   reinterpret_cast<const kahypar_hyperedge_id_t *>(hypergraph->getHyperedgeVertices()),
                                   tmpPartition,
                                   5, &objective, context, partition);
+        LOG_F(INFO, "finished decomposition improvement with KaHyPar");
     }
+#endif
 
     return UniverseSolverResult::SATISFIABLE;
 }

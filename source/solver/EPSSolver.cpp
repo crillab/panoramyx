@@ -72,7 +72,7 @@ void EPSSolver::startSearch() {
             // FIXME: We must indeed release the semaphore when clearing, because we must stop waiting for a new one...
             try {
                 nbCubes++;
-                DLOG_F(INFO, "assigning cubes #%d", nbCubes);
+                LOG_F(INFO, "assigning cubes #%d", nbCubes);
                 auto *solver = availableSolvers.get();
                 currentRunningSolvers[((PanoramyxSolver *) solver)->getIndex()] = true;
                 solver->solve(cube);

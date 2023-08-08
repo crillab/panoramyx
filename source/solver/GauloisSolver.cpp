@@ -76,10 +76,10 @@ GauloisSolver::solve(const std::vector<Universe::UniverseAssumption<Universe::Bi
 }
 
 void GauloisSolver::interrupt() {
-    DLOG_F(INFO, "interrupt !");
+    LOG_F(INFO, "interrupt !");
     interrupted = true;
     solver->interrupt();
-    DLOG_F(INFO, "after interrupt !");
+    LOG_F(INFO, "after interrupt !");
 }
 
 void GauloisSolver::setVerbosity(int level) {
@@ -96,7 +96,7 @@ void GauloisSolver::setTimeoutMs(long mseconds) {
 
 void GauloisSolver::reset() {
     loadMutex.lock();
-    DLOG_F(INFO, "call reset");
+    LOG_F(INFO, "call reset");
     solver->reset();
     loadMutex.unlock();
 }
@@ -114,7 +114,10 @@ int GauloisSolver::nConstraints() {
 }
 
 void GauloisSolver::setLogFile(const std::string &filename) {
-    solver->setLogFile(filename);
+    size_t extIndex = filename.rfind('.');
+    string name = filename.substr(0, extIndex);
+    string ext = filename.substr(extIndex + 1);
+    solver->setLogFile(name + "_solver." + ext);
     loguru::add_file(filename.c_str(), loguru::Append, loguru::Verbosity_INFO);
 }
 
@@ -133,7 +136,7 @@ void GauloisSolver::start() {
 }
 
 void GauloisSolver::readMessage(Message *m) {
-    DLOG_F(INFO, "Gaulois Solver: readMessage - %s", m->name);
+    LOG_F(INFO, "Gaulois Solver: readMessage - %s", m->name);
     if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE_FILENAME))) {
         std::string filename(m->parameters);
         this->solve(filename, m);
@@ -141,7 +144,7 @@ void GauloisSolver::readMessage(Message *m) {
         this->solve(m);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_INDEX))) {
         this->index = m->read<unsigned>();
-        DLOG_F(INFO, "Setting index to %d", index);
+        LOG_F(INFO, "Setting index to %d", index);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_SOLVE_ASSUMPTIONS))) {
         std::vector<Universe::UniverseAssumption<Universe::BigInteger>> assumpts;
         for (int i = 0, n = 0; n < m->nbParameters; n += 3) {
@@ -275,13 +278,13 @@ Universe::UniverseSolverResult GauloisSolver::solve(Message *m) {
         int src = m->src;
         std::thread t([this, src]() {
             try {
-                DLOG_F(INFO, "before load mutex");
+                LOG_F(INFO, "before load mutex");
                 loadMutex.lock();
-                DLOG_F(INFO, "after load mutex");
+                LOG_F(INFO, "after load mutex");
                 auto result = this->solve();
-                DLOG_F(INFO, "after solve");
+                LOG_F(INFO, "after solve");
                 sendResult(src, result);
-                DLOG_F(INFO, "after send");
+                LOG_F(INFO, "after send");
                 loadMutex.unlock();
                 finished.release();
                 easyjni::JavaVirtualMachineRegistry::detachCurrentThread();
@@ -299,9 +302,9 @@ Universe::UniverseSolverResult GauloisSolver::solve(Message *m) {
 void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
     MessageBuilder mb;
     mb.withParameter(index);
-    DLOG_F(INFO, "avant boundMutex.lock()");
+    LOG_F(INFO, "avant boundMutex.lock()");
     boundMutex.lock();
-    DLOG_F(INFO, "après boundMutex.lock()");
+    LOG_F(INFO, "après boundMutex.lock()");
     if (interrupted) {
         boundMutex.unlock();
         return;
@@ -368,9 +371,9 @@ GauloisSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteg
             }
         }
 
-        DLOG_F(INFO, "Run solve(assumpts,m) in a new thread.");
+        LOG_F(INFO, "Run solve(assumpts,m) in a new thread.");
         loadMutex.lock();
-        DLOG_F(INFO, "après loadmutex.lock()");
+        LOG_F(INFO, "après loadmutex.lock()");
         auto result = this->solve(asumpts);
         sendResult(src, result);
         loadMutex.unlock();
@@ -485,16 +488,16 @@ bool GauloisSolver::isOptimization(Message *m) {
     Message *r = mb.named(PANO_MESSAGE_IS_OPTIMIZATION).withTag(PANO_TAG_RESPONSE).withParameter(
             isOptimization()).build();
 
-    DLOG_F(INFO, "send message to %d", m->src);
+    LOG_F(INFO, "send message to %d", m->src);
     comm->send(r, m->src);
     free(r);
     return optimization;
 }
 
 std::map<std::string, Universe::BigInteger> GauloisSolver::mapSolution(Message *m) {
-    DLOG_F(INFO, "log avant %d", m->src);
+    LOG_F(INFO, "log avant %d", m->src);
     boundMutex.lock();
-    DLOG_F(INFO, "log après");
+    LOG_F(INFO, "log après");
     MessageBuilder mb;
     mb.named(PANO_MESSAGE_MAP_SOLUTION);
     for (auto &kv: currentSolution) {
