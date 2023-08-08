@@ -78,8 +78,8 @@ UniverseSolverResult KahyparDecompositionSolver::solve() {
                                   tmpPartition,
                                   5, &objective, context, partition);
         LOG_F(INFO, "finished decomposition improvement with KaHyPar");
-    }
 #endif
+    }
 
     return UniverseSolverResult::SATISFIABLE;
 }
