@@ -71,20 +71,25 @@ void EPSSolver::startSearch() {
             // Solving the cube using one of the available solvers.
             // FIXME: We must indeed release the semaphore when clearing, because we must stop waiting for a new one...
             try {
-                nbCubes++;
                 LOG_F(INFO, "assigning cubes #%d", nbCubes);
+                if (result != Universe::UniverseSolverResult::UNKNOWN) {
+                    LOG_F(INFO, "already solved");
+                    break;
+                }
+                nbCubes++;
                 auto *solver = availableSolvers.get();
                 currentRunningSolvers[((PanoramyxSolver *) solver)->getIndex()] = true;
                 solver->solve(cube);
 
             } catch (NoSuchElementException &e) {
-                return;
+                break;
             }
         }
 
         // All cubes have been generated.
         // We must wait for the solvers to solve them.
         waitForAllCubes(nbCubes);
+        LOG_F(INFO, "fini");
     });
 
     solvingThread.detach();
@@ -110,10 +115,14 @@ void EPSSolver::onUnsatisfiableFound(unsigned solverIndex) {
 void EPSSolver::waitForAllCubes(int nbCubes) {
     // FIXME: Shouldn't we make sure to acquire cubes as many times as nbCubes?
     for (int i = 0; i < nbCubes; i++) {
+        LOG_F(INFO, "before cubes.acquire()");
         cubes.acquire();
+        LOG_F(INFO, "after cubes.acquire()");
         if (result == Universe::UniverseSolverResult::SATISFIABLE) {
             // One of the cube has a solution, so the search is finished.
             // FIXME: solved will not be released here, is that OK?
+            LOG_F(INFO, "SATISFIABLE");
+            solved.release();
             return;
         }
     }

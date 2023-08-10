@@ -369,9 +369,13 @@ UniverseSolverResult AbstractParallelSolver::internalSolve(const vector<Universe
     }
 
     // Waiting for the solvers to answer.
+    LOG_F(INFO, "before solved.acquire()");
     solved.acquire();
+    LOG_F(INFO, "after solved.acquire()");
     endSearch();
+    LOG_F(INFO, "after endSearch()");
     end.acquire();
+    LOG_F(INFO, "after and.acquire()");
 
     // Returning the result.
     return result;

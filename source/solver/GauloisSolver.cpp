@@ -183,14 +183,12 @@ void GauloisSolver::readMessage(Message *m) {
         std::string filename(m->parameters);
         this->setLogFile(filename);
     } else if (strncmp(m->name, PANO_MESSAGE_END_SEARCH, sizeof(m->name)) == 0) {
-        boundMutex.lock();
         interrupt();
         MessageBuilder mb;
         Message *r = mb.named(PANO_MESSAGE_END_SEARCH).withTag(PANO_TAG_SOLVE).build();
         comm->send(r, m->src);
         free(r);
         finishedB = true;
-        boundMutex.unlock();
     } else if (strncmp(m->name, PANO_MESSAGE_LOWER_BOUND, sizeof(m->name)) == 0) {
         std::string param(m->parameters, strlen(m->parameters) + 1);
         Universe::BigInteger newBound = Universe::bigIntegerValueOf(param);

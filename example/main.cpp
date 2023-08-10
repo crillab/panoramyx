@@ -375,7 +375,7 @@ int main(int argc, char **argv) {
             chief = asb->build();
 
             int nbGaulois = !decompose ? (nb - 1) : nbChiefs;
-            for (int i = 1; i < nbGaulois; i++) {
+            for (int i = 1; i <= nbGaulois; i++) {
                 chief->addSolver(new RemoteSolver(i));
             }
             chief->loadInstance(program.get<string>("instance"));
@@ -388,7 +388,7 @@ int main(int argc, char **argv) {
             if (!std::filesystem::is_directory(logdir)) {
                 std::filesystem::create_directory(logdir);
             }
-            PartitionSolver *solver = new PartitionSolver(networkCommunication, createHypergraphDecompositionSolver(program));
+            PartitionSolver *solver = new PartitionSolver(networkCommunication, createHypergraphDecompositionSolver(program.at<argparse::ArgumentParser>("eps")));
             for (int i = 0; i < nbPartitions; i++) {
                 chief->addSolver(new RemoteSolver((id * nbPartitions) + i));
             }
