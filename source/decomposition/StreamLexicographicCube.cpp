@@ -29,6 +29,8 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
+#include <loguru.hpp>
+
 #include <crillab-panoramyx/decomposition/StreamLexicographicCube.hpp>
 
 using namespace std;
@@ -64,7 +66,12 @@ StreamLexicographicCube::StreamLexicographicCube(const vector<string> &branching
         variables(),
         indexesCurrentValues(),
         variablesFinished() {
-    // Nothing to do: everything is already initialized.
+    LOG_F(INFO, "size of branching variables: %d", branchingVariables.size());
+    if (branchingVariables.empty()) {
+        for (auto &variable: mapping) {
+            this->branchingVariables.push_back(variable.first);
+        }
+    }
 }
 
 bool StreamLexicographicCube::hasNext() const {
@@ -87,7 +94,6 @@ vector<UniverseAssumption<BigInteger>> StreamLexicographicCube::next() {
 
 void StreamLexicographicCube::generateFirst() {
     size_t estimatedCubeCount = 1;
-
     for (auto &identifier : branchingVariables) {
         // Initializing internal data-structures.
         auto *variable = mapping.at(identifier);

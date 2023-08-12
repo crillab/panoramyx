@@ -42,6 +42,7 @@
 #include <crillab-panoramyx/network/Message.hpp>
 #include <crillab-panoramyx/network/MessageBuilder.hpp>
 #include <crillab-panoramyx/solver/GauloisSolver.hpp>
+#include <crillab-panoramyx/solver/AbstractParallelSolver.hpp>
 
 using namespace Panoramyx;
 using namespace std;
@@ -150,7 +151,7 @@ void GauloisSolver::readMessage(Message *m) {
         for (int i = 0, n = 0; n < m->nbParameters; n += 3) {
             int s = (int) strlen(m->parameters + i);
             char *ptr = m->parameters + i;
-            std::string varId(ptr, s + 1);
+            std::string varId(ptr, s);
             i += s + 1;
             bool equal = m->read<bool>(i);
             i += sizeof(bool);
@@ -185,7 +186,7 @@ void GauloisSolver::readMessage(Message *m) {
     } else if (strncmp(m->name, PANO_MESSAGE_END_SEARCH, sizeof(m->name)) == 0) {
         interrupt();
         MessageBuilder mb;
-        Message *r = mb.named(PANO_MESSAGE_END_SEARCH).withTag(PANO_TAG_SOLVE).build();
+        Message *r = mb.named(PANO_MESSAGE_END_SEARCH_ACK).withTag(PANO_TAG_SOLVE).build();
         comm->send(r, m->src);
         free(r);
         finishedB = true;
@@ -236,6 +237,19 @@ void GauloisSolver::readMessage(Message *m) {
         this->setConstraintIgnored(m);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_CONSTRAINT_IS_IGNORED))) {
         this->isConstraintIgnored(m);
+    }if (NAME_OF(m, IS(PANO_MESSAGE_SATISFIABLE))) {
+        ((AbstractParallelSolver *) solver)->readSatisfiable(m);
+
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_NEW_BOUND_FOUND))) {
+        ((AbstractParallelSolver *) solver)->readBound(m);
+
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_UNSATISFIABLE))) {
+        ((AbstractParallelSolver *) solver)->readUnsatisfiable(m);
+
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_UNKNOWN))) {
+        ((AbstractParallelSolver *) solver)->readUnknown(m);
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_END_SEARCH_ACK))) {
+        ((AbstractParallelSolver *) solver)->readEnd(m);
     }
 }
 
@@ -304,6 +318,7 @@ void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
     boundMutex.lock();
     LOG_F(INFO, "après boundMutex.lock()");
     if (interrupted) {
+        LOG_F(INFO, "interrupted");
         boundMutex.unlock();
         return;
     }
@@ -315,8 +330,11 @@ void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
             } else {
                 mb.named(PANO_MESSAGE_SATISFIABLE);
             }
+            LOG_F(INFO, "map solution");
             currentSolution = solver->mapSolution();
+            LOG_F(INFO, "solution");
             sol = solver->solution();
+            LOG_F(INFO, "fini");
             break;
         case Universe::UniverseSolverResult::UNSATISFIABLE:
             mb.named(PANO_MESSAGE_UNSATISFIABLE);
@@ -333,10 +351,11 @@ void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
     }
     boundMutex.unlock();
     Message *r = mb.withTag(PANO_TAG_SOLVE).build();
-    comm->send(r, src);
-    free(r);
     LOG_F(INFO, "sending result: %s",
           result == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
+    comm->send(r, src);
+    free(r);
+    LOG_F(INFO, "result sent");
 }
 
 Universe::UniverseSolverResult GauloisSolver::solve(std::string filename, Message *m) {
@@ -357,12 +376,12 @@ GauloisSolver::solve(std::vector<Universe::UniverseAssumption<Universe::BigInteg
     int src = m->src;
     std::thread t([this, src, asumpts]() {
         std::vector<Universe::UniverseAssumption<Universe::BigInteger>> realAssumpts;
-        std::map<std::string, Universe::IUniverseVariable*> mapping = solver->getVariablesMapping();
         for (int i = 0; i < asumpts.size(); i++) {
             auto &a = asumpts[i];
             if (a.isEqual()) {
                 realAssumpts.emplace_back(a);
             }  else {
+                std::map<std::string, Universe::IUniverseVariable*> mapping = solver->getVariablesMapping();
                 auto &b = asumpts[i + 1];
                 mapping[a.getVariableId()]->getDomain()->keepValues(a.getValue(), b.getValue());
                 i++;
@@ -394,7 +413,6 @@ const map<std::string, Universe::IUniverseVariable *> &GauloisSolver::getVariabl
 }
 
 map<std::string, Universe::BigInteger> GauloisSolver::mapSolution() {
-
     return currentSolution;
 }
 

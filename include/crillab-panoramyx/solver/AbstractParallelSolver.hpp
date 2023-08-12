@@ -114,6 +114,11 @@ namespace Panoramyx {
         std::map<std::string, Universe::BigInteger> bestSolution;
 
         /**
+         * The assignment corresponding to the current (best) solution.
+         */
+        std::vector<Universe::BigInteger> bestSolutionVector;
+
+        /**
          * The mutex avoiding to read and write the best solution at the same time.
          */
         std::mutex solutionMutex;
@@ -412,6 +417,12 @@ namespace Panoramyx {
          * @return The current bound.
          */
         Universe::BigInteger getCurrentBound() override;
+
+        void readSatisfiable(const Message *message);
+        void readUnsatisfiable(const Message *message);
+        void readBound(const Message *message);
+        void readUnknown(const Message *message);
+        void readEnd(const Message *message);
 
     protected:
 

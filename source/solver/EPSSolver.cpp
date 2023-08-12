@@ -65,6 +65,7 @@ void EPSSolver::startSearch() {
         for (auto cube: *this->generator->generateCubes()) {
             if (cube.empty()) {
                 // There is no more consistent cubes.
+                LOG_F(INFO, "empty cube");
                 break;
             }
 

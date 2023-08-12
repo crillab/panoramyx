@@ -56,16 +56,15 @@ UniverseSolverResult KahyparDecompositionSolver::solve() {
     if (partition == nullptr) {
         auto *hypergraph = getHypergraph();
         int objective = 0;
-        int *tmpPartition = new int[hypergraph->getNumberOfVertices()];
         partition = new int[hypergraph->getNumberOfVertices()];
 
-        LOG_F(INFO, "starting decomposition with KaHyPar");
+        LOG_F(INFO, "starting decomposition with KaHyPar into %d blocks", nbBlocks);
         kahypar_partition(hypergraph->getNumberOfVertices(), hypergraph->getNumberOfHyperedges(), imbalance, nbBlocks,
                           hypergraph->getVertexWeights(), hypergraph->getHyperedgeWeights(),
                           reinterpret_cast<const size_t *>(hypergraph->getHyperedgeIndices()),
                           reinterpret_cast<const kahypar_hyperedge_id_t *>(hypergraph->getHyperedgeVertices()),
                           &objective,
-                          context, tmpPartition);
+                          context, partition);
         LOG_F(INFO, "finished decomposition with KaHyPar");
 
 #if 0
@@ -95,7 +94,9 @@ UniverseSolverResult KahyparDecompositionSolver::solve(const vector<UniverseAssu
 
 vector<vector<int>> KahyparDecompositionSolver::getPartition() {
     vector<vector<int>> partitionAsVector(nbBlocks);
+    assert(getHypergraph() != nullptr);
     for (int constraintId = 0; constraintId < getHypergraph()->getNumberOfVertices(); constraintId++) {
+        partitionAsVector.reserve(partition[constraintId]);
         partitionAsVector[partition[constraintId]].emplace_back(constraintId);
     }
     return partitionAsVector;

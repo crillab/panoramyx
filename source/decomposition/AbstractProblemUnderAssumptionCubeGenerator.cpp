@@ -29,6 +29,8 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
+#include <loguru.hpp>
+
 #include <cassert>
 #include <crillab-panoramyx/decomposition/AbstractProblemUnderAssumptionCubeGenerator.hpp>
 #include <crillab-panoramyx/decomposition/StreamPriorityQueueAdapter.hpp>
@@ -62,6 +64,7 @@ Stream<vector<UniverseAssumption<BigInteger>>> *AbstractProblemUnderAssumptionCu
         // Looking for the next variable to assign.
         IUniverseVariable *nextVariable = nullptr;
         for (const auto &variable: solver->getVariablesMapping()) {
+            LOG_F(INFO, "trying variable %s with size %d", variable.second->getName().c_str(), variable.second->getDomain()->currentSize());
             if (variable.second->getDomain()->currentSize() > 1) {
                 nextVariable = variable.second;
                 break;

@@ -45,6 +45,7 @@ HypergraphDecompositionCubeGenerator::HypergraphDecompositionCubeGenerator(
 }
 
 void HypergraphDecompositionCubeGenerator::loadInstance(const std::string &filename) {
+    assert(solver != nullptr);
     AbstractCubeGenerator::loadInstance(filename);
     decompositionSolver->loadInstance(filename);
 }

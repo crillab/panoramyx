@@ -222,18 +222,18 @@ void parseConsistencyChecker(argparse::ArgumentParser &program, ICubeGenerator *
 }
 
 
-IHypergraphDecompositionSolver *createHypergraphDecompositionSolver(argparse::ArgumentParser &program) {
+IHypergraphDecompositionSolver *createHypergraphDecompositionSolver(argparse::ArgumentParser &global, argparse::ArgumentParser &program) {
     if (program.get<std::string>("kahypar-configuration-file").empty()) {
         return nullptr;
     }
     return new KahyparDecompositionSolver(
             program.get<double>("imbalance"),
-            program.get<int>("factor-cube-generator"),
+            global.get<int>("nb-partitions"),
             program.get<string>("kahypar-configuration-file"));
 }
 
 
-ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &program, INetworkCommunication *networkCommunication) {
+ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &global, argparse::ArgumentParser &program, INetworkCommunication *networkCommunication) {
     if (program.get<string>("cube-generator") == "Lexicographic") {
         auto cg = new LexicographicCubeGenerator(
                 networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"));
@@ -252,7 +252,7 @@ ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &program, INetworkCo
     }else if (program.get<string>("cube-generator") == "Hypergraph") {
         auto cg = new HypergraphDecompositionCubeGenerator(
                 networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"),
-                createHypergraphDecompositionSolver(program));
+                createHypergraphDecompositionSolver(global, program));
         parseConsistencyChecker(program, cg);
         return cg;
     }
@@ -357,7 +357,7 @@ int main(int argc, char **argv) {
             AbstractSolverBuilder *asb;
             if (program.is_subcommand_used("eps")) {
                 asb = (new EPSSolverBuilder())->withCubeGenerator(
-                        parseCubeGenerator(program.at<argparse::ArgumentParser>("eps"),
+                        parseCubeGenerator(program, program.at<argparse::ArgumentParser>("eps"),
                                            networkCommunication))->withNetworkCommunicator(
                         networkCommunication)->withJavaOptions(
                         splitJavaOptions(program.get<string>("java-options")))->withJars(
@@ -388,9 +388,9 @@ int main(int argc, char **argv) {
             if (!std::filesystem::is_directory(logdir)) {
                 std::filesystem::create_directory(logdir);
             }
-            PartitionSolver *solver = new PartitionSolver(networkCommunication, createHypergraphDecompositionSolver(program.at<argparse::ArgumentParser>("eps")));
+            PartitionSolver *solver = new PartitionSolver(networkCommunication, createHypergraphDecompositionSolver(program, program.at<argparse::ArgumentParser>("eps")));
             for (int i = 0; i < nbPartitions; i++) {
-                chief->addSolver(new RemoteSolver((id * nbPartitions) + i));
+                solver->addSolver(new RemoteSolver((id * nbPartitions) + i));
             }
             auto *gaulois = new GauloisSolver(solver, networkCommunication);
             gaulois->setLogFile(logdir + separator() + "log_partition_" +

@@ -95,6 +95,8 @@ namespace Panoramyx {
          */
         void loadInstance(const std::string &filename) override;
 
+        void interrupt() override;
+
     protected:
 
         /**

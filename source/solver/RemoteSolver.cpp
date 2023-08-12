@@ -68,7 +68,7 @@ bool RemoteSolver::isOptimization() {
         LOG_F(INFO, "after answer");
         mutex.unlock();
         optimization = m->read<bool>();
-        LOG_F(INFO, "Remote Solver: readMessage - %d", optimization);
+        LOG_F(INFO, "Remote Solver: readMessage - %d", *optimization);
         free(m);
     }
     return *optimization;
@@ -108,8 +108,8 @@ UniverseSolverResult RemoteSolver::solve(
         mb.withParameter(assumpt.getVariableId());
         mb.withParameter(assumpt.isEqual());
         mb.withParameter(toString(assumpt.getValue()));
-
-        LOG_F(INFO, "add assumption: %s %s '%s'", assumpt.getVariableId().c_str(),
+        assert(assumpt.isEqual());
+        LOG_F(INFO, "add assumption: %d %s %s '%s'",assumpt.getVariableId().size(), assumpt.getVariableId().c_str(),
               assumpt.isEqual() ? "=" : "!=",
               toString(assumpt.getValue()).c_str());
     }
@@ -503,5 +503,5 @@ bool RemoteSolver::checkSolution(const std::map<std::string, BigInteger> &assign
 }
 
 const std::vector<IUniverseConstraint *> &RemoteSolver::getConstraints() {
-    throw remoteConstraints;
+    return remoteConstraints;
 }

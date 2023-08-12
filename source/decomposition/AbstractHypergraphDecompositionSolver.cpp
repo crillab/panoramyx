@@ -2177,18 +2177,20 @@ void AbstractHypergraphDecompositionSolver::addConstraint(const vector<string> &
 }
 
 Hypergraph *AbstractHypergraphDecompositionSolver::getHypergraph() {
-    HypergraphBuilder *builder = HypergraphBuilder::createHypergraph(constrId - 1, constraintsWithVariables.size());
-    for(auto &entry : constraintsWithVariables) {
-        auto nb = entry.second.size();
-        int *vertices = new int[nb];
-        int i = 0;
-        for (int ctr : entry.second) {
-            vertices[i] = ctr;
-            i++;
+    if (hypergraph == nullptr) {
+        HypergraphBuilder *builder = HypergraphBuilder::createHypergraph(constrId - 1, constraintsWithVariables.size());
+        for (auto &entry: constraintsWithVariables) {
+            auto nb = entry.second.size();
+            int *vertices = new int[nb];
+            int i = 0;
+            for (int ctr: entry.second) {
+                vertices[i] = ctr;
+                i++;
+            }
+            orderedVariables.push_back(entry.first);
+            builder->withHyperedge(UnweightedHyperedge::joining((int) nb, vertices));
         }
-        orderedVariables.push_back(entry.first);
-        builder->withHyperedge(UnweightedHyperedge::joining((int) nb, vertices));
+        hypergraph = builder->build();
     }
-    return builder->build();
-
+    return hypergraph;
 }

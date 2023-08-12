@@ -29,6 +29,8 @@
  * @license This project is released under the GNU LGPL3 License.
  */
 
+#include <loguru.hpp>
+
 #include <limits>
 #include <thread>
 
@@ -58,7 +60,7 @@ PartitionSolver::~PartitionSolver() {
 
 void PartitionSolver::loadInstance(const string &filename) {
     AbstractParallelSolver::loadInstance(filename);
-    this->generator->loadInstance(filename);
+    this->decompositionSolver->loadInstance(filename);
 }
 
 void PartitionSolver::beforeSearch() {
@@ -130,7 +132,25 @@ void PartitionSolver::startSearch() {
 }
 
 void PartitionSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &assumpts) {
-    throw UnsupportedOperationException("cannot use assumptions in Partition mode");
+    // Solving the cubes for the different sub-problems.
+    numberOfSolutions = 0;
+    bestSolution.clear();
+    for (auto *solver : solvers) {
+        solver->solve(assumpts);
+    }
+
+    // Waiting for all sub-problems to be solved.
+    for (int i = 0; i < solvers.size(); i++) {
+        partitions.acquire();
+        LOG_F(INFO, "%d partitions solved", i + 1);
+    }
+
+    solved.release();
+}
+
+void PartitionSolver::interrupt() {
+    AbstractParallelSolver::interrupt();
+    solved.release();
 }
 
 void PartitionSolver::onSatisfiableFound(unsigned solverIndex) {

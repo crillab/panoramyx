@@ -193,10 +193,11 @@ UniverseSolverResult AbstractParallelSolver::getResult() {
 
 vector<BigInteger> AbstractParallelSolver::solution() {
     if ((result == UniverseSolverResult::SATISFIABLE) || (result == UniverseSolverResult::OPTIMUM_FOUND)) {
-        // FIXME: Shouldn't we use the cached solution?
-        return solvers[winner]->solution();
+        solutionMutex.lock();
+        auto local = bestSolutionVector;
+        solutionMutex.unlock();
+        return local;
     }
-
     throw IllegalStateException("problem has no solution yet");
 }
 
@@ -282,35 +283,55 @@ void AbstractParallelSolver::readMessage(const Message *message) {
     LOG_F(INFO, "main solver received a message '%s'", message->name);
 
     if (NAME_OF(message, IS(PANO_MESSAGE_SATISFIABLE))) {
-        winner = message->read<unsigned>();
-        currentRunningSolvers[winner] = false;
-        result = UniverseSolverResult::SATISFIABLE;
-        onSatisfiableFound(winner);
-        solved.release();
+        readSatisfiable(message);
 
     } else if (NAME_OF(message, IS(PANO_MESSAGE_NEW_BOUND_FOUND))) {
-        auto src = message->read<unsigned>();
-        string param(message->parameters + sizeof(unsigned), strlen(message->parameters + sizeof(unsigned)) + 1);
-        BigInteger newBound = Universe::bigIntegerValueOf(param);
-        result = UniverseSolverResult::SATISFIABLE;
-        LOG_F(INFO, "solver #%d sent its current bound: %s", src, Universe::toString(newBound).c_str());
-        currentRunningSolvers[src] = false;
-        onNewBoundFound(newBound, src);
+        readBound(message);
 
     } else if (NAME_OF(message, IS(PANO_MESSAGE_UNSATISFIABLE))) {
-        auto src = message->read<unsigned>();
-        onUnsatisfiableFound(src);
+        readUnsatisfiable(message);
 
     } else if (NAME_OF(message, IS(PANO_MESSAGE_UNKNOWN))) {
-        auto src = message->read<unsigned>();
-        onUnknown(src);
+        readUnknown(message);
 
-    } else if (NAME_OF(message, IS(PANO_MESSAGE_END_SEARCH))) {
-        runningSolvers--;
-        if (runningSolvers <= 0) {
-            interrupted = true;
-            end.release();
-        }
+    } else if (NAME_OF(message, IS(PANO_MESSAGE_END_SEARCH_ACK))) {
+        readEnd(message);
+    }
+}
+
+void AbstractParallelSolver::readSatisfiable(const Panoramyx::Message *message) {
+    winner = message->read<unsigned>();
+    currentRunningSolvers[winner] = false;
+    result = UniverseSolverResult::SATISFIABLE;
+    onSatisfiableFound(winner);
+    solved.release();
+}
+
+void AbstractParallelSolver::readBound(const Panoramyx::Message *message) {
+    auto src = message->read<unsigned>();
+    string param(message->parameters + sizeof(unsigned), strlen(message->parameters + sizeof(unsigned)) + 1);
+    BigInteger newBound = Universe::bigIntegerValueOf(param);
+    result = UniverseSolverResult::SATISFIABLE;
+    LOG_F(INFO, "solver #%d sent its current bound: %s", src, Universe::toString(newBound).c_str());
+    currentRunningSolvers[src] = false;
+    onNewBoundFound(newBound, src);
+}
+
+void AbstractParallelSolver::readUnsatisfiable(const Panoramyx::Message *message) {
+    auto src = message->read<unsigned>();
+    onUnsatisfiableFound(src);
+}
+
+void AbstractParallelSolver::readUnknown(const Panoramyx::Message *message) {
+    auto src = message->read<unsigned>();
+    onUnknown(src);
+}
+
+void AbstractParallelSolver::readEnd(const Panoramyx::Message *message) {
+    runningSolvers--;
+    if (runningSolvers <= 0) {
+        interrupted = true;
+        end.release();
     }
 }
 
@@ -327,9 +348,12 @@ void AbstractParallelSolver::beforeSearch(unsigned int solverIndex) {
 }
 
 void AbstractParallelSolver::onSatisfiableFound(unsigned int solverIndex) {
-    solutionMutex.lock();
-    bestSolution = solvers[solverIndex]->mapSolution();
-    solutionMutex.unlock();
+    if (!interrupted) {
+        solutionMutex.lock();
+        bestSolution = solvers[solverIndex]->mapSolution();
+        bestSolutionVector = solvers[solverIndex]->solution();
+        solutionMutex.unlock();
+    }
 }
 
 void AbstractParallelSolver::onNewBoundFound(const Universe::BigInteger &bound, unsigned int i) {
