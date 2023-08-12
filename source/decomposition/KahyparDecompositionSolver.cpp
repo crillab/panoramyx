@@ -94,7 +94,6 @@ UniverseSolverResult KahyparDecompositionSolver::solve(const vector<UniverseAssu
 
 vector<vector<int>> KahyparDecompositionSolver::getPartition() {
     vector<vector<int>> partitionAsVector(nbBlocks);
-    assert(getHypergraph() != nullptr);
     for (int constraintId = 0; constraintId < getHypergraph()->getNumberOfVertices(); constraintId++) {
         partitionAsVector.reserve(partition[constraintId]);
         partitionAsVector[partition[constraintId]].emplace_back(constraintId);

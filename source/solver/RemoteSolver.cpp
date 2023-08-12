@@ -108,7 +108,6 @@ UniverseSolverResult RemoteSolver::solve(
         mb.withParameter(assumpt.getVariableId());
         mb.withParameter(assumpt.isEqual());
         mb.withParameter(toString(assumpt.getValue()));
-        assert(assumpt.isEqual());
         LOG_F(INFO, "add assumption: %d %s %s '%s'",assumpt.getVariableId().size(), assumpt.getVariableId().c_str(),
               assumpt.isEqual() ? "=" : "!=",
               toString(assumpt.getValue()).c_str());

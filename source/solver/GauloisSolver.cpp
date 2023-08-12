@@ -217,6 +217,8 @@ void GauloisSolver::readMessage(Message *m) {
         this->isOptimization(m);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_MAP_SOLUTION))) {
         this->mapSolution(m);
+    } else if (NAME_OF(m, IS(PANO_MESSAGE_SOLUTION))) {
+        this->solution(m);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_N_VARIABLES))) {
         this->nVariables(m);
     } else if (NAME_OF(m, IS(PANO_MESSAGE_N_CONSTRAINTS))) {
