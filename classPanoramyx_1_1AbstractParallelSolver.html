@@ -244,6 +244,26 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a241091f898c4e00e9379dff5271561f3" class="m-doc">getCurrentBound</a>(</span><span class="m-doc-wrap">) -&gt; Universe::BigInteger <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
+            <dt id="a21895afb505bf5547c8977a40de0c689">
+              <span class="m-doc-wrap-bumper">void <a href="#a21895afb505bf5547c8977a40de0c689" class="m-doc-self">readSatisfiable</a>(</span><span class="m-doc-wrap">const <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* message)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a73c2d2b1dbb0eac0550d05cb9c933a8d">
+              <span class="m-doc-wrap-bumper">void <a href="#a73c2d2b1dbb0eac0550d05cb9c933a8d" class="m-doc-self">readUnsatisfiable</a>(</span><span class="m-doc-wrap">const <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* message)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae51aa94376a3d4c87441919e3d8ea491">
+              <span class="m-doc-wrap-bumper">void <a href="#ae51aa94376a3d4c87441919e3d8ea491" class="m-doc-self">readBound</a>(</span><span class="m-doc-wrap">const <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* message)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a7de2af2d0db65dec0a83800f0d5bb786">
+              <span class="m-doc-wrap-bumper">void <a href="#a7de2af2d0db65dec0a83800f0d5bb786" class="m-doc-self">readUnknown</a>(</span><span class="m-doc-wrap">const <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* message)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a7d3aca5afbf6f028383fc5713216e5d5">
+              <span class="m-doc-wrap-bumper">void <a href="#a7d3aca5afbf6f028383fc5713216e5d5" class="m-doc-self">readEnd</a>(</span><span class="m-doc-wrap">const <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* message)</span>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="pro-methods">
@@ -353,6 +373,10 @@
             <dd></dd>
             <dt>
               std::map&lt;std::string, Universe::BigInteger&gt; <a href="#a7400fc4633c658df276b85d295891a86" class="m-doc">bestSolution</a>
+            </dt>
+            <dd></dd>
+            <dt>
+              std::vector&lt;Universe::BigInteger&gt; <a href="#a3c1284d9c81401d63197e175621b3338" class="m-doc">bestSolutionVector</a>
             </dt>
             <dd></dd>
             <dt>
@@ -1183,6 +1207,12 @@
           <section class="m-doc-details" id="a7400fc4633c658df276b85d295891a86"><div>
             <h3>
               std::map&lt;std::string, Universe::BigInteger&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a7400fc4633c658df276b85d295891a86" class="m-doc-self">bestSolution</a> <span class="m-label m-warning">protected</span>
+            </h3>
+<p>The assignment corresponding to the current (best) solution.</p>
+          </div></section>
+          <section class="m-doc-details" id="a3c1284d9c81401d63197e175621b3338"><div>
+            <h3>
+              std::vector&lt;Universe::BigInteger&gt; Panoramyx::<wbr />AbstractParallelSolver::<wbr /><a href="#a3c1284d9c81401d63197e175621b3338" class="m-doc-self">bestSolutionVector</a> <span class="m-label m-warning">protected</span>
             </h3>
 <p>The assignment corresponding to the current (best) solution.</p>
           </div></section>
