@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>crillab-panoramyx/solver/ directory | crillab-panoramyx</title>
+  <title>Panoramyx::GauloisPartitionSolver class | crillab-panoramyx</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -49,7 +49,8 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_ae3cef7cb587072333a3bfd49a486b99.html">crillab-panoramyx</a>/</span>solver<span class="m-breadcrumb">/</span> <span class="m-thin">directory</span>
+          <span class="m-breadcrumb"><a href="namespacePanoramyx.html">Panoramyx</a>::<wbr/></span>GauloisPartitionSolver <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="GauloisPartitionSolver_8hpp.html">&lt;GauloisPartitionSolver.hpp&gt;</a></div>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -58,38 +59,39 @@
             <li>
               Reference
               <ul>
-                <li><a href="#files">Files</a></li>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="files">
-          <h2><a href="#files">Files</a></h2>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
           <dl class="m-doc">
-            <dt>file <a href="AbstractParallelSolver_8hpp.html" class="m-doc">AbstractParallelSolver.hpp</a></dt>
-            <dd>The parent class of all the solvers that run in parallel.</dd>
-            <dt>file <a href="AbstractSolverBuilder_8hpp.html" class="m-doc">AbstractSolverBuilder.hpp</a></dt>
-            <dd>The parent class of all the solvers builders.</dd>
-            <dt>file <a href="EPSSolver_8hpp.html" class="m-doc">EPSSolver.hpp</a></dt>
-            <dd>Defines a parallel solver that applies a cube-and-conquer approach to solve an instance.</dd>
-            <dt>file <a href="EPSSolverBuilder_8hpp.html" class="m-doc">EPSSolverBuilder.hpp</a></dt>
-            <dd>The builder for EPS solvers.</dd>
-            <dt>file <a href="GauloisPartitionSolver_8hpp.html" class="m-doc">GauloisPartitionSolver.hpp</a></dt>
+            <dt>
+              class <a href="classPanoramyx_1_1GauloisSolver.html" class="m-doc">GauloisSolver</a>
+            </dt>
             <dd><span></span></dd>
-            <dt>file <a href="GauloisSolver_8hpp.html" class="m-doc">GauloisSolver.hpp</a></dt>
-            <dd>Provides a solver implementation encapsulating the communication with Abraracourcix.</dd>
-            <dt>file <a href="ICubeGenerator_8hpp.html" class="m-doc">ICubeGenerator.hpp</a></dt>
-            <dd>Defines a strategy for generating cubes in EPS-based solvers.</dd>
-            <dt>file <a href="PanoramyxSolver_8hpp.html" class="m-doc">PanoramyxSolver.hpp</a></dt>
-            <dd>Defines an interface for the solvers that are used in a parallel solver.</dd>
-            <dt>file <a href="PartitionSolver_8hpp.html" class="m-doc">PartitionSolver.hpp</a></dt>
-            <dd>Defines a parallel solver that solves in parallel independent sub-problems of the original problem.</dd>
-            <dt>file <a href="PortfolioSolver_8hpp.html" class="m-doc">PortfolioSolver.hpp</a></dt>
-            <dd>Defines a parallel solver that runs different solvers on the same input instance.</dd>
-            <dt>file <a href="PortfolioSolverBuilder_8hpp.html" class="m-doc">PortfolioSolverBuilder.hpp</a></dt>
-            <dd>The builder for portfolio solvers.</dd>
-            <dt>file <a href="RemoteSolver_8hpp.html" class="m-doc">RemoteSolver.hpp</a></dt>
-            <dd>Provides a solver implementation encapsulating the communication with a remote solver.</dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="a4cf20c174565e8588b1f8730f003fd2c">
+              <span class="m-doc-wrap-bumper"><a href="#a4cf20c174565e8588b1f8730f003fd2c" class="m-doc-self">GauloisPartitionSolver</a>(</span><span class="m-doc-wrap"><a href="classPanoramyx_1_1PartitionSolver.html" class="m-doc">Panoramyx::<wbr />PartitionSolver</a>* solver,
+              <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* comm) <span class="m-label m-flat m-info">explicit</span> </span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt id="ae6005ddd1abb3e7e44c344c88c47cd68">
+              <span class="m-doc-wrap-bumper">void <a href="#ae6005ddd1abb3e7e44c344c88c47cd68" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
       </div>

@@ -101,11 +101,19 @@
               <span class="m-doc-wrap-bumper">void <a href="#a99f2d24ca6a0306d464db09b4d8e386e" class="m-doc-self">interrupt</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd><span></span></dd>
+            <dt id="abf51c0610da8a471d7b5325f8732b768">
+              <span class="m-doc-wrap-bumper">auto <a href="#abf51c0610da8a471d7b5325f8732b768" class="m-doc-self">getRunningSolvers</a>(</span><span class="m-doc-wrap">) const -&gt; int</span>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section id="pro-methods">
           <h2><a href="#pro-methods">Protected functions</a></h2>
           <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a741c9a9a6749bdbdf62d185e0b2879dd" class="m-doc">internalSolve</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&amp; assumpts) -&gt; Universe::UniverseSolverResult <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
             <dt>
               <span class="m-doc-wrap-bumper">void <a href="#ae4e3e9034b5482453adf1fe275c6700a" class="m-doc">beforeSearch</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
@@ -134,6 +142,14 @@
               <span class="m-doc-wrap-bumper">void <a href="#aebc05232a30b1d2417418838140aca97" class="m-doc">onUnknown</a>(</span><span class="m-doc-wrap">unsigned solverIndex) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#af35b075ada21691d7c49fb5949d3b9fa" class="m-doc">endSearch</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd></dd>
+            <dt id="a1e74d31792c32c1480947e6a7f796375">
+              <span class="m-doc-wrap-bumper">void <a href="#a1e74d31792c32c1480947e6a7f796375" class="m-doc-self">readEnd</a>(</span><span class="m-doc-wrap">const <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* message) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd><span></span></dd>
           </dl>
         </section>
         <section>
@@ -182,6 +198,20 @@
               </tbody>
             </table>
 <p>Loads the instance to solve.</p>
+          </div></section>
+          <section class="m-doc-details" id="a741c9a9a6749bdbdf62d185e0b2879dd"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Universe::UniverseSolverResult Panoramyx::<wbr />PartitionSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a741c9a9a6749bdbdf62d185e0b2879dd" class="m-doc-self">internalSolve</a>(</span><span class="m-doc-wrap">const std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt;&amp; assumpts) <span class="m-label m-warning">override</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The outcome of the search conducted by the solver.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Actually solves the problem associated to this solver.</p>
           </div></section>
           <section class="m-doc-details" id="ae4e3e9034b5482453adf1fe275c6700a"><div>
             <h3>
@@ -279,6 +309,12 @@
               </tbody>
             </table>
 <p>Updates the search when a solver did not find any solution.</p>
+          </div></section>
+          <section class="m-doc-details" id="af35b075ada21691d7c49fb5949d3b9fa"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void Panoramyx::<wbr />PartitionSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af35b075ada21691d7c49fb5949d3b9fa" class="m-doc-self">endSearch</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span> <span class="m-label m-warning">protected</span></span></span>
+            </h3>
+<p>Terminates the search.</p>
           </div></section>
         </section>
       </div>

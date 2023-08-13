@@ -59,12 +59,24 @@
             <li>
               Reference
               <ul>
+                <li><a href="#derived-classes">Derived classes</a></li>
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#pro-methods">Protected functions</a></li>
+                <li><a href="#pro-attribs">Protected variables</a></li>
               </ul>
             </li>
           </ul>
         </div>
+        <section id="derived-classes">
+          <h2><a href="#derived-classes">Derived classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classPanoramyx_1_1GauloisPartitionSolver.html" class="m-doc">GauloisPartitionSolver</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
@@ -130,8 +142,8 @@
               <span class="m-doc-wrap-bumper">void <a href="#ab41c430540890392f15d0c837a2257a0" class="m-doc-self">setLogFile</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ac075d2cb1b9b6addd8527dc74839c095">
-              <span class="m-doc-wrap-bumper">void <a href="#ac075d2cb1b9b6addd8527dc74839c095" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">)</span>
+            <dt id="acbd3ea544e3497a5ee9f17f3e8fc4a50">
+              <span class="m-doc-wrap-bumper">void <a href="#acbd3ea544e3497a5ee9f17f3e8fc4a50" class="m-doc-self">start</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd><span></span></dd>
             <dt id="af7702ab5d25a7d3821ced2b0b2c0f11d">
@@ -251,6 +263,134 @@
             <dd><span></span></dd>
             <dt id="a90e9d4fb61f254f3657606b76d3696b3">
               <span class="m-doc-wrap-bumper">void <a href="#a90e9d4fb61f254f3657606b76d3696b3" class="m-doc-self">checkSolution</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* pMessage)</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pro-methods">
+          <h2><a href="#pro-methods">Protected functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a68b344d7fd03dd7cde05e32d2f85290b">
+              <span class="m-doc-wrap-bumper">auto <a href="#a68b344d7fd03dd7cde05e32d2f85290b" class="m-doc-self">solution</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; std::vector&lt;Universe::BigInteger&gt;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="adb51f60fa81289402dacd3165d17d001">
+              <span class="m-doc-wrap-bumper">auto <a href="#adb51f60fa81289402dacd3165d17d001" class="m-doc-self">mapSolution</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; std::map&lt;std::string, Universe::BigInteger&gt;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="afb4af1b93b0c4f91aa61eceb788f9522">
+              <span class="m-doc-wrap-bumper">void <a href="#afb4af1b93b0c4f91aa61eceb788f9522" class="m-doc-self">readMessage</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aa52ddf9001b5c279056b0345d043ae57">
+              <span class="m-doc-wrap-bumper">auto <a href="#aa52ddf9001b5c279056b0345d043ae57" class="m-doc-self">nVariables</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; int</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="acf060e35b742883a8f1a5afd49e2b737">
+              <span class="m-doc-wrap-bumper">auto <a href="#acf060e35b742883a8f1a5afd49e2b737" class="m-doc-self">nConstraints</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; int</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ac23f354ea0d03a109b8856236b63ba37">
+              <span class="m-doc-wrap-bumper">auto <a href="#ac23f354ea0d03a109b8856236b63ba37" class="m-doc-self">getLowerBound</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; Universe::BigInteger</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a12dbcd76ee7d8c11fece93ec55bc32ef">
+              <span class="m-doc-wrap-bumper">auto <a href="#a12dbcd76ee7d8c11fece93ec55bc32ef" class="m-doc-self">getUpperBound</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; Universe::BigInteger</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a88efe44418c44a7c01569d6ad96a81ea">
+              <span class="m-doc-wrap-bumper">auto <a href="#a88efe44418c44a7c01569d6ad96a81ea" class="m-doc-self">getCurrentBound</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; Universe::BigInteger</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a9caed19c40d6fdbe2ed5933c664fadce">
+              <span class="m-doc-wrap-bumper">auto <a href="#a9caed19c40d6fdbe2ed5933c664fadce" class="m-doc-self">isMinimization</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ac534c42fb091185755ee6ca13aa90ae9">
+              <span class="m-doc-wrap-bumper">auto <a href="#ac534c42fb091185755ee6ca13aa90ae9" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; Universe::UniverseSolverResult</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a12f9919b57841f0dc4f0f25b860b5c1a">
+              <span class="m-doc-wrap-bumper">auto <a href="#a12f9919b57841f0dc4f0f25b860b5c1a" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">std::string filename,
+              <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; Universe::UniverseSolverResult</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a726be2c9db5a021c5c53bda728f58613">
+              <span class="m-doc-wrap-bumper">auto <a href="#a726be2c9db5a021c5c53bda728f58613" class="m-doc-self">solve</a>(</span><span class="m-doc-wrap">std::vector&lt;Universe::UniverseAssumption&lt;Universe::BigInteger&gt;&gt; asumpts,
+              <a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; Universe::UniverseSolverResult</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aa2e204de295493c4f25fa54a106eeb28">
+              <span class="m-doc-wrap-bumper">auto <a href="#aa2e204de295493c4f25fa54a106eeb28" class="m-doc-self">getOptimSolver</a>(</span><span class="m-doc-wrap">) -&gt; Universe::IOptimizationSolver*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="af3934a94ed5d06f365d946c7a5c20eca">
+              <span class="m-doc-wrap-bumper">auto <a href="#af3934a94ed5d06f365d946c7a5c20eca" class="m-doc-self">isConstraintIgnored</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a68d222c7cc86ce2c4b37c9896d14232c">
+              <span class="m-doc-wrap-bumper">void <a href="#a68d222c7cc86ce2c4b37c9896d14232c" class="m-doc-self">setConstraintIgnored</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a93cd5e2753ca1baddc3096db0d031d11">
+              <span class="m-doc-wrap-bumper">auto <a href="#a93cd5e2753ca1baddc3096db0d031d11" class="m-doc-self">getConstraintScore</a>(</span><span class="m-doc-wrap"><a href="structPanoramyx_1_1Message.html" class="m-doc">Message</a>* m) -&gt; double</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pro-attribs">
+          <h2><a href="#pro-attribs">Protected variables</a></h2>
+          <dl class="m-doc">
+            <dt id="a81725be8814221bdd928df212739549d">
+              Universe::IUniverseSolver* <a href="#a81725be8814221bdd928df212739549d" class="m-doc-self">solver</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a4a56d4b681262e3f7f907d7c2e57c7ea">
+              <a href="classPanoramyx_1_1INetworkCommunication.html" class="m-doc">INetworkCommunication</a>* <a href="#a4a56d4b681262e3f7f907d7c2e57c7ea" class="m-doc-self">comm</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a06fd6bd0bb730af457fdfd425652d3c2">
+              bool <a href="#a06fd6bd0bb730af457fdfd425652d3c2" class="m-doc-self">interrupted</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="acd9dc7da32ca9f412584292e27ae84e9">
+              bool <a href="#acd9dc7da32ca9f412584292e27ae84e9" class="m-doc-self">finishedB</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a0c388fc7ece6e191a854a74ee3ab1996">
+              std::binary_semaphore <a href="#a0c388fc7ece6e191a854a74ee3ab1996" class="m-doc-self">finished</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae407f099e1dbf52bef80bea18081be7e">
+              std::mutex <a href="#ae407f099e1dbf52bef80bea18081be7e" class="m-doc-self">loadMutex</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a8d8326cf2d4cc7966dcef0ef8d00907c">
+              std::mutex <a href="#a8d8326cf2d4cc7966dcef0ef8d00907c" class="m-doc-self">boundMutex</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a5c24607cd165e81ec93864c2fefc66d7">
+              int <a href="#a5c24607cd165e81ec93864c2fefc66d7" class="m-doc-self">nbSolved</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a380ee5233a98607757bef84afca3647a">
+              bool <a href="#a380ee5233a98607757bef84afca3647a" class="m-doc-self">optimization</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a41c623e9d84f8dad20ade5aef918d8a6">
+              std::map&lt;std::string, Universe::BigInteger&gt; <a href="#a41c623e9d84f8dad20ade5aef918d8a6" class="m-doc-self">currentSolution</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad620aaf23a2e7995fc7ea76de59afac4">
+              Universe::BigInteger <a href="#ad620aaf23a2e7995fc7ea76de59afac4" class="m-doc-self">currentBound</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="afc930f3e34635144c24b490f9edd657f">
+              unsigned <a href="#afc930f3e34635144c24b490f9edd657f" class="m-doc-self">index</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad415d424aafdd33204e483b473fe034b">
+              std::vector&lt;Universe::BigInteger&gt; <a href="#ad415d424aafdd33204e483b473fe034b" class="m-doc-self">sol</a>
             </dt>
             <dd><span></span></dd>
           </dl>

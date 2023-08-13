@@ -92,6 +92,10 @@
             </dt>
             <dd></dd>
             <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5473885970e67ef24e63f0b0a6a29f9f" class="m-doc">getVariablePartition</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;std::vector&lt;std::string&gt;&gt; <span class="m-label m-flat m-warning">pure virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#ac2e7ea9016d3841f30b60ffc2b202cdb" class="m-doc">cutset</a>(</span><span class="m-doc-wrap">) -&gt; std::vector&lt;std::string&gt; <span class="m-label m-flat m-warning">pure virtual</span></span>
             </dt>
             <dd></dd>
@@ -118,6 +122,20 @@
               </tfoot>
             </table>
 <p>Gives the partition computed by this solver. The partition is represented as a vector of vector of constraint identifiers, where the i-th vector contains the constraint identifiers of the i-th partition.</p>
+          </div></section>
+          <section class="m-doc-details" id="a5473885970e67ef24e63f0b0a6a29f9f"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">std::vector&lt;std::vector&lt;std::string&gt;&gt; Panoramyx::<wbr />IHypergraphDecompositionSolver::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5473885970e67ef24e63f0b0a6a29f9f" class="m-doc-self">getVariablePartition</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">pure virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The computed partition.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>Gives the partition computed by this solver. The partition is represented as a vector of vector of variable identifiers, where the i-th vector contains the variable identifiers of the i-th partition.</p>
           </div></section>
           <section class="m-doc-details" id="ac2e7ea9016d3841f30b60ffc2b202cdb"><div>
             <h3>
