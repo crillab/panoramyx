@@ -65,6 +65,10 @@ namespace Panoramyx {
          */
         int *partition;
 
+        std::vector<std::vector<int>> constraintPartitionAsVector;
+        std::vector<std::string> cutsetVector;
+        std::vector<std::vector<std::string>> variablePartitionAsVector;
+
     public:
 
         /**
@@ -116,6 +120,15 @@ namespace Panoramyx {
          * @return The computed partition.
          */
         std::vector<std::vector<int>> getPartition() override;
+
+        /**
+         * Gives the partition computed by this solver.
+         * The partition is represented as a vector of vector of variable identifiers, where the i-th vector
+         * contains the variable identifiers of the i-th partition.
+         *
+         * @return The computed partition.
+         */
+        virtual std::vector<std::vector<std::string>> getVariablePartition() override;
 
         /**
          * Gives the cutset of the problem to solve.

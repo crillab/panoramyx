@@ -93,34 +93,52 @@ UniverseSolverResult KahyparDecompositionSolver::solve(const vector<UniverseAssu
 }
 
 vector<vector<int>> KahyparDecompositionSolver::getPartition() {
-    vector<vector<int>> partitionAsVector(nbBlocks);
-    for (int constraintId = 0; constraintId < getHypergraph()->getNumberOfVertices(); constraintId++) {
-        partitionAsVector.reserve(partition[constraintId]);
-        partitionAsVector[partition[constraintId]].emplace_back(constraintId);
+    if (constraintPartitionAsVector.empty()) {
+        vector<vector<int>> partitionAsVector(nbBlocks);
+        for (int constraintId = 0; constraintId < getHypergraph()->getNumberOfVertices(); constraintId++) {
+            partitionAsVector[partition[constraintId]].emplace_back(constraintId);
+        }
+        constraintPartitionAsVector = partitionAsVector;
     }
-    return partitionAsVector;
+    return constraintPartitionAsVector;
+}
+
+vector<vector<string>> KahyparDecompositionSolver::getVariablePartition() {
+    if (variablePartitionAsVector.empty()) {
+        cutset();
+    }
+    return variablePartitionAsVector;
 }
 
 vector<string> KahyparDecompositionSolver::cutset() {
-    vector<string> varInCutset;
+    if (cutsetVector.empty()) {
+        vector<string> varInCutset;
+        vector<vector<string>> varPartition(nbBlocks);
+        // Looking for hyperedges in the cutset.
+        auto *hypergraph = getHypergraph();
+        for (int i = 0; i < hypergraph->getNumberOfHyperedges(); i++) {
+            int begin = (int) hypergraph->getHyperedgeIndices()[i];
+            int end = (int) hypergraph->getHyperedgeIndices()[i + 1];
 
-    // Looking for hyperedges in the cutset.
-    auto *hypergraph = getHypergraph();
-    for(int i = 0; i < hypergraph->getNumberOfHyperedges(); i++) {
-        int begin = (int) hypergraph->getHyperedgeIndices()[i];
-        int end   = (int)hypergraph->getHyperedgeIndices()[i + 1];
+            // Comparing the block of the different vertices.
+            int first = partition[hypergraph->getHyperedgeVertices()[begin]];
+            bool allSame = true;
+            for (int j = begin + 1; j < end; j++) {
+                if (partition[hypergraph->getHyperedgeVertices()[j]] != first) {
+                    // The hyperedge joins two vertices that are in different blocks.
+                    // It is thus in the cutset
+                    varInCutset.push_back(orderedVariables[i]);
 
-        // Comparing the block of the different vertices.
-        int first = partition[hypergraph->getHyperedgeVertices()[begin]];
-        for(int j = begin + 1; j < end; j++) {
-            if(partition[hypergraph->getHyperedgeVertices()[j]] != first) {
-                // The hyperedge joins two vertices that are in different blocks.
-                // It is thus in the cutset
-                varInCutset.push_back(orderedVariables[i]);
-                break;
+                    allSame = false;
+                    break;
+                }
+            }
+            if (allSame) {
+                varPartition[first].push_back(orderedVariables[i]);
             }
         }
+        cutsetVector = varInCutset;
+        variablePartitionAsVector =varPartition;
     }
-
-    return varInCutset;
+    return cutsetVector;
 }

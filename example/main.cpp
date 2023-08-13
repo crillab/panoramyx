@@ -8,6 +8,7 @@
 #include <iostream>
 #include <filesystem>
 #include <csignal>
+#include <climits>
 
 #include <crillab-autis/core/Scanner.hpp>
 #include <crillab-autis/xcsp/AutisXcspParserAdapter.hpp>
@@ -24,6 +25,7 @@
 #include "crillab-panoramyx/solver/AbstractParallelSolver.hpp"
 #include "crillab-panoramyx/solver/EPSSolver.hpp"
 #include "crillab-panoramyx/solver/GauloisSolver.hpp"
+#include "crillab-panoramyx/solver/GauloisPartitionSolver.hpp"
 #include "crillab-panoramyx/solver/PortfolioSolver.hpp"
 #include "crillab-panoramyx/utils/VectorStream.hpp"
 #include "loguru.hpp"
@@ -251,7 +253,7 @@ ICubeGenerator *parseCubeGenerator(argparse::ArgumentParser &global, argparse::A
         return cg;
     }else if (program.get<string>("cube-generator") == "Hypergraph") {
         auto cg = new HypergraphDecompositionCubeGenerator(
-                networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator"),
+                global.get<bool>("decompose") ? INT_MAX : (networkCommunication->nbProcesses() * program.get<int>("factor-cube-generator")),
                 createHypergraphDecompositionSolver(global, program));
         parseConsistencyChecker(program, cg);
         return cg;
@@ -349,9 +351,9 @@ int main(int argc, char **argv) {
     bool decompose = program.get<bool>("decompose");
     buildJVM(program);
 
+    int id = networkCommunication->getId();
     int nbChiefs = (nb - 1) / (nbPartitions + 1);
     networkCommunication->start([=,&program]() {
-        int id = networkCommunication->getId();
         if (id == 0) {
             atexit(atExit);
             AbstractSolverBuilder *asb;
@@ -379,6 +381,7 @@ int main(int argc, char **argv) {
                 chief->addSolver(new RemoteSolver(i));
             }
             chief->loadInstance(program.get<string>("instance"));
+            chief->readMessages();
             auto r = chief->solve();
             std::cout << (int) r << std::endl;
 
@@ -389,16 +392,17 @@ int main(int argc, char **argv) {
                 std::filesystem::create_directory(logdir);
             }
             PartitionSolver *solver = new PartitionSolver(networkCommunication, createHypergraphDecompositionSolver(program, program.at<argparse::ArgumentParser>("eps")));
-            for (int i = 0; i < nbPartitions; i++) {
-                solver->addSolver(new RemoteSolver((id * nbPartitions) + i));
+            for (int i = 1; i <= nbPartitions; i++) {
+                solver->addSolver(new RemoteSolver(nbChiefs + (id - 1) * nbPartitions + i));
             }
-            auto *gaulois = new GauloisSolver(solver, networkCommunication);
+            auto *gaulois = new GauloisPartitionSolver(solver, networkCommunication);
             gaulois->setLogFile(logdir + separator() + "log_partition_" +
                                 std::to_string(id) + "_" + std::to_string(getpid()) +
                                 ".log");
             gaulois->start();
 
-        } else if (!decompose || id < ((nbChiefs + 1) * nbPartitions)){
+        } else if (!decompose || id < (1 + nbChiefs + nbChiefs * nbPartitions)){
+            LOG_F(INFO, "creating worker %d", id);
             auto configs = parseSolverConfiguration(program);
             auto logdir = program.get<string>("log-directory");
             if (!std::filesystem::is_directory(logdir)) {
@@ -421,8 +425,11 @@ int main(int argc, char **argv) {
                                 std::to_string(id) + "_" + std::to_string(getpid()) +
                                 ".log");
             gaulois->start();
+        } else {
+            LOG_F(INFO, "terminating useless process %d", id);
         }
     });
+    LOG_F(INFO, "#%d is waiting to terminate", id);
     networkCommunication->finalize();
     return 0;
 }

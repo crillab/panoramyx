@@ -418,18 +418,23 @@ namespace Panoramyx {
          */
         Universe::BigInteger getCurrentBound() override;
 
-        void readSatisfiable(const Message *message);
-        void readUnsatisfiable(const Message *message);
-        void readBound(const Message *message);
-        void readUnknown(const Message *message);
-        void readEnd(const Message *message);
-
-    protected:
-
+        virtual void readSatisfiable(const Message *message);
+        virtual void readUnsatisfiable(const Message *message);
+        virtual void readBound(const Message *message);
+        virtual void readUnknown(const Message *message);
+        virtual void readEnd(const Message *message);
         /**
          * Reads (in a dedicated thread) all the messages that are received.
          */
         virtual void readMessages();
+
+        /**
+             * Terminates the search.
+             */
+        virtual void endSearch();
+
+    protected:
+
 
         /**
          * Reads a message, and performs the corresponding operation.
@@ -503,20 +508,13 @@ namespace Panoramyx {
         virtual void updateBounds();
 
         /**
-         * Terminates the search.
-         */
-        virtual void endSearch();
-
-    private:
-
-        /**
          * Actually solves the problem associated to this solver.
          *
          * @param assumptions The assumptions to consider when solving.
          *
          * @return The outcome of the search conducted by the solver.
          */
-        Universe::UniverseSolverResult internalSolve(
+        virtual Universe::UniverseSolverResult internalSolve(
                 const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts);
 
     };

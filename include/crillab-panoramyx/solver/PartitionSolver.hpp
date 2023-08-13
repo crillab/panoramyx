@@ -39,6 +39,8 @@
 
 namespace Panoramyx {
 
+    class GauloisPartitionSolver;
+
     /**
      * The PartitionSolver defines a parallel solver that solves in parallel independent
      * sub-problems of the original problem.
@@ -97,7 +99,11 @@ namespace Panoramyx {
 
         void interrupt() override;
 
+        int getRunningSolvers() const;
+
     protected:
+        Universe::UniverseSolverResult internalSolve(
+                const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) override;
 
         /**
          * Applies some initialization before actually starting the search.
@@ -143,6 +149,12 @@ namespace Panoramyx {
          * @param solverIndex The index of the solver that returned UNKNOWN.
          */
         void onUnknown(unsigned solverIndex) override;
+
+        void endSearch() override;
+
+        void readEnd(const Message *message) override;
+
+        friend class GauloisPartitionSolver;
 
     };
 

@@ -52,7 +52,7 @@ namespace Panoramyx {
  */
 
 class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimizationSolver {
-   private:
+   protected:
     Universe::IUniverseSolver *solver;
     INetworkCommunication *comm;
     bool interrupted = false;
@@ -121,7 +121,7 @@ class GauloisSolver : public Universe::IUniverseSolver, public Universe::IOptimi
 
     void setLogFile(const std::string &filename) override;
 
-    void start();
+    virtual void start();
 
     ~GauloisSolver() override = default;
 

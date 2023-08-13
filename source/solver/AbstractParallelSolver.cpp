@@ -168,8 +168,6 @@ UniverseSolverResult AbstractParallelSolver::solve(const string &filename) {
 }
 
 UniverseSolverResult AbstractParallelSolver::solve(const vector<UniverseAssumption<BigInteger>> &assumpts) {
-    // Reading the messages in a dedicated thread.
-    readMessages();
 
     // Preparing the solving process.
     for (unsigned i = 0; i < solvers.size(); i++) {
@@ -280,7 +278,7 @@ void AbstractParallelSolver::readMessages() {
 }
 
 void AbstractParallelSolver::readMessage(const Message *message) {
-    LOG_F(INFO, "main solver received a message '%s'", message->name);
+    LOG_F(INFO, "main solver #%d received a message '%s' from %d", communicator->getId(), message->name, message->src);
 
     if (NAME_OF(message, IS(PANO_MESSAGE_SATISFIABLE))) {
         readSatisfiable(message);
@@ -300,6 +298,7 @@ void AbstractParallelSolver::readMessage(const Message *message) {
 }
 
 void AbstractParallelSolver::readSatisfiable(const Panoramyx::Message *message) {
+    LOG_F(INFO, "sat received");
     winner = message->read<unsigned>();
     currentRunningSolvers[winner] = false;
     result = UniverseSolverResult::SATISFIABLE;
@@ -329,8 +328,10 @@ void AbstractParallelSolver::readUnknown(const Panoramyx::Message *message) {
 
 void AbstractParallelSolver::readEnd(const Panoramyx::Message *message) {
     runningSolvers--;
+    LOG_F(INFO, "remaining solvers: %d", runningSolvers);
     if (runningSolvers <= 0) {
         interrupted = true;
+        LOG_F(INFO, "end released");
         end.release();
     }
 }
@@ -399,7 +400,7 @@ UniverseSolverResult AbstractParallelSolver::internalSolve(const vector<Universe
     endSearch();
     LOG_F(INFO, "after endSearch()");
     end.acquire();
-    LOG_F(INFO, "after and.acquire()");
+    LOG_F(INFO, "after end.acquire()");
 
     // Returning the result.
     return result;

@@ -37,6 +37,7 @@
 #include <crillab-except/except.hpp>
 #include <crillab-panoramyx/decomposition/HypergraphDecompositionCubeGenerator.hpp>
 #include <crillab-panoramyx/solver/PartitionSolver.hpp>
+#include <crillab-panoramyx/network/MessageBuilder.hpp>
 
 using namespace std;
 
@@ -135,7 +136,13 @@ void PartitionSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &
     // Solving the cubes for the different sub-problems.
     numberOfSolutions = 0;
     bestSolution.clear();
+    for (const auto &a : assumpts) {
+        bestSolution[a.getVariableId()] = a.getValue();
+    }
+
+    LOG_F(INFO, "working with %d solvers", solvers.size());
     for (auto *solver : solvers) {
+        LOG_F(INFO, "sending one more cube");
         solver->solve(assumpts);
     }
 
@@ -150,7 +157,7 @@ void PartitionSolver::startSearch(const vector<UniverseAssumption<BigInteger>> &
 
 void PartitionSolver::interrupt() {
     AbstractParallelSolver::interrupt();
-    solved.release();
+    //solved.release();
 }
 
 void PartitionSolver::onSatisfiableFound(unsigned solverIndex) {
@@ -162,7 +169,13 @@ void PartitionSolver::onSatisfiableFound(unsigned solverIndex) {
         result = UniverseSolverResult::SATISFIABLE;
     }
 
-    // TODO Store the partial solution found by the solver (other variables should not be considered).
+    auto sol = solvers[solverIndex]->mapSolution();
+    auto vec = decompositionSolver->getVariablePartition();
+    for (const auto &var : vec[solverIndex]) {
+        if (sol.contains(var)) {
+            bestSolution[var] = sol[var];
+        }
+    }
     solutionMutex.unlock();
 
     // The solver has finished its sub-problem.
@@ -182,4 +195,47 @@ void PartitionSolver::onUnsatisfiableFound(unsigned) {
 void PartitionSolver::onUnknown(unsigned) {
     // The solver has finished its sub-problem.
     partitions.release();
+}
+
+int PartitionSolver::getRunningSolvers() const {
+    return runningSolvers;
+}
+
+Universe::UniverseSolverResult
+PartitionSolver::internalSolve(const std::vector<Universe::UniverseAssumption<Universe::BigInteger>> &assumpts) {
+    // Preparing the solvers.
+    beforeSearch();
+    for (int i = 0; i < solvers.size(); i++) {
+        beforeSearch(i);
+    }
+
+    // Solving the problem (with or without assumptions).
+    if (assumpts.empty()) {
+        startSearch();
+    } else {
+        startSearch(assumpts);
+    }
+
+    // Waiting for the solvers to answer.
+    LOG_F(INFO, "partition before solved.acquire()");
+    solved.acquire();
+    LOG_F(INFO, "partition after solved.acquire()");
+
+    // Returning the result.
+    return result;
+}
+
+void PartitionSolver::readEnd(const Panoramyx::Message *message) {
+    AbstractParallelSolver::readEnd(message);
+    if (runningSolvers <= 0) {
+        MessageBuilder mb;
+        Message *r = mb.named(PANO_MESSAGE_END_SEARCH_ACK).withTag(PANO_TAG_SOLVE).build();
+        communicator->send(r, 0);
+        free(r);
+    }
+}
+
+void PartitionSolver::endSearch() {
+    interrupt();
+    AbstractParallelSolver::endSearch();
 }

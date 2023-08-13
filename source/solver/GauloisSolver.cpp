@@ -353,8 +353,9 @@ void GauloisSolver::sendResult(int src, Universe::UniverseSolverResult result) {
     }
     boundMutex.unlock();
     Message *r = mb.withTag(PANO_TAG_SOLVE).build();
-    LOG_F(INFO, "sending result: %s",
-          result == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" : "unsatisfiable");
+    LOG_F(INFO, "#%d sending result to %d: %s", comm->getId(), src,
+          result == Universe::UniverseSolverResult::SATISFIABLE ? "satisfiable" :
+          result == Universe::UniverseSolverResult::UNSATISFIABLE ? "unsatisfiable" : "unknown");
     comm->send(r, src);
     free(r);
     LOG_F(INFO, "result sent");

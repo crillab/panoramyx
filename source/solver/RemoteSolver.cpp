@@ -100,8 +100,11 @@ UniverseSolverResult RemoteSolver::solve(
 UniverseSolverResult RemoteSolver::solve(
         const std::vector<UniverseAssumption<BigInteger>>
         &assumpts) {
+    LOG_F(INFO, "#%d loading variables", rank);
     nVariables();
+    LOG_F(INFO, "#%d loading constraints", rank);
     nConstraints();
+    LOG_F(INFO, "loading done");
     MessageBuilder mb;
     mb.named(PANO_MESSAGE_SOLVE_ASSUMPTIONS);
     for (auto &assumpt: assumpts) {
