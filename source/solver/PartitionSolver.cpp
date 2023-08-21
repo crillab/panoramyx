@@ -62,10 +62,10 @@ PartitionSolver::~PartitionSolver() {
 void PartitionSolver::loadInstance(const string &filename) {
     AbstractParallelSolver::loadInstance(filename);
     this->decompositionSolver->loadInstance(filename);
+    decompositionSolver->solve();
 }
 
 void PartitionSolver::beforeSearch() {
-    decompositionSolver->solve();
     constraintsInPartitions = decompositionSolver->getPartition();
 }
 

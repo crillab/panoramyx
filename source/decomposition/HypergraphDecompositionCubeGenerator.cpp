@@ -47,10 +47,10 @@ HypergraphDecompositionCubeGenerator::HypergraphDecompositionCubeGenerator(
 void HypergraphDecompositionCubeGenerator::loadInstance(const std::string &filename) {
     AbstractCubeGenerator::loadInstance(filename);
     decompositionSolver->loadInstance(filename);
+    decompositionSolver->solve();
 }
 
 Stream<vector<UniverseAssumption<BigInteger>>> *HypergraphDecompositionCubeGenerator::generateCubes() {
-    decompositionSolver->solve();
     return new StreamLexicographicCube(
             decompositionSolver->cutset(), solver->getVariablesMapping(), consistencyChecker, nbCubesMax);
 }
