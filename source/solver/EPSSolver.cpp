@@ -108,6 +108,7 @@ void EPSSolver::onSatisfiableFound(unsigned solverIndex) {
 }
 
 void EPSSolver::onUnsatisfiableFound(unsigned solverIndex) {
+    nbUnsat++;
     solvers[solverIndex]->reset();
     availableSolvers.add(solvers[solverIndex]);
     cubes.release();
@@ -115,7 +116,6 @@ void EPSSolver::onUnsatisfiableFound(unsigned solverIndex) {
 
 void EPSSolver::waitForAllCubes(int nbCubes) {
     // FIXME: Shouldn't we make sure to acquire cubes as many times as nbCubes?
-    int nbUnsat=0;
     for (int i = 0; i < nbCubes; i++) {
         LOG_F(INFO, "before cubes.acquire()");
         cubes.acquire();
@@ -126,8 +126,6 @@ void EPSSolver::waitForAllCubes(int nbCubes) {
             LOG_F(INFO, "SATISFIABLE");
             solved.release();
             return;
-        }else if(result==Universe::UniverseSolverResult::UNSATISFIABLE){
-            nbUnsat++;
         }
     }
     if(nbUnsat!=nbCubes){

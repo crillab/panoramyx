@@ -60,6 +60,8 @@ namespace Panoramyx {
          */
         std::counting_semaphore<42> cubes;
 
+        int nbUnsat=0;
+
     public:
 
         /**
